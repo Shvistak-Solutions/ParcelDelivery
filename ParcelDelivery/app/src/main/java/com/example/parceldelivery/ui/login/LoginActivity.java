@@ -22,18 +22,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.parceldelivery.DatabaseHelper;
 import com.example.parceldelivery.R;
 import com.example.parceldelivery.ui.login.LoginViewModel;
 import com.example.parceldelivery.ui.login.LoginViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
-
+    public DatabaseHelper database;
     private LoginViewModel loginViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        database = new DatabaseHelper(this);
+
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
