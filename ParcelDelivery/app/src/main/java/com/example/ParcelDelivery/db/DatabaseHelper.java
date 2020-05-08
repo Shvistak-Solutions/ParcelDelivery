@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.widget.Toast;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
 
@@ -52,8 +55,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertUserDetails("Łukasz","Scared", 1, "scared@email.com", "1111111111111", "difrent", "myślenice", "11111");
         insertUserDetails("Zdzisław","Siwy", 3, "siwy@email.com", "0000000000000", "siwy", "kanciapa", "11111");
 
-
-
     }
 
     private int getUserId(String email)
@@ -94,7 +95,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(newRowId != -1) {
             cValues.clear();
             cValues.put("email", email);
-            cValues.put("haslo", "1234");
+            cValues.put("haslo", md5("1234"));
             int id = getUserId(email);
             if (id != 0) {
                 cValues.put("id_pracownika", id);
@@ -124,5 +125,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("Pracownicy", "id = ?",new String[]{String.valueOf(userid)});
         db.close();
+    }
+
+    public static final String md5(final String s) {
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash
+
+            MessageDigest digest = java.security.MessageDigest
+                    .getInstance(MD5);
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
