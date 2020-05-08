@@ -2,8 +2,11 @@ package com.example.ParcelDelivery.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.strictmode.SqliteObjectLeakedViolation;
+import android.widget.Toast;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
@@ -15,8 +18,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL("CREATE TABLE Konta(id_pracownika INTEGER PRIMARY KEY, email VARCHAR, haslo VARCHAR);");
-        database.execSQL("CREATE TABLE Pracownicy(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, stanowisko INTEGER, pesel VARCHAR, nr_dowodu VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
+        database.execSQL("CREATE TABLE Konta(id_pracownika INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR);");
+        database.execSQL("CREATE TABLE Pracownicy(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, stanowisko INTEGER, email VARCHAR unique, pesel VARCHAR, nr_dowodu VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
         database.execSQL("CREATE TABLE Pensje(id_pracownika INTEGER, pensja FLOAT, ilosc_godzin INTEGER, data DATE, FOREIGN KEY(id_pracownika) REFERENCES Pracownicy(id));");
         database.execSQL("CREATE TABLE Dyspozycje(id_pracownika INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id_pracownika) REFERENCES Pracownicy(id));");
         database.execSQL("CREATE TABLE Grafik(id_pracownika INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id_pracownika) REFERENCES Pracownicy(id))");
@@ -26,24 +29,95 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        db.execSQL("DROP TABLE IF EXISTS Konta");
+        db.execSQL("DROP TABLE IF EXISTS Pracownicy");
+        db.execSQL("DROP TABLE IF EXISTS Pensje");
+        db.execSQL("DROP TABLE IF EXISTS Dyspozycje");
+        db.execSQL("DROP TABLE IF EXISTS Grafik");
+        db.execSQL("DROP TABLE IF EXISTS Klienci");
+        db.execSQL("DROP TABLE IF EXISTS Paczki");
+
+        onCreate(db);
+    }
+
+    public void dbSeed()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        onUpgrade(db, 1, 2);
+        insertUserDetails("Katarzyna","Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
+        insertUserDetails("Rafał","Świstak", 0, "bober@email.com", "555555555555", "koza", "mielec", "11111");
+        insertUserDetails("Szczepan","'Szlachta' Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
+        insertUserDetails("Krzysztof","Dżachym", 1, "dżadża@email.com", "333333333333333", "jachym", "krakow", "11111");
+        insertUserDetails("Patryk","Frasio", 2, "frasio@email.com", "222222222222", "frasio", "konkurencyjnaKopalniaSiarki", "11111");
+        insertUserDetails("Łukasz","Scared", 1, "scared@email.com", "1111111111111", "difrent", "myślenice", "11111");
+        insertUserDetails("Zdzisław","Siwy", 3, "siwy@email.com", "0000000000000", "siwy", "kanciapa", "11111");
+
+
 
     }
 
-    public void insertUserDetails(String name, String surname, int position, String pesel, String idNum, String address, String postal){
+    private int getUserId(String email)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "select id from Pracownicy where email= '"+email+"'";
+        Cursor cursor = db.rawQuery(query,null);
+        int id;
+        if(cursor.moveToFirst())
+        {
+            id = cursor.getInt(0);
+        }
+        else {
+            cursor.close();
+            return 0;
+        }
+        cursor.close();
+        return id;
+    }
+
+    public long insertUserDetails(String name, String surname, int position,String email, String pesel, String idNum, String address, String postal){
         //Get the Data Repository in write mode
         SQLiteDatabase db = this.getWritableDatabase();
         //Create a new map of values, where column names are the keys
         ContentValues cValues = new ContentValues();
+        //ContentValues accountValues = new ContentValues();
         cValues.put("imie", name);
         cValues.put("nazwisko", surname);
         cValues.put("stanowisko", position);
+        cValues.put("email",email);
         cValues.put("pesel", pesel);
         cValues.put("nr_dowodu", idNum);
         cValues.put("adres", address);
         cValues.put("kod_pocztowy", postal);
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert("Pracownicy",null, cValues);
+        if(newRowId != -1) {
+            cValues.clear();
+            cValues.put("email", email);
+            cValues.put("haslo", "1234");
+            int id = getUserId(email);
+            if (id != 0) {
+                cValues.put("id_pracownika", id);
+                newRowId = db.insert("Konta", null, cValues);
+                if(newRowId != -1)
+                    AutoFillOtherTables(id, db);
+            }
+            else return -1;
+        }
+        else {
+            db.close();
+            return newRowId;
+        }
         db.close();
+        return newRowId;
+    }
+
+    private void AutoFillOtherTables(int id_worker, SQLiteDatabase db)
+    {
+        db.execSQL("Insert INTO Pensje(id_pracownika) values ("+id_worker+") ");
+        db.execSQL("Insert INTO Dyspozycje(id_pracownika) values ("+id_worker+") ");
+        db.execSQL("Insert INTO Grafik(id_pracownika) values ("+id_worker+") ");
+
     }
 
     public void DeleteUser(int userid){

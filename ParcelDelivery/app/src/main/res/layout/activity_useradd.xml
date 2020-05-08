@@ -7,9 +7,10 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/buttonAdd"
+        android:id="@+id/buttonSave"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="Save and Add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editSurname" />
+        app:layout_constraintTop_toBottomOf="@+id/editEmail" />
 
     <EditText
         android:id="@+id/editIdNum"
@@ -58,18 +59,18 @@
         app:layout_constraintTop_toBottomOf="@+id/editIdNum" />
 
     <EditText
-        android:id="@+id/editSurname"
+        android:id="@+id/editEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:ems="10"
-        android:hint="Nazwisko"
+        android:hint="Email"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/spinnerPlacement"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editName" />
+        app:layout_constraintTop_toBottomOf="@+id/editSurname" />
 
     <EditText
         android:id="@+id/editPostal"
@@ -79,7 +80,7 @@
         android:ems="10"
         android:hint="Kod pocztowy"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/buttonAdd"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSave"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,17 +101,30 @@
         app:layout_constraintTop_toBottomOf="@+id/spinnerPlacement" />
 
     <EditText
+        android:id="@+id/editSurname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="Nazwisko"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/editEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editName" />
+
+    <EditText
         android:id="@+id/editName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="100dp"
         android:layout_marginBottom="8dp"
-        android:ems="10"
         android:hint="Imię"
-        android:inputType="textPersonName"
+        android:ems="10"
+        android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/editSurname"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

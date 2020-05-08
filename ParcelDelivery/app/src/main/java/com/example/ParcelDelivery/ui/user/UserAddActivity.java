@@ -15,7 +15,7 @@ import com.example.ParcelDelivery.R;
 
 public class UserAddActivity extends AppCompatActivity {
 
-    EditText name, surname, pesel, idNum, address, postal;
+    EditText name, surname, pesel, email, idNum, address, postal;
     Spinner position;
     Button saveBtn;
     Intent intent;
@@ -31,23 +31,25 @@ public class UserAddActivity extends AppCompatActivity {
 
         name = (EditText)findViewById(R.id.editName);
         surname = (EditText)findViewById(R.id.editSurname);
+        email = (EditText)findViewById(R.id.editEmail) ;
         position = (Spinner)findViewById(R.id.spinnerPlacement);
         pesel = (EditText)findViewById(R.id.editPesel);
         idNum = (EditText)findViewById(R.id.editIdNum);
         address = (EditText)findViewById(R.id.editAddress);
         postal = (EditText)findViewById(R.id.editPostal);
-        saveBtn = (Button)findViewById(R.id.buttonAdd);
+        saveBtn = (Button)findViewById(R.id.buttonSave);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String userName = name.getText().toString();
                 String userSurname = surname.getText().toString();
+                String userEmail = email.getText().toString();
                 String userPesel = pesel.getText().toString();
                 String userId = idNum.getText().toString();
                 String userAddress = surname.getText().toString();
                 String userPostal = postal.getText().toString();
                 int userPosition = 1;
-                String SpinnerValue = position.toString();
+                String SpinnerValue = position.getSelectedItem().toString();
                 switch(SpinnerValue)
                 {
                     case "Kurier":
@@ -63,14 +65,22 @@ public class UserAddActivity extends AppCompatActivity {
                         userPosition = 3;
                         break;
                     default:
+                        Toast.makeText(getApplicationContext(), "Nothing matched",Toast.LENGTH_SHORT).show();
                         userPosition = 0;
                         break;
                 }
                 DatabaseHelper dbHandler = new DatabaseHelper(UserAddActivity.this);
-                dbHandler.insertUserDetails(userName,userSurname,userPosition,userPesel,userId,userAddress,userPostal);
-                intent = new Intent(UserAddActivity.this, com.example.ParcelDelivery.ui.user.UserListActivity.class);
-                startActivity(intent);
-                Toast.makeText(getApplicationContext(), "Details Inserted Successfully",Toast.LENGTH_SHORT).show();
+                if(dbHandler.insertUserDetails(userName,userSurname,userPosition,userEmail,userPesel,userId,userAddress,userPostal) != -1)
+                {
+                    intent = new Intent(UserAddActivity.this, com.example.ParcelDelivery.ui.user.UserListActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(getApplicationContext(), "Dodano sukcesywnie",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Oj... Coś poszło nie tak",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }

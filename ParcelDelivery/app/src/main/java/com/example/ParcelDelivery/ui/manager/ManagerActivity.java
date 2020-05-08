@@ -1,4 +1,4 @@
-package com.example.ParcelDelivery;
+package com.example.ParcelDelivery.ui.manager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.ui.user.UserListActivity;
 
 public class ManagerActivity extends AppCompatActivity {

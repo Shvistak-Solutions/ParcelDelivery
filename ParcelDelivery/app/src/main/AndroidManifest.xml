@@ -9,8 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.ParcelDelivery.ManagerActivity"></activity>
-        <activity android:name="com.example.ParcelDelivery.MainActivity">
+        <activity android:name="com.example.ParcelDelivery.ui.manager.ManagerActivity"></activity>
+        <activity android:name="com.example.ParcelDelivery.ui.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

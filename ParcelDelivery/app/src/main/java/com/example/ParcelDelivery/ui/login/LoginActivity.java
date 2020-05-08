@@ -1,4 +1,4 @@
-package com.example.ParcelDelivery;
+package com.example.ParcelDelivery.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,9 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.ParcelDelivery.R;
+import com.example.ParcelDelivery.db.DatabaseHelper;
+import com.example.ParcelDelivery.ui.manager.ManagerActivity;
 
-public class MainActivity extends AppCompatActivity {
 
+public class LoginActivity extends AppCompatActivity {
+
+    private DatabaseHelper db;
     private EditText Name;
     private EditText Password;
     private Button Login;
@@ -19,6 +24,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+        db = new DatabaseHelper(this);
+        db.dbSeed();
 
         Name = (EditText)findViewById(R.id.etName);
         Password = (EditText)findViewById(R.id.etPassword);
@@ -38,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     {
         if((name.equals("siwy@email.com")) && (password.equals("1234")))
         {
-            Intent intent = new Intent(MainActivity.this, ManagerActivity.class);
+            Intent intent = new Intent(LoginActivity.this, ManagerActivity.class);
             startActivity(intent);
         }
     }
