@@ -3,7 +3,7 @@ package com.example.parceldelivery.ui.login;
 import androidx.annotation.Nullable;
 
 /**
- * Data validation state of the login form.
+ * Data validation state of the login form
  */
 class LoginFormState {
     @Nullable
