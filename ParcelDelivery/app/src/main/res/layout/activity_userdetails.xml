@@ -10,27 +10,27 @@
         android:id="@+id/buttonResetPasswd"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Save and Add"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:text="Reset Password"
+        app:layout_constraintBottom_toTopOf="@+id/buttonRemoveAccount"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Spinner
-        android:id="@+id/spinnerPlacement"
+    <TextView
+        android:id="@+id/textPlacement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:entries="@array/array_name"
-        android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/textPesel"
         app:layout_constraintEnd_toEndOf="parent"
+        android:hint="Stanowisko"
+        android:ems="10"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textEmail" />
 
-    <EditText
+    <TextView
         android:id="@+id/textIdNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textPesel" />
 
-    <EditText
+    <TextView
         android:id="@+id/textAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textIdNum" />
 
-    <EditText
+    <TextView
         android:id="@+id/textEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,13 +66,13 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/spinnerPlacement"
+        app:layout_constraintBottom_toTopOf="@+id/textPlacement"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textSurname" />
 
-    <EditText
+    <TextView
         android:id="@+id/textPostal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textAddress" />
 
-    <EditText
+    <TextView
         android:id="@+id/textPesel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -98,9 +98,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerPlacement" />
+        app:layout_constraintTop_toBottomOf="@+id/textPlacement" />
 
-    <EditText
+    <TextView
         android:id="@+id/textSurname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -114,18 +114,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textName" />
 
-    <EditText
+    <TextView
         android:id="@+id/textName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="8dp"
-        android:hint="Imię"
         android:ems="10"
+        android:hint="Imię"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/textSurname"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonRemoveAccount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Remove Account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,15 +29,15 @@ public class UserAddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_useradd);
 
-        name = (EditText)findViewById(R.id.editName);
-        surname = (EditText)findViewById(R.id.editSurname);
-        email = (EditText)findViewById(R.id.editEmail) ;
+        name = (EditText)findViewById(R.id.textName);
+        surname = (EditText)findViewById(R.id.textSurname);
+        email = (EditText)findViewById(R.id.textEmail) ;
         position = (Spinner)findViewById(R.id.spinnerPlacement);
-        pesel = (EditText)findViewById(R.id.editPesel);
-        idNum = (EditText)findViewById(R.id.editIdNum);
-        address = (EditText)findViewById(R.id.editAddress);
-        postal = (EditText)findViewById(R.id.editPostal);
-        saveBtn = (Button)findViewById(R.id.buttonSave);
+        pesel = (EditText)findViewById(R.id.textPesel);
+        idNum = (EditText)findViewById(R.id.textIdNum);
+        address = (EditText)findViewById(R.id.textAddress);
+        postal = (EditText)findViewById(R.id.textPostal);
+        saveBtn = (Button)findViewById(R.id.buttonResetPasswd);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

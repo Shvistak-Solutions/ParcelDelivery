@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
@@ -113,6 +115,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
+    public ArrayList<HashMap<String, String>> GetUsers(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<HashMap<String, String>> userList = new ArrayList<>();
+        String query = "SELECT imie, nazwisko, stanowisko, email FROM Pracownicy";
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            HashMap<String,String> user = new HashMap<>();
+            user.put("imie",cursor.getString(cursor.getColumnIndex("imie")));
+            user.put("nazwisko",cursor.getString(cursor.getColumnIndex("nazwisko")));
+            user.put("stanowisko",cursor.getString(cursor.getColumnIndex("stanowisko")));
+            user.put("email",cursor.getString(cursor.getColumnIndex("email")));
+            userList.add(user);
+        }
+        return  userList;
+    }
+
+    public ArrayList<HashMap<String, String>> GetUserByUserId(int userid){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<HashMap<String, String>> userList = new ArrayList<>();
+        String query = "SELECT imie, nazwisko, stanowisko, email FROM Pracownicy";
+        Cursor cursor = db.query("Pracownicy", new String[]{"imie", "nazwisko", "stanowisko", "email"}, "id=?",new String[]{String.valueOf(userid)},null, null, null, null);
+        if (cursor.moveToNext()){
+            HashMap<String,String> user = new HashMap<>();
+            user.put("imie",cursor.getString(cursor.getColumnIndex("imie")));
+            user.put("nazwisko",cursor.getString(cursor.getColumnIndex("nazwisko")));
+            user.put("stanowisko",cursor.getString(cursor.getColumnIndex("stanowisko")));
+            user.put("email",cursor.getString(cursor.getColumnIndex("email")));
+            userList.add(user);
+        }
+        return  userList;
+    }
+
     private void AutoFillOtherTables(int id_worker, SQLiteDatabase db)
     {
         db.execSQL("Insert INTO Pensje(id_pracownika) values ("+id_worker+") ");
@@ -127,6 +161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    // Ta funkcja to mocny snippet
     public static final String md5(final String s) {
         final String MD5 = "MD5";
         try {

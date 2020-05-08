@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         db = new DatabaseHelper(this);
-        db.dbSeed();
+        db.dbSeed(); // to robi dropa i insertuje seeda
 
         Name = (EditText)findViewById(R.id.etName);
         Password = (EditText)findViewById(R.id.etPassword);

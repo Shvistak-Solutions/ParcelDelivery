@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+    <TextView
+        android:id="@+id/imie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="17dp" />
+    <TextView
+        android:id="@+id/nazwisko"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imie"
+        android:layout_marginTop="7dp"
+        android:textColor="#343434"
+        android:textSize="14dp" />
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imie"
+        android:layout_alignParentRight="true"
+        android:textColor="#343434"
+        android:textSize="14dp" />
+
+    <Button
+        android:id="@+id/buttonDetails"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/email"
+        android:layout_alignBaseline="@id/nazwisko"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="0dp"
+        android:text="Details"
+        android:textSize="14sp" />
+
+</RelativeLayout>
