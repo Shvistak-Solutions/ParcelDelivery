@@ -131,6 +131,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  userList;
     }
 
+    public ArrayList<String> GetUsersWhatYouWant(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<String> userList = new ArrayList<>();
+        String query = "SELECT'"+name+"' FROM Pracownicy";
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            HashMap<String,String> user = new HashMap<>();
+            userList.add(cursor.getString(cursor.getColumnIndex(name)));
+        }
+        return  userList;
+    }
+
     public ArrayList<HashMap<String, String>> GetUserByUserId(int userid){
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<HashMap<String, String>> userList = new ArrayList<>();

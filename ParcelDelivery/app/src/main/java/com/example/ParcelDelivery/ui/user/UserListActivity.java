@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -24,16 +26,36 @@ public class UserListActivity extends AppCompatActivity {
     Button saveBtn;
     Intent intent;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userlist);
 
         DatabaseHelper db = new DatabaseHelper(this);
-        ArrayList<HashMap<String, String>> userList = db.GetUsers();
         ListView lv = (ListView) findViewById(R.id.user_list);
+        ArrayList<HashMap<String, String>> userList = db.GetUsers();
         ListAdapter adapter = new SimpleAdapter(UserListActivity.this, userList, R.layout.list_row,new String[]{"imie","nazwisko","email"}, new int[]{R.id.imie, R.id.nazwisko, R.id.email});
         lv.setAdapter(adapter);
+
+//        ArrayList<String> lol =db.GetUsers2();
+//        ArrayAdapter<String> itemsAdapter =
+//                new ArrayAdapter<String>(this, R.layout.list_row, R.id.imie, lol);
+//        lv.setAdapter(itemsAdapter);
+//
+//        lv.setClickable(true);
+//        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getApplicationContext(),"You selected : " + position,Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+        //int howMany = adapter.getCount();
+        //Toast.makeText(getApplicationContext(),"You selected : " + howMany,Toast.LENGTH_SHORT).show();
+
+
 
         saveBtn = (Button)findViewById(R.id.buttonAddUser);
         saveBtn.setOnClickListener(new View.OnClickListener() {

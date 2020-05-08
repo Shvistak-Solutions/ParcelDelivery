@@ -30,13 +30,10 @@
     <Button
         android:id="@+id/buttonDetails"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/email"
-        android:layout_alignBaseline="@id/nazwisko"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="0dp"
-        android:text="Details"
-        android:textSize="14sp" />
+        android:layout_alignTop="@id/imie"
+        android:text="" />
 
 </RelativeLayout>
