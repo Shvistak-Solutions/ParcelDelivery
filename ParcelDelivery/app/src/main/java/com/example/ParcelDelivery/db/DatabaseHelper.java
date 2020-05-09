@@ -59,7 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    private int getUserId(String email)
+    public int getUserId(String email)
     {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -118,23 +118,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<HashMap<String, String>> GetUsers(){
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<HashMap<String, String>> userList = new ArrayList<>();
+        String position;
         String query = "SELECT imie, nazwisko, stanowisko, email FROM Pracownicy";
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
             HashMap<String,String> user = new HashMap<>();
             user.put("imie",cursor.getString(cursor.getColumnIndex("imie")));
             user.put("nazwisko",cursor.getString(cursor.getColumnIndex("nazwisko")));
-            user.put("stanowisko",cursor.getString(cursor.getColumnIndex("stanowisko")));
+            position = cursor.getString(cursor.getColumnIndex("stanowisko"));
+            switch(position)
+            {
+                case "0":
+                    position = "Kurier";
+                    break;
+                case "1":
+                    position = "Magazynier";
+                    break;
+                case "2":
+                    position = "Koordynator";
+                    break;
+                case "3":
+                    position = "Manager";
+                    break;
+                default:
+                    position = "WTF";
+                    break;
+            }
+            user.put("stanowisko",position);
             user.put("email",cursor.getString(cursor.getColumnIndex("email")));
             userList.add(user);
         }
         return  userList;
     }
 
+
+
     public ArrayList<String> GetUsersWhatYouWant(String name){
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> userList = new ArrayList<>();
-        String query = "SELECT'"+name+"' FROM Pracownicy";
+        String query = "SELECT "+name+" FROM Pracownicy";
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
             HashMap<String,String> user = new HashMap<>();
@@ -143,21 +165,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  userList;
     }
 
-    public ArrayList<HashMap<String, String>> GetUserByUserId(int userid){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<HashMap<String, String>> userList = new ArrayList<>();
-        String query = "SELECT imie, nazwisko, stanowisko, email FROM Pracownicy";
-        Cursor cursor = db.query("Pracownicy", new String[]{"imie", "nazwisko", "stanowisko", "email"}, "id=?",new String[]{String.valueOf(userid)},null, null, null, null);
-        if (cursor.moveToNext()){
-            HashMap<String,String> user = new HashMap<>();
-            user.put("imie",cursor.getString(cursor.getColumnIndex("imie")));
-            user.put("nazwisko",cursor.getString(cursor.getColumnIndex("nazwisko")));
-            user.put("stanowisko",cursor.getString(cursor.getColumnIndex("stanowisko")));
-            user.put("email",cursor.getString(cursor.getColumnIndex("email")));
-            userList.add(user);
-        }
-        return  userList;
-    }
 
     private void AutoFillOtherTables(int id_worker, SQLiteDatabase db)
     {

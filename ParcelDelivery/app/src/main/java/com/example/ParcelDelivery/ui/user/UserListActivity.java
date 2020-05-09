@@ -19,6 +19,7 @@ import com.example.ParcelDelivery.db.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @SuppressLint("Registered")
 public class UserListActivity extends AppCompatActivity {
@@ -33,27 +34,23 @@ public class UserListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userlist);
 
-        DatabaseHelper db = new DatabaseHelper(this);
+        final DatabaseHelper db = new DatabaseHelper(this);
         ListView lv = (ListView) findViewById(R.id.user_list);
-        ArrayList<HashMap<String, String>> userList = db.GetUsers();
-        ListAdapter adapter = new SimpleAdapter(UserListActivity.this, userList, R.layout.list_row,new String[]{"imie","nazwisko","email"}, new int[]{R.id.imie, R.id.nazwisko, R.id.email});
+        final ArrayList<HashMap<String, String>> userList = db.GetUsers();
+        final ListAdapter adapter = new SimpleAdapter(UserListActivity.this, userList, R.layout.list_row,new String[]{"imie","nazwisko","email","stanowisko"}, new int[]{R.id.textListName, R.id.textListSurname,R.id.textListEmail, R.id.textListPosition});
         lv.setAdapter(adapter);
+        lv.setClickable(true);
 
-//        ArrayList<String> lol =db.GetUsers2();
-//        ArrayAdapter<String> itemsAdapter =
-//                new ArrayAdapter<String>(this, R.layout.list_row, R.id.imie, lol);
-//        lv.setAdapter(itemsAdapter);
-//
-//        lv.setClickable(true);
-//        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getApplicationContext(),"You selected : " + position,Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-        //int howMany = adapter.getCount();
-        //Toast.makeText(getApplicationContext(),"You selected : " + howMany,Toast.LENGTH_SHORT).show();
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                HashMap<String, String> grr = userList.get(position);
+                String email = grr.get("email");
+                intent = new Intent(UserListActivity.this, UserDetailsActivity.class);
+                intent.putExtra("id", db.getUserId(email));
+                startActivity(intent);
+            }
+        });
 
 
 

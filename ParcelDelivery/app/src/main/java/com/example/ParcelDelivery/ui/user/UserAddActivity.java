@@ -32,7 +32,7 @@ public class UserAddActivity extends AppCompatActivity {
         name = (EditText)findViewById(R.id.textName);
         surname = (EditText)findViewById(R.id.textSurname);
         email = (EditText)findViewById(R.id.textEmail) ;
-        position = (Spinner)findViewById(R.id.spinnerPlacement);
+        position = (Spinner)findViewById(R.id.spinnerPosition);
         pesel = (EditText)findViewById(R.id.textPesel);
         idNum = (EditText)findViewById(R.id.textIdNum);
         address = (EditText)findViewById(R.id.textAddress);
