@@ -126,32 +126,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             user.put("imie",cursor.getString(cursor.getColumnIndex("imie")));
             user.put("nazwisko",cursor.getString(cursor.getColumnIndex("nazwisko")));
             position = cursor.getString(cursor.getColumnIndex("stanowisko"));
-            switch(position)
-            {
-                case "0":
-                    position = "Kurier";
-                    break;
-                case "1":
-                    position = "Magazynier";
-                    break;
-                case "2":
-                    position = "Koordynator";
-                    break;
-                case "3":
-                    position = "Manager";
-                    break;
-                default:
-                    position = "WTF";
-                    break;
-            }
-            user.put("stanowisko",position);
+            user.put("stanowisko",getPosition( position ));
             user.put("email",cursor.getString(cursor.getColumnIndex("email")));
             userList.add(user);
         }
+        cursor.close();
+        db.close();
         return  userList;
     }
 
-
+    public HashMap<String, String> GetUserDetails(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        HashMap<String, String> user = new HashMap<>();
+        String position;
+        String query = "SELECT * FROM Pracownicy where id ="+id;
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            user.put("imie",cursor.getString(cursor.getColumnIndex("imie")));
+            user.put("nazwisko",cursor.getString(cursor.getColumnIndex("nazwisko")));
+            position = cursor.getString(cursor.getColumnIndex("stanowisko"));
+            user.put("stanowisko",getPosition( position ));
+            user.put("email",cursor.getString(cursor.getColumnIndex("email")));
+            user.put("pesel",cursor.getString(cursor.getColumnIndex("pesel")));
+            user.put("nr_dowodu",cursor.getString(cursor.getColumnIndex("nr_dowodu")));
+            user.put("adres",cursor.getString(cursor.getColumnIndex("adres")));
+            user.put("kod_pocztowy",cursor.getString(cursor.getColumnIndex("kod_pocztowy")));
+        }
+        cursor.close();
+        db.close();
+        return  user;
+    }
 
     public ArrayList<String> GetUsersWhatYouWant(String name){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -159,9 +163,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT "+name+" FROM Pracownicy";
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
-            HashMap<String,String> user = new HashMap<>();
+            if(name.equals("stanowisko"))
+            {
+                String position = cursor.getString(cursor.getColumnIndex(name));
+                userList.add(getPosition( position ));
+            }
+            else
             userList.add(cursor.getString(cursor.getColumnIndex(name)));
         }
+        cursor.close();
+        db.close();
         return  userList;
     }
 
@@ -178,6 +189,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("Pracownicy", "id = ?",new String[]{String.valueOf(userid)});
         db.close();
+    }
+
+    private String getPosition(String position)
+    {
+        switch(position)
+        {
+            case "0":
+                position = "Kurier";
+                break;
+            case "1":
+                position = "Magazynier";
+                break;
+            case "2":
+                position = "Koordynator";
+                break;
+            case "3":
+                position = "Manager";
+                break;
+            default:
+                position = "WTF";
+                break;
+        }
+        return position;
     }
 
     // Ta funkcja to mocny snippet

@@ -18,62 +18,62 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textPlacement"
+        android:id="@+id/textDetailPosition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/textPesel"
+        app:layout_constraintBottom_toTopOf="@+id/textDetailPesel"
         app:layout_constraintEnd_toEndOf="parent"
         android:hint="Stanowisko"
         android:ems="10"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailEmail" />
 
     <TextView
-        android:id="@+id/textIdNum"
+        android:id="@+id/textDetailIdNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="Nr dowodu"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/textAddress"
+        app:layout_constraintBottom_toTopOf="@+id/textDetailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textPesel" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailPesel" />
 
     <TextView
-        android:id="@+id/textAddress"
+        android:id="@+id/textDetailAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="Adres"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/textPostal"
+        app:layout_constraintBottom_toTopOf="@+id/textDetailPostal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textIdNum" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailIdNum" />
 
     <TextView
-        android:id="@+id/textEmail"
+        android:id="@+id/textDetailEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/textPlacement"
+        app:layout_constraintBottom_toTopOf="@+id/textDetailPosition"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textSurname" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailSurname" />
 
     <TextView
-        android:id="@+id/textPostal"
+        android:id="@+id/textDetailPostal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
@@ -84,38 +84,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailAddress" />
 
     <TextView
-        android:id="@+id/textPesel"
+        android:id="@+id/textDetailPesel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="pesel"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/textIdNum"
+        app:layout_constraintBottom_toTopOf="@+id/textDetailIdNum"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textPlacement" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailPosition" />
 
     <TextView
-        android:id="@+id/textSurname"
+        android:id="@+id/textDetailSurname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="Nazwisko"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/textEmail"
+        app:layout_constraintBottom_toTopOf="@+id/textDetailEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textName" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailName" />
 
     <TextView
-        android:id="@+id/textName"
+        android:id="@+id/textDetailName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
@@ -123,7 +123,7 @@
         android:ems="10"
         android:hint="Imię"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/textSurname"
+        app:layout_constraintBottom_toTopOf="@+id/textDetailSurname"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

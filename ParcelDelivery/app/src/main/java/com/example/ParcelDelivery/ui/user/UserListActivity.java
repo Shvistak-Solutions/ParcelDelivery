@@ -27,8 +27,6 @@ public class UserListActivity extends AppCompatActivity {
     Button saveBtn;
     Intent intent;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,10 +42,10 @@ public class UserListActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                HashMap<String, String> grr = userList.get(position);
-                String email = grr.get("email");
+                HashMap<String, String> userDetail = userList.get(position);
                 intent = new Intent(UserListActivity.this, UserDetailsActivity.class);
-                intent.putExtra("id", db.getUserId(email));
+                String idWorker = Integer.toString(db.getUserId(userDetail.get("email")));
+                intent.putExtra("id", idWorker );
                 startActivity(intent);
             }
         });

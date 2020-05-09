@@ -29,14 +29,14 @@ public class UserAddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_useradd);
 
-        name = (EditText)findViewById(R.id.textName);
-        surname = (EditText)findViewById(R.id.textSurname);
-        email = (EditText)findViewById(R.id.textEmail) ;
+        name = (EditText)findViewById(R.id.editTextName);
+        surname = (EditText)findViewById(R.id.editTextSurname);
+        email = (EditText)findViewById(R.id.editTextEmail) ;
         position = (Spinner)findViewById(R.id.spinnerPosition);
-        pesel = (EditText)findViewById(R.id.textPesel);
-        idNum = (EditText)findViewById(R.id.textIdNum);
-        address = (EditText)findViewById(R.id.textAddress);
-        postal = (EditText)findViewById(R.id.textPostal);
+        pesel = (EditText)findViewById(R.id.editTextPesel);
+        idNum = (EditText)findViewById(R.id.editTextIdNum);
+        address = (EditText)findViewById(R.id.editTextAddress);
+        postal = (EditText)findViewById(R.id.editTextPostal);
         saveBtn = (Button)findViewById(R.id.buttonResetPasswd);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,27 +48,9 @@ public class UserAddActivity extends AppCompatActivity {
                 String userId = idNum.getText().toString();
                 String userAddress = surname.getText().toString();
                 String userPostal = postal.getText().toString();
-                int userPosition = 1;
+
                 String SpinnerValue = position.getSelectedItem().toString();
-                switch(SpinnerValue)
-                {
-                    case "Kurier":
-                        userPosition = 0;
-                        break;
-                    case "Magazynier":
-                        userPosition = 1;
-                        break;
-                    case "Koordynator":
-                        userPosition = 2;
-                        break;
-                    case "Manager":
-                        userPosition = 3;
-                        break;
-                    default:
-                        Toast.makeText(getApplicationContext(), "Nothing matched",Toast.LENGTH_SHORT).show();
-                        userPosition = 0;
-                        break;
-                }
+                int userPosition = positionStringToint(SpinnerValue);
                 DatabaseHelper dbHandler = new DatabaseHelper(UserAddActivity.this);
                 if(dbHandler.insertUserDetails(userName,userSurname,userPosition,userEmail,userPesel,userId,userAddress,userPostal) != -1)
                 {
@@ -85,28 +67,30 @@ public class UserAddActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    private int positionStringToint(String position)
+    {
+        int userPosition;
+        switch(position)
+        {
+            case "Kurier":
+                userPosition = 0;
+                break;
+            case "Magazynier":
+                userPosition = 1;
+                break;
+            case "Koordynator":
+                userPosition = 2;
+                break;
+            case "Manager":
+                userPosition = 3;
+                break;
+            default:
+                userPosition = 0;
+                break;
+        }
+        return userPosition;
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
 }
+
+
