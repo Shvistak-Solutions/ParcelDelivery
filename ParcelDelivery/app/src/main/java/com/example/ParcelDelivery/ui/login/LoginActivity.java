@@ -1,16 +1,22 @@
 package com.example.ParcelDelivery.ui.login;
 
-import androidx.appcompat.app.AppCompatActivity;
+        import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+        import android.content.Intent;
+        import android.os.Bundle;
+        import android.view.View;
+        import android.widget.Button;
+        import android.widget.EditText;
+        import android.widget.Toast;
 
-import com.example.ParcelDelivery.R;
-import com.example.ParcelDelivery.db.DatabaseHelper;
-import com.example.ParcelDelivery.ui.manager.ManagerActivity;
+        import com.example.ParcelDelivery.ui.coordinator.CoordinatorActivity;
+        import com.example.ParcelDelivery.ui.courier.CourierActivity;
+        import com.example.ParcelDelivery.R;
+        import com.example.ParcelDelivery.ui.storekeeper.StorekeeperActivity;
+        import com.example.ParcelDelivery.db.DatabaseHelper;
+        import com.example.ParcelDelivery.ui.manager.ManagerActivity;
+
+        import static com.example.ParcelDelivery.db.DatabaseHelper.md5;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -37,19 +43,52 @@ public class LoginActivity extends AppCompatActivity {
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validate(Name.getText().toString(), Password.getText().toString());
+                validate();
             }
         });
     }
 
 
 
-    private void validate(String name, String password)
+    private void validate()
     {
-        if((name.equals("siwy@email.com")) && (password.equals("1234")))
+        Intent intent1 = new Intent(LoginActivity.this, ManagerActivity.class);
+        Intent intent2 = new Intent(LoginActivity.this, CoordinatorActivity.class);
+        Intent intent3 = new Intent(LoginActivity.this, CourierActivity.class);
+        Intent intent4 = new Intent(LoginActivity.this, StorekeeperActivity.class);
+        int id = db.getUserId(Name.getText().toString());
+        String position = db.GetUserData("stanowisko", "Pracownicy", id);
+        if(id == 0)
         {
-            Intent intent = new Intent(LoginActivity.this, ManagerActivity.class);
-            startActivity(intent);
+            Toast.makeText(getApplicationContext(),"Nie ma takiego użytkownika w bazie danych.",Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            if( !(md5(Password.getText().toString()).equals(db.GetUserData("haslo","Konta", id ))))
+            {
+                Toast.makeText(getApplicationContext(), "Błędne hasło.", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                switch(position)
+                {
+                    case "Kurier":
+                        startActivity(intent3);
+                        break;
+                    case "Magazynier":
+                        startActivity(intent4);
+                        break;
+                    case "Koordynator":
+                        startActivity(intent2);
+                        break;
+                    case "Manager":
+                        startActivity(intent1);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
         }
     }
 
