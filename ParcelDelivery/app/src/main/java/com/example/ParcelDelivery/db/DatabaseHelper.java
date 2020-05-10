@@ -157,7 +157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  user;
     }
 
-    public String GetUserDetail(String name,String table, int id){
+    public String GetUserData(String name,String table, int id){
         SQLiteDatabase db = this.getWritableDatabase();
         String result = "";
         String query = "SELECT "+name+" FROM "+table+" where id ="+id;

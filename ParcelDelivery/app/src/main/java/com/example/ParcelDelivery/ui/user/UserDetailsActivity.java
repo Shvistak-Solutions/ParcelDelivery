@@ -44,7 +44,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(getApplicationContext(), "Id: "+db.GetUserDetail("haslo","Konta", id),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Id: "+db.GetUserData("haslo","Konta", id),Toast.LENGTH_SHORT).show();
             }
         });
 
