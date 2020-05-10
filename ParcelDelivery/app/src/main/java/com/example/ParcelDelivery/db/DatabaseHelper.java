@@ -23,11 +23,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL("CREATE TABLE Konta(id_pracownika INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR);");
+        database.execSQL("CREATE TABLE Konta(id INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR);");
         database.execSQL("CREATE TABLE Pracownicy(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, stanowisko INTEGER, email VARCHAR unique, pesel VARCHAR, nr_dowodu VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
-        database.execSQL("CREATE TABLE Pensje(id_pracownika INTEGER, pensja FLOAT, ilosc_godzin INTEGER, data DATE, FOREIGN KEY(id_pracownika) REFERENCES Pracownicy(id));");
-        database.execSQL("CREATE TABLE Dyspozycje(id_pracownika INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id_pracownika) REFERENCES Pracownicy(id));");
-        database.execSQL("CREATE TABLE Grafik(id_pracownika INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id_pracownika) REFERENCES Pracownicy(id))");
+        database.execSQL("CREATE TABLE Pensje(id INTEGER, pensja FLOAT, ilosc_godzin INTEGER, data DATE, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
+        database.execSQL("CREATE TABLE Dyspozycje(id INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
+        database.execSQL("CREATE TABLE Grafik(id INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id) REFERENCES Pracownicy(id))");
         database.execSQL("CREATE TABLE Klienci(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
         database.execSQL("CREATE TABLE Paczki(id INTEGER PRIMARY KEY AUTOINCREMENT, id_kuriera INTEGER, status INTEGER, id_nadawcy INTEGER, id_odbiorcy INTEGER, FOREIGN KEY(id_kuriera) REFERENCES Pracownicy(id), FOREIGN KEY(id_odbiorcy) REFERENCES Klienci(id), FOREIGN KEY(id_nadawcy) REFERENCES Klienci(id));");
     }
@@ -100,7 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cValues.put("haslo", md5("1234"));
             int id = getUserId(email);
             if (id != 0) {
-                cValues.put("id_pracownika", id);
+                cValues.put("id", id);
                 newRowId = db.insert("Konta", null, cValues);
                 if(newRowId != -1)
                     AutoFillOtherTables(id, db);
@@ -135,7 +135,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  userList;
     }
 
-    public HashMap<String, String> GetUserDetails(String id) {
+    public HashMap<String, String> GetUserDetails(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         HashMap<String, String> user = new HashMap<>();
         String position;
@@ -155,6 +155,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return  user;
+    }
+
+    public String GetUserDetail(String name,String table, int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String result = "";
+        String query = "SELECT "+name+" FROM "+table+" where id ="+id;
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            if(name.equals("stanowisko"))
+            {
+                result = cursor.getString(cursor.getColumnIndex(name));
+                result = getPosition(result);
+            }
+            else
+               result =cursor.getString(cursor.getColumnIndex(name));
+        }
+        cursor.close();
+        db.close();
+        return  result;
     }
 
     public ArrayList<String> GetUsersWhatYouWant(String name){
@@ -179,9 +198,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void AutoFillOtherTables(int id_worker, SQLiteDatabase db)
     {
-        db.execSQL("Insert INTO Pensje(id_pracownika) values ("+id_worker+") ");
-        db.execSQL("Insert INTO Dyspozycje(id_pracownika) values ("+id_worker+") ");
-        db.execSQL("Insert INTO Grafik(id_pracownika) values ("+id_worker+") ");
+        db.execSQL("Insert INTO Pensje(id) values ("+id_worker+") ");
+        db.execSQL("Insert INTO Dyspozycje(id) values ("+id_worker+") ");
+        db.execSQL("Insert INTO Grafik(id) values ("+id_worker+") ");
 
     }
 

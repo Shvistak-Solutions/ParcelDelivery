@@ -44,7 +44,8 @@ public class UserListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 HashMap<String, String> userDetail = userList.get(position);
                 intent = new Intent(UserListActivity.this, UserDetailsActivity.class);
-                String idWorker = Integer.toString(db.getUserId(userDetail.get("email")));
+                //String idWorker = Integer.toString(db.getUserId(userDetail.get("email")));
+                int idWorker = db.getUserId(userDetail.get("email"));
                 intent.putExtra("id", idWorker );
                 startActivity(intent);
             }

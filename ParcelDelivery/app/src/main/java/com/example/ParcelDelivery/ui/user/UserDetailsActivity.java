@@ -17,14 +17,14 @@ import java.util.HashMap;
 public class UserDetailsActivity extends AppCompatActivity {
 
     TextView name, surname, pesel, email, idNum, address, postal, position;
-    String id;
+    int id;
     Button buttonRmv;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userdetails);
-        id = getIntent().getStringExtra("id");
+        id = getIntent().getIntExtra("id", -1);
 
         name = (TextView)findViewById(R.id.textDetailName);
         surname = (TextView)findViewById(R.id.textDetailSurname);
@@ -36,14 +36,15 @@ public class UserDetailsActivity extends AppCompatActivity {
         postal = (TextView)findViewById(R.id.textDetailPostal);
         buttonRmv = (Button)findViewById(R.id.buttonRemoveAccount);
 
-        DatabaseHelper db = new DatabaseHelper(this);
+        final DatabaseHelper db = new DatabaseHelper(this);
         final HashMap<String,String> details = db.GetUserDetails(id);
         fillTextViews(details);
 
         buttonRmv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Id: "+id,Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getApplicationContext(), "Id: "+db.GetUserDetail("haslo","Konta", id),Toast.LENGTH_SHORT).show();
             }
         });
 
