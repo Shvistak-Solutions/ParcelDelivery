@@ -15,6 +15,8 @@ package com.example.ParcelDelivery.ui.login;
         import com.example.ParcelDelivery.ui.storekeeper.StorekeeperActivity;
         import com.example.ParcelDelivery.db.DatabaseHelper;
         import com.example.ParcelDelivery.ui.manager.ManagerActivity;
+        import com.example.ParcelDelivery.ui.password_reset.ForgotPasswordActivity;
+        import android.widget.TextView;
 
         import static com.example.ParcelDelivery.db.DatabaseHelper.md5;
 
@@ -25,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText Name;
     private EditText Password;
     private Button Login;
+    private TextView forgotPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,23 @@ public class LoginActivity extends AppCompatActivity {
                 validate();
             }
         });
+
+
+        Login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                validate();
+            }
+        });
+
+        forgotPassword = (TextView)findViewById(R.id.ID_PASSWORD_RESET);
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+            }
+        });
+
     }
 
 

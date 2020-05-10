@@ -270,4 +270,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return "";
     }
+
+    public void updateForgotenPassword(String email, String password){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        String password_md5 = md5(password);
+        values.put("haslo",password_md5);
+        db.update("Konta",values,"email = ?",new String[] {email});
+        db.close();
+
+    }
+
+    public boolean checkIfExists(String userEmail){
+        SQLiteDatabase  db = this.getReadableDatabase();
+
+        String query = "select "+ "email" + " from " + "Konta";
+        Cursor cursor = db.rawQuery(query, null);
+        String existEmail;
+
+        if (cursor.moveToFirst()) {
+            do {
+                existEmail = cursor.getString(0);
+
+                if (existEmail.equals(userEmail)) {
+                    return true;
+                }
+            } while (cursor.moveToNext());
+        }
+        return false;
+    }
+
 }
