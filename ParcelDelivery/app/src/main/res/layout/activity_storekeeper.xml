@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".StorekeeperActivity">
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Magazynier"
+        tools:layout_editor_absoluteX="112dp"
+        tools:layout_editor_absoluteY="188dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

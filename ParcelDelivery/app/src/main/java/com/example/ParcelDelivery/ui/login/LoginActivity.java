@@ -72,16 +72,16 @@ public class LoginActivity extends AppCompatActivity {
             {
                 switch(position)
                 {
-                    case "0":
+                    case "Kurier":
                         startActivity(intent3);
                         break;
-                    case "1":
+                    case "Magazynier":
                         startActivity(intent4);
                         break;
-                    case "2":
+                    case "Koordynator":
                         startActivity(intent2);
                         break;
-                    case "3":
+                    case "Manager":
                         startActivity(intent1);
                         break;
                     default:

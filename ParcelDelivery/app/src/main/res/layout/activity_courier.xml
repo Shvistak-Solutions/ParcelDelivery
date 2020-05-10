@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".CourierActivity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="130dp"
+        android:layout_height="38dp"
+        android:text="Kurier"
+        tools:layout_editor_absoluteX="136dp"
+        tools:layout_editor_absoluteY="119dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
