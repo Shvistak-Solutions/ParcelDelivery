@@ -1,5 +1,6 @@
 package com.example.ParcelDelivery.ui.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,12 +20,13 @@ public class UserDetailsActivity extends AppCompatActivity {
     TextView name, surname, pesel, email, idNum, address, postal, position;
     int id;
     Button buttonRmv;
+    Intent intent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userdetails);
-        id = getIntent().getIntExtra("id", -1);
+        id = getIntent().getIntExtra("id", 0);
 
         name = (TextView)findViewById(R.id.textDetailName);
         surname = (TextView)findViewById(R.id.textDetailSurname);
@@ -43,8 +45,9 @@ public class UserDetailsActivity extends AppCompatActivity {
         buttonRmv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(getApplicationContext(), "Id: "+db.GetUserData("haslo","Konta", id),Toast.LENGTH_SHORT).show();
+                db.deleteUser(id);
+                intent = new Intent(UserDetailsActivity.this, UserListActivity.class);
+                startActivity(intent);
             }
         });
 

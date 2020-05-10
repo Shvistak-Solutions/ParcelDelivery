@@ -16,6 +16,14 @@ import java.util.HashMap;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
 
+    private String TAB_ACCOUNT = "Konta";
+    private String TAB_WORKERS = "Pracownicy";
+    private String TAB_SALARY = "Pensje";
+    private String TAB_AVAILABILITY = "Dyspozycje";
+    private String TAB_SCHEDULE = "Grafik";
+    private String TAB_CLIENTS = "Klienci";
+    private String TAB_PACKAGES = "Paczki";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
         SQLiteDatabase database = this.getWritableDatabase();
@@ -23,24 +31,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL("CREATE TABLE Konta(id INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR);");
-        database.execSQL("CREATE TABLE Pracownicy(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, stanowisko INTEGER, email VARCHAR unique, pesel VARCHAR, nr_dowodu VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
-        database.execSQL("CREATE TABLE Pensje(id INTEGER, pensja FLOAT, ilosc_godzin INTEGER, data DATE, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
-        database.execSQL("CREATE TABLE Dyspozycje(id INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
-        database.execSQL("CREATE TABLE Grafik(id INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id) REFERENCES Pracownicy(id))");
-        database.execSQL("CREATE TABLE Klienci(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
-        database.execSQL("CREATE TABLE Paczki(id INTEGER PRIMARY KEY AUTOINCREMENT, id_kuriera INTEGER, status INTEGER, id_nadawcy INTEGER, id_odbiorcy INTEGER, FOREIGN KEY(id_kuriera) REFERENCES Pracownicy(id), FOREIGN KEY(id_odbiorcy) REFERENCES Klienci(id), FOREIGN KEY(id_nadawcy) REFERENCES Klienci(id));");
+        database.execSQL("CREATE TABLE "+TAB_ACCOUNT+"(id INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR)");
+        database.execSQL("CREATE TABLE "+TAB_WORKERS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, stanowisko INTEGER, email VARCHAR unique, pesel VARCHAR, nr_dowodu VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
+        database.execSQL("CREATE TABLE "+TAB_SALARY+"(id INTEGER, pensja FLOAT, ilosc_godzin INTEGER, data DATE, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
+        database.execSQL("CREATE TABLE "+TAB_AVAILABILITY+"(id INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
+        database.execSQL("CREATE TABLE "+TAB_SCHEDULE+"(id INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id) REFERENCES Pracownicy(id))");
+        database.execSQL("CREATE TABLE "+TAB_CLIENTS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
+        database.execSQL("CREATE TABLE "+TAB_PACKAGES+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_kuriera INTEGER, status INTEGER, id_nadawcy INTEGER, id_odbiorcy INTEGER, FOREIGN KEY(id_kuriera) REFERENCES Pracownicy(id), FOREIGN KEY(id_odbiorcy) REFERENCES Klienci(id), FOREIGN KEY(id_nadawcy) REFERENCES Klienci(id));");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE IF EXISTS Konta");
-        db.execSQL("DROP TABLE IF EXISTS Pracownicy");
-        db.execSQL("DROP TABLE IF EXISTS Pensje");
-        db.execSQL("DROP TABLE IF EXISTS Dyspozycje");
-        db.execSQL("DROP TABLE IF EXISTS Grafik");
-        db.execSQL("DROP TABLE IF EXISTS Klienci");
-        db.execSQL("DROP TABLE IF EXISTS Paczki");
+        db.execSQL("DROP TABLE IF EXISTS "+TAB_PACKAGES);
+        db.execSQL("DROP TABLE IF EXISTS "+TAB_SCHEDULE);
+        db.execSQL("DROP TABLE IF EXISTS "+TAB_AVAILABILITY);
+        db.execSQL("DROP TABLE IF EXISTS "+TAB_SALARY);
+        db.execSQL("DROP TABLE IF EXISTS "+TAB_ACCOUNT);
+        db.execSQL("DROP TABLE IF EXISTS "+TAB_WORKERS);
+        db.execSQL("DROP TABLE IF EXISTS "+TAB_CLIENTS);
 
         onCreate(db);
     }
@@ -63,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String query = "select id from Pracownicy where email= '"+email+"'";
+        String query = "select id from "+TAB_WORKERS+" where email= '"+email+"'";
         Cursor cursor = db.rawQuery(query,null);
         int id;
         if(cursor.moveToFirst())
@@ -93,7 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cValues.put("adres", address);
         cValues.put("kod_pocztowy", postal);
         // Insert the new row, returning the primary key value of the new row
-        long newRowId = db.insert("Pracownicy",null, cValues);
+        long newRowId = db.insert(TAB_WORKERS,null, cValues);
         if(newRowId != -1) {
             cValues.clear();
             cValues.put("email", email);
@@ -101,7 +109,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int id = getUserId(email);
             if (id != 0) {
                 cValues.put("id", id);
-                newRowId = db.insert("Konta", null, cValues);
+                newRowId = db.insert(TAB_ACCOUNT, null, cValues);
                 if(newRowId != -1)
                     AutoFillOtherTables(id, db);
             }
@@ -119,7 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<HashMap<String, String>> userList = new ArrayList<>();
         String position;
-        String query = "SELECT imie, nazwisko, stanowisko, email FROM Pracownicy";
+        String query = "SELECT imie, nazwisko, stanowisko, email FROM "+TAB_WORKERS;
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
             HashMap<String,String> user = new HashMap<>();
@@ -139,7 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         HashMap<String, String> user = new HashMap<>();
         String position;
-        String query = "SELECT * FROM Pracownicy where id ="+id;
+        String query = "SELECT * FROM "+TAB_WORKERS+" where id ="+id;
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
             user.put("imie",cursor.getString(cursor.getColumnIndex("imie")));
@@ -179,7 +187,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<String> GetUsersWhatYouWant(String name){
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> userList = new ArrayList<>();
-        String query = "SELECT "+name+" FROM Pracownicy";
+        String query = "SELECT "+name+" FROM "+TAB_WORKERS;
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
             if(name.equals("stanowisko"))
@@ -198,15 +206,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void AutoFillOtherTables(int id_worker, SQLiteDatabase db)
     {
-        db.execSQL("Insert INTO Pensje(id) values ("+id_worker+") ");
-        db.execSQL("Insert INTO Dyspozycje(id) values ("+id_worker+") ");
-        db.execSQL("Insert INTO Grafik(id) values ("+id_worker+") ");
+        db.execSQL("Insert INTO "+TAB_SALARY+"(id) values ("+id_worker+") ");
+        db.execSQL("Insert INTO "+TAB_AVAILABILITY+"(id) values ("+id_worker+") ");
+        db.execSQL("Insert INTO "+TAB_SCHEDULE+"(id) values ("+id_worker+") ");
 
     }
 
-    public void DeleteUser(int userid){
+    public void deleteUser(int userid){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("Pracownicy", "id = ?",new String[]{String.valueOf(userid)});
+        db.delete( TAB_ACCOUNT, "id = ?",new String[]{String.valueOf(userid)});
+        db.delete(TAB_AVAILABILITY, "id = ?",new String[]{String.valueOf(userid)});
+        db.delete(TAB_SALARY, "id = ?",new String[]{String.valueOf(userid)});
+        db.delete(TAB_SCHEDULE, "id = ?",new String[]{String.valueOf(userid)});
+        db.delete(TAB_WORKERS, "id = ?",new String[]{String.valueOf(userid)});
         db.close();
     }
 
