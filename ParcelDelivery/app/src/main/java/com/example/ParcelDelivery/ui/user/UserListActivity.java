@@ -94,9 +94,9 @@ public class UserListActivity extends AppCompatActivity {
     private String getEmailFromAdapter(String str)
     {
         str = str.substring(1,str.length()-1);
-        String[] lol = str.split(",");
-        lol = lol[lol.length-1].split("=");
-        return lol[1];
+        String[] lol = str.split("email=");
+        lol = lol[lol.length-1].split(" ");
+        return lol[0];
     }
 
 
