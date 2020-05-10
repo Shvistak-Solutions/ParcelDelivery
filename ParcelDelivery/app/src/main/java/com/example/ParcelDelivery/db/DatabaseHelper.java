@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.strictmode.SqliteObjectLeakedViolation;
-import android.widget.Toast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -86,6 +85,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
+    //Dodaje nowych pracownikow
     public long insertUserDetails(String name, String surname, int position,String email, String pesel, String idNum, String address, String postal){
         //Get the Data Repository in write mode
         if(surname.isEmpty() || name.isEmpty() || email.isEmpty())
