@@ -52,16 +52,19 @@ public class UserAddActivity extends AppCompatActivity {
                 String SpinnerValue = position.getSelectedItem().toString();
                 int userPosition = positionStringToint(SpinnerValue);
                 DatabaseHelper dbHandler = new DatabaseHelper(UserAddActivity.this);
-                if(dbHandler.insertUserDetails(userName,userSurname,userPosition,userEmail,userPesel,userId,userAddress,userPostal) != -1)
+                long res = dbHandler.insertUserDetails(userName,userSurname,userPosition,userEmail,userPesel,userId,userAddress,userPostal);
+                if(res > 0)
                 {
                     intent = new Intent(UserAddActivity.this, com.example.ParcelDelivery.ui.user.UserListActivity.class);
                     startActivity(intent);
                     Toast.makeText(getApplicationContext(), "Dodano sukcesywnie",Toast.LENGTH_SHORT).show();
                 }
+                else if(res == 0)
+                    Toast.makeText(getApplicationContext(), "Pole Imie, Nazwisko i Email nie mogą być puste",Toast.LENGTH_SHORT).show();
+
                 else
-                {
-                    Toast.makeText(getApplicationContext(), "Oj... Coś poszło nie tak",Toast.LENGTH_SHORT).show();
-                }
+                    Toast.makeText(getApplicationContext(), "Nie udało się dodać pracownika",Toast.LENGTH_SHORT).show();
+
 
             }
         });

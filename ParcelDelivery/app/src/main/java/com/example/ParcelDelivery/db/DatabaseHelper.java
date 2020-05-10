@@ -32,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL("CREATE TABLE "+TAB_ACCOUNT+"(id INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR)");
-        database.execSQL("CREATE TABLE "+TAB_WORKERS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, stanowisko INTEGER, email VARCHAR unique, pesel VARCHAR, nr_dowodu VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
+        database.execSQL("CREATE TABLE "+TAB_WORKERS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, stanowisko INTEGER, email VARCHAR unique, pesel VARCHAR unique, nr_dowodu VARCHAR unique, adres VARCHAR, kod_pocztowy VARCHAR);");
         database.execSQL("CREATE TABLE "+TAB_SALARY+"(id INTEGER, pensja FLOAT, ilosc_godzin INTEGER, data DATE, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
         database.execSQL("CREATE TABLE "+TAB_AVAILABILITY+"(id INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
         database.execSQL("CREATE TABLE "+TAB_SCHEDULE+"(id INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id) REFERENCES Pracownicy(id))");
@@ -88,6 +88,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public long insertUserDetails(String name, String surname, int position,String email, String pesel, String idNum, String address, String postal){
         //Get the Data Repository in write mode
+        if(surname.isEmpty() || name.isEmpty() || email.isEmpty())
+            return 0;
         SQLiteDatabase db = this.getWritableDatabase();
         //Create a new map of values, where column names are the keys
         ContentValues cValues = new ContentValues();
