@@ -9,7 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,11 +22,13 @@ import com.example.ParcelDelivery.db.DatabaseHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @SuppressLint("Registered")
 public class UserListActivity extends AppCompatActivity {
 
     Button saveBtn;
+    SearchView search;
     Intent intent;
 
     @Override
@@ -33,19 +37,43 @@ public class UserListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_userlist);
 
         final DatabaseHelper db = new DatabaseHelper(this);
-        ListView lv = (ListView) findViewById(R.id.user_list);
+        final ListView lv = (ListView) findViewById(R.id.user_list);
         final ArrayList<HashMap<String, String>> userList = db.GetUsers();
-        final ListAdapter adapter = new SimpleAdapter(UserListActivity.this, userList, R.layout.list_row,new String[]{"imie","nazwisko","email","stanowisko"}, new int[]{R.id.textListName, R.id.textListSurname,R.id.textListEmail, R.id.textListPosition});
+        final SimpleAdapter adapter = new SimpleAdapter(UserListActivity.this, userList, R.layout.list_row,new String[]{"imie","nazwisko","email","stanowisko"}, new int[]{R.id.textListName, R.id.textListSurname,R.id.textListEmail, R.id.textListPosition});
         lv.setAdapter(adapter);
         lv.setClickable(true);
+
+        search = (SearchView)findViewById(R.id.searchView);
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                adapter.getFilter().filter(query);
+                //lv.setAdapter(adapter);
+                Toast.makeText(getApplicationContext(), "Oj... Coś poszło nie tak",Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                adapter.getFilter().filter(newText);
+                //lv.setAdapter(adapter);
+                Toast.makeText(getApplicationContext(), "tyle"+adapter.getCount(),Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+        });
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                HashMap<String, String> userDetail = userList.get(position);
+
+                String email = null;
+                email = getEmailFromAdapter(email = adapter.getItem(position).toString());
                 intent = new Intent(UserListActivity.this, UserDetailsActivity.class);
-                //String idWorker = Integer.toString(db.getUserId(userDetail.get("email")));
-                int idWorker = db.getUserId(userDetail.get("email"));
+                int idWorker = db.getUserId(email);
                 intent.putExtra("id", idWorker );
                 startActivity(intent);
             }
@@ -62,6 +90,16 @@ public class UserListActivity extends AppCompatActivity {
             }
         });
     }
+
+    private String getEmailFromAdapter(String str)
+    {
+        str = str.substring(1,str.length()-1);
+        String[] lol = str.split(",");
+        lol = lol[lol.length-1].split("=");
+        return lol[1];
+    }
+
+
 
     @Override
     protected void onStart() {
