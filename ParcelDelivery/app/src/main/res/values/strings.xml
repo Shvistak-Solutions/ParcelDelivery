@@ -6,4 +6,6 @@
         <item>Koordynator</item>
         <item>Manager</item>
     </string-array>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 </resources>

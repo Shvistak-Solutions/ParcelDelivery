@@ -1,5 +1,7 @@
 package com.example.ParcelDelivery.ui.user;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,15 +20,16 @@ import java.util.HashMap;
 public class UserDetailsActivity extends AppCompatActivity {
 
     TextView name, surname, pesel, email, idNum, address, postal, position;
-    int id;
+    int userId;
     Button buttonRmv;
     Intent intent;
+    DatabaseHelper db;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userdetails);
-        id = getIntent().getIntExtra("id", 0);
+        userId = getIntent().getIntExtra("id", 0);
 
         name = (TextView)findViewById(R.id.textDetailName);
         surname = (TextView)findViewById(R.id.textDetailSurname);
@@ -38,22 +41,41 @@ public class UserDetailsActivity extends AppCompatActivity {
         postal = (TextView)findViewById(R.id.textDetailPostal);
         buttonRmv = (Button)findViewById(R.id.buttonRemoveAccount);
 
-        final DatabaseHelper db = new DatabaseHelper(this);
-        final HashMap<String,String> details = db.GetUserDetails(id);
+        db = new DatabaseHelper(this);
+        final HashMap<String,String> details = db.GetUserDetails(userId);
         fillTextViews(details);
+
+        final AlertDialog dialog = removeAlert(details.get("email"));
 
         buttonRmv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.deleteUser(id);
-                intent = new Intent(UserDetailsActivity.this, UserListActivity.class);
-                startActivity(intent);
+                dialog.show();
             }
         });
 
 
 
 
+    }
+
+    private AlertDialog removeAlert(String email)
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(UserDetailsActivity.this);
+        builder.setMessage("Remove user: "+email)
+                .setTitle("Are you sure?");
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                db.deleteUser(userId);
+                intent = new Intent(UserDetailsActivity.this, UserListActivity.class);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        return builder.create();
     }
 
     private void fillTextViews(HashMap<String,String> details)
