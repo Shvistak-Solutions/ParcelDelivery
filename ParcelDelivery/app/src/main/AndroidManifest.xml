@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CoordinatorActivity"></activity>
-        <activity android:name=".StorekeeperActivity" />
-        <activity android:name=".CourierActivity" />
+        <activity android:name=".ui.coordinator.CoordinatorActivity"></activity>
+        <activity android:name=".ui.storekeeper.StorekeeperActivity" />
+        <activity android:name=".ui.courier.CourierActivity" />
         <activity android:name=".ui.manager.ManagerActivity" />
         <activity android:name=".ui.login.LoginActivity">
             <intent-filter>

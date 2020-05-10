@@ -1,8 +1,10 @@
-package com.example.ParcelDelivery;
+package com.example.ParcelDelivery.ui.courier;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.ParcelDelivery.R;
 
 public class CourierActivity extends AppCompatActivity {
 

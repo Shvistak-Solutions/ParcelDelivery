@@ -9,10 +9,10 @@ package com.example.ParcelDelivery.ui.login;
         import android.widget.EditText;
         import android.widget.Toast;
 
-        import com.example.ParcelDelivery.CoordinatorActivity;
-        import com.example.ParcelDelivery.CourierActivity;
+        import com.example.ParcelDelivery.ui.coordinator.CoordinatorActivity;
+        import com.example.ParcelDelivery.ui.courier.CourierActivity;
         import com.example.ParcelDelivery.R;
-        import com.example.ParcelDelivery.StorekeeperActivity;
+        import com.example.ParcelDelivery.ui.storekeeper.StorekeeperActivity;
         import com.example.ParcelDelivery.db.DatabaseHelper;
         import com.example.ParcelDelivery.ui.manager.ManagerActivity;
 
