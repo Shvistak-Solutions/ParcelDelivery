@@ -23,7 +23,7 @@ public class ManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager);
 
-        Button saveBtn = (Button) findViewById(R.id.JEBANYPRZYCISK);
+        Button saveBtn = (Button) findViewById(R.id.buttonUserList);
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
