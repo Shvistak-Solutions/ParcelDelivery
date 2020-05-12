@@ -21,7 +21,7 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     TextView name, surname, pesel, email, idNum, address, postal, position;
     int userId;
-    Button buttonRmv, buttonResetPassword;
+    Button buttonRmv, buttonResetPassword, buttonTest;
     Intent intent;
     DatabaseHelper db;
 
@@ -40,6 +40,13 @@ public class UserDetailsActivity extends AppCompatActivity {
         final AlertDialog dialogReset = resetAlert(details.get("email"));
 
 
+        buttonTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(UserDetailsActivity.this, UserTestActivity.class);
+                startActivity(intent);
+            }
+        });
 
         buttonRmv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,5 +125,6 @@ public class UserDetailsActivity extends AppCompatActivity {
         postal = (TextView)findViewById(R.id.textDetailPostal);
         buttonRmv = (Button)findViewById(R.id.buttonRemoveAccount);
         buttonResetPassword = (Button)findViewById(R.id.buttonResetPasswd);
+        buttonTest = (Button)findViewById(R.id.buttonTest);
     }
 }

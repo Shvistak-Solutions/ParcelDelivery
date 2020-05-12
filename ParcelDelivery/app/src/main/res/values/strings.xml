@@ -8,4 +8,14 @@
     </string-array>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
+    <string name="adres">Adres</string>
+    <string name="nr_dowodu">Nr dowodu</string>
+    <string name="stanowisko">Stanowisko</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="email">Email</string>
+    <string name="kod_pocztowy">Kod pocztowy</string>
+    <string name="pesel">Pesel</string>
+    <string name="nazwisko">Nazwisko</string>
+    <string name="remove_account">Remove Account</string>
+    <string name="imie">Imię</string>
 </resources>

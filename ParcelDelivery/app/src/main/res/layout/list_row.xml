@@ -36,14 +36,5 @@
         android:textColor="#343434"
         android:textSize="14dp" />
 
-    <!--Your comment
-    <Button
-        android:id="@+id/buttonDetails"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/email"
-        android:layout_alignTop="@id/imie"
-        android:text="" />
-    -->
+
 </RelativeLayout>
