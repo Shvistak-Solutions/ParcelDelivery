@@ -281,7 +281,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
-    public int updateData(String[] columns, String[] values, String table, String whereColumn, String whereValue)
+    public int updateStringData(String[] columns, String[] values, String table, String whereColumn, String whereValue)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues val = new ContentValues();
@@ -297,7 +297,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public int updateData(String column,String value, String table,String whereColumn, String whereValue)
+    public int updateStringData(String column,String value, String table,String whereColumn, String whereValue)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues val = new ContentValues();
@@ -310,7 +310,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public int updateData(String[] columns, String[] values, String table)
+    public int updateStringData(String[] columns, String[] values, String table)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues val = new ContentValues();
@@ -326,7 +326,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public int updateData(String column,String value, String table)
+    public int updateStringData(String column,String value, String table)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues val = new ContentValues();
@@ -383,8 +383,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return "";
     }
-
-    
 
     private String getPosition(String position)
     {

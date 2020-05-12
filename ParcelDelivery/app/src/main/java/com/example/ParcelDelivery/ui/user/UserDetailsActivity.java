@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,17 +30,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userdetails);
         userId = getIntent().getIntExtra("id", 0);
-
-        name = (TextView)findViewById(R.id.textDetailName);
-        surname = (TextView)findViewById(R.id.textDetailSurname);
-        email = (TextView)findViewById(R.id.textDetailEmail) ;
-        position = (TextView) findViewById(R.id.textDetailPosition);
-        pesel = (TextView)findViewById(R.id.textDetailPesel);
-        idNum = (TextView)findViewById(R.id.textDetailIdNum);
-        address = (TextView)findViewById(R.id.textDetailAddress);
-        postal = (TextView)findViewById(R.id.textDetailPostal);
-        buttonRmv = (Button)findViewById(R.id.buttonRemoveAccount);
-        buttonResetPassword = (Button)findViewById(R.id.buttonResetPasswd);
+        findLayoutItems();
 
         db = new DatabaseHelper(this);
         final HashMap<String,String> details = db.getData("Pracownicy",userId);
@@ -74,7 +65,8 @@ public class UserDetailsActivity extends AppCompatActivity {
                 .setTitle("Are you sure?");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                db.updateData("haslo","Reset1234","Konta","email", email);
+                if(db.updateStringData("stanowisko","1","Pracownicy","email", email) <= 0)
+                    Toast.makeText(getApplicationContext(), "Nie udało się zresetować hasła",Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -113,5 +105,18 @@ public class UserDetailsActivity extends AppCompatActivity {
         idNum.setText(details.get("nr_dowodu"));
         postal.setText(details.get("kod_pocztowy"));
 
+    }
+
+    private void findLayoutItems(){
+        name = (TextView)findViewById(R.id.textDetailName);
+        surname = (TextView)findViewById(R.id.textDetailSurname);
+        email = (TextView)findViewById(R.id.textDetailEmail) ;
+        position = (TextView) findViewById(R.id.textDetailPosition);
+        pesel = (TextView)findViewById(R.id.textDetailPesel);
+        idNum = (TextView)findViewById(R.id.textDetailIdNum);
+        address = (TextView)findViewById(R.id.textDetailAddress);
+        postal = (TextView)findViewById(R.id.textDetailPostal);
+        buttonRmv = (Button)findViewById(R.id.buttonRemoveAccount);
+        buttonResetPassword = (Button)findViewById(R.id.buttonResetPasswd);
     }
 }

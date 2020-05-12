@@ -20,24 +20,14 @@ public class UserAddActivity extends AppCompatActivity {
     Button saveBtn;
     Intent intent;
 
-    //    public void toUserList(View view) {
-//        Intent intent = new Intent(UserAddActivity.this, UserListActivity.class);
-//        startActivity(intent);
-//    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_useradd);
+        findLayoutItems();
 
-        name = (EditText)findViewById(R.id.editTextName);
-        surname = (EditText)findViewById(R.id.editTextSurname);
-        email = (EditText)findViewById(R.id.editTextEmail) ;
-        position = (Spinner)findViewById(R.id.spinnerPosition);
-        pesel = (EditText)findViewById(R.id.editTextPesel);
-        idNum = (EditText)findViewById(R.id.editTextIdNum);
-        address = (EditText)findViewById(R.id.editTextAddress);
-        postal = (EditText)findViewById(R.id.editTextPostal);
-        saveBtn = (Button)findViewById(R.id.buttonResetPasswd);
+
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +83,20 @@ public class UserAddActivity extends AppCompatActivity {
         }
         return userPosition;
     }
+
+    private void findLayoutItems()
+    {
+        name = (EditText)findViewById(R.id.editTextName);
+        surname = (EditText)findViewById(R.id.editTextSurname);
+        email = (EditText)findViewById(R.id.editTextEmail) ;
+        position = (Spinner)findViewById(R.id.spinnerPosition);
+        pesel = (EditText)findViewById(R.id.editTextPesel);
+        idNum = (EditText)findViewById(R.id.editTextIdNum);
+        address = (EditText)findViewById(R.id.editTextAddress);
+        postal = (EditText)findViewById(R.id.editTextPostal);
+        saveBtn = (Button)findViewById(R.id.buttonResetPasswd);
+    }
+
 
 }
 
