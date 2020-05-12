@@ -9,9 +9,15 @@ public class ForgotPasswordGenerator {
     private String box = "";
     private int boxLenght;
 
-    public ForgotPasswordGenerator() {
+    public ForgotPasswordGenerator(int numberOfCharacters) {
 
         this.numberOfCharacters = numberOfCharacters;
+        makeBox();
+    }
+
+    public ForgotPasswordGenerator() {
+
+        this.numberOfCharacters = 6;
         makeBox();
     }
 

@@ -273,7 +273,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return "";
     }
 
-    public void updateForgotenPassword(String email, String password){
+    public void updatePassword(String email, String password){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         String password_md5 = md5(password);

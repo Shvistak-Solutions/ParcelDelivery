@@ -76,15 +76,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             password1.generateLetter();
             password2 = password1.generatePassword();
 
-            dbH.updateForgotenPassword(email2, password2);
+            dbH.updatePassword(email2, password2);
 
             newPasswordSign.setVisibility(View.VISIBLE);
             passwordPrint.setVisibility(View.VISIBLE);
             passwordPrint.setTextSize(35);
             passwordPrint.setText(password2);
             Toast.makeText(this,"Powroc do strony logowania i zaloguj sie za pomoca nowego hasla",Toast.LENGTH_LONG).show();
-
-
 
 
         }

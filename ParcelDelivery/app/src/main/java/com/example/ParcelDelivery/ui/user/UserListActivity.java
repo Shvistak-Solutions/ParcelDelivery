@@ -63,7 +63,7 @@ public class UserListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String email = null;
-                email = getEmailFromAdapter(email = adapter.getItem(position).toString());
+                email = getEmailFromAdapter(adapter, position);
                 intent = new Intent(UserListActivity.this, UserDetailsActivity.class);
                 int idWorker = db.getUserId(email);
                 intent.putExtra("id", idWorker );
@@ -83,8 +83,9 @@ public class UserListActivity extends AppCompatActivity {
         });
     }
 
-    private String getEmailFromAdapter(String str)
+    private String getEmailFromAdapter(SimpleAdapter adapter, int position)
     {
+        String str = adapter.getItem(position).toString();
         str = str.substring(1,str.length()-1);
         String[] lol = str.split("email=");
         lol = lol[lol.length-1].split(" ");
