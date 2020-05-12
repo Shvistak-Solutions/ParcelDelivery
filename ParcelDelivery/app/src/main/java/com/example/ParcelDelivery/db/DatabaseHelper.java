@@ -56,14 +56,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         onUpgrade(db, 1, 2);
-        insertUserDetails("Katarzyna","Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
-        insertUserDetails("Rafał","Świstak", 0, "bober@email.com", "555555555555", "koza", "mielec", "11111");
-        insertUserDetails("Szczepan","'Szlachta' Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
-        insertUserDetails("Krzysztof","Dżachym", 1, "dżadża@email.com", "333333333333333", "jachym", "krakow", "11111");
-        insertUserDetails("Patryk","Frasio", 2, "frasio@email.com", "222222222222", "frasio", "konkurencyjnaKopalniaSiarki", "11111");
-        insertUserDetails("Łukasz","Scared", 1, "scared@email.com", "1111111111111", "difrent", "myślenice", "11111");
-        insertUserDetails("Zdzisław","Siwy", 3, "siwy@email.com", "0000000000000", "siwy", "kanciapa", "11111");
+        insertNewUser("Katarzyna","Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
+        insertNewUser("Rafał","Świstak", 0, "bober@email.com", "555555555555", "koza", "mielec", "11111");
+        insertNewUser("Szczepan","'Szlachta' Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
+        insertNewUser("Krzysztof","Dżachym", 1, "dżadża@email.com", "333333333333333", "jachym", "krakow", "11111");
+        insertNewUser("Patryk","Frasio", 2, "frasio@email.com", "222222222222", "frasio", "konkurencyjnaKopalniaSiarki", "11111");
+        insertNewUser("Łukasz","Scared", 1, "scared@email.com", "1111111111111", "difrent", "myślenice", "11111");
+        insertNewUser("Zdzisław","Siwy", 3, "siwy@email.com", "0000000000000", "siwy", "kanciapa", "11111");
 
+    }
+
+    public void updatePassword(String email, String password){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        String password_md5 = md5(password);
+        values.put("haslo",password_md5);
+        db.update("Konta",values,"email = ?",new String[] {email});
+        db.close();
+
+    }
+
+    public boolean checkIfExists(String userEmail){
+        SQLiteDatabase  db = this.getReadableDatabase();
+
+        String query = "select "+ "email" + " from " + "Konta";
+        Cursor cursor = db.rawQuery(query, null);
+        String existEmail;
+
+        if (cursor.moveToFirst()) {
+            do {
+                existEmail = cursor.getString(0);
+
+                if (existEmail.equals(userEmail)) {
+                    return true;
+                }
+            } while (cursor.moveToNext());
+        }
+        return false;
     }
 
     public int getUserId(String email)
@@ -86,7 +115,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Dodaje nowych pracownikow
-    public long insertUserDetails(String name, String surname, int position,String email, String pesel, String idNum, String address, String postal){
+    public long insertNewUser(String name, String surname, int position,String email, String pesel, String idNum, String address, String postal){
         //Get the Data Repository in write mode
         if(surname.isEmpty() || name.isEmpty() || email.isEmpty())
             return 0;
@@ -145,22 +174,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  userList;
     }
 
-    public HashMap<String, String> getUserDetails(int id) {
+    public HashMap<String, String> getUserDetails(String table, int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         HashMap<String, String> user = new HashMap<>();
         String position;
-        String query = "SELECT * FROM "+TAB_WORKERS+" where id ="+id;
+        String query = "SELECT * FROM "+table+" where id ="+id;
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
-            user.put("imie",cursor.getString(cursor.getColumnIndex("imie")));
-            user.put("nazwisko",cursor.getString(cursor.getColumnIndex("nazwisko")));
-            position = cursor.getString(cursor.getColumnIndex("stanowisko"));
-            user.put("stanowisko",getPosition( position ));
-            user.put("email",cursor.getString(cursor.getColumnIndex("email")));
-            user.put("pesel",cursor.getString(cursor.getColumnIndex("pesel")));
-            user.put("nr_dowodu",cursor.getString(cursor.getColumnIndex("nr_dowodu")));
-            user.put("adres",cursor.getString(cursor.getColumnIndex("adres")));
-            user.put("kod_pocztowy",cursor.getString(cursor.getColumnIndex("kod_pocztowy")));
+                user = databaseContentToHashMap(table,cursor);
         }
         cursor.close();
         db.close();
@@ -214,38 +235,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void deleteUser(int userid){
+    public void deleteUser(int userId){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete( TAB_ACCOUNT, "id = ?",new String[]{String.valueOf(userid)});
-        db.delete(TAB_AVAILABILITY, "id = ?",new String[]{String.valueOf(userid)});
-        db.delete(TAB_SALARY, "id = ?",new String[]{String.valueOf(userid)});
-        db.delete(TAB_SCHEDULE, "id = ?",new String[]{String.valueOf(userid)});
-        db.delete(TAB_WORKERS, "id = ?",new String[]{String.valueOf(userid)});
+        db.delete( TAB_ACCOUNT, "id = ?",new String[]{String.valueOf(userId)});
+        db.delete(TAB_AVAILABILITY, "id = ?",new String[]{String.valueOf(userId)});
+        db.delete(TAB_SALARY, "id = ?",new String[]{String.valueOf(userId)});
+        db.delete(TAB_SCHEDULE, "id = ?",new String[]{String.valueOf(userId)});
+        db.delete(TAB_WORKERS, "id = ?",new String[]{String.valueOf(userId)});
         db.close();
     }
 
-    private String getPosition(String position)
-    {
-        switch(position)
-        {
-            case "0":
-                position = "Kurier";
-                break;
-            case "1":
-                position = "Magazynier";
-                break;
-            case "2":
-                position = "Koordynator";
-                break;
-            case "3":
-                position = "Manager";
-                break;
-            default:
-                position = "WTF";
-                break;
-        }
-        return position;
-    }
+    
+
+    
 
     // Ta funkcja to mocny snippet
     public static final String md5(final String s) {
@@ -273,33 +275,70 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return "";
     }
 
-    public void updatePassword(String email, String password){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        String password_md5 = md5(password);
-        values.put("haslo",password_md5);
-        db.update("Konta",values,"email = ?",new String[] {email});
-        db.close();
+    
 
+    private String getPosition(String position)
+    {
+        switch(position)
+        {
+            case "0":
+                position = "Kurier";
+                break;
+            case "1":
+                position = "Magazynier";
+                break;
+            case "2":
+                position = "Koordynator";
+                break;
+            case "3":
+                position = "Manager";
+                break;
+            default:
+                position = "WTF";
+                break;
+        }
+        return position;
     }
 
-    public boolean checkIfExists(String userEmail){
-        SQLiteDatabase  db = this.getReadableDatabase();
-
-        String query = "select "+ "email" + " from " + "Konta";
-        Cursor cursor = db.rawQuery(query, null);
-        String existEmail;
-
-        if (cursor.moveToFirst()) {
-            do {
-                existEmail = cursor.getString(0);
-
-                if (existEmail.equals(userEmail)) {
-                    return true;
-                }
-            } while (cursor.moveToNext());
+    private HashMap<String,String> databaseContentToHashMap(String table, Cursor cursor)
+    {
+        HashMap<String, String> user = new HashMap<>();
+        switch(table) {
+            case "Pracownicy":
+                String position;
+                user.put("imie", cursor.getString(cursor.getColumnIndex("imie")));
+                user.put("nazwisko", cursor.getString(cursor.getColumnIndex("nazwisko")));
+                position = cursor.getString(cursor.getColumnIndex("stanowisko"));
+                user.put("stanowisko", getPosition(position));
+                user.put("email", cursor.getString(cursor.getColumnIndex("email")));
+                user.put("pesel", cursor.getString(cursor.getColumnIndex("pesel")));
+                user.put("nr_dowodu", cursor.getString(cursor.getColumnIndex("nr_dowodu")));
+                user.put("adres", cursor.getString(cursor.getColumnIndex("adres")));
+                user.put("kod_pocztowy", cursor.getString(cursor.getColumnIndex("kod_pocztowy")));
+                break;
+            case "Pensje":
+                user.put("pensja", cursor.getString(cursor.getColumnIndex("pensja")));
+                user.put("ilosc_godzin", cursor.getString(cursor.getColumnIndex("ilosc_godzin")));
+                user.put("data", cursor.getString(cursor.getColumnIndex("data")));
+                break;
+            case "Grafik":
+                user.put("godzina_rozpoczecia", cursor.getString(cursor.getColumnIndex("godzina_rozpoczecia")));
+                user.put("godzina_zakonczenia", cursor.getString(cursor.getColumnIndex("godzina_zakonczenia")));
+                user.put("data", cursor.getString(cursor.getColumnIndex("data")));
+                user.put("wejscie", cursor.getString(cursor.getColumnIndex("wejscie")));
+                user.put("wyjscie", cursor.getString(cursor.getColumnIndex("wyjscie")));
+                break;
+            case "Dyspozycje":
+                user.put("godzina_rozpoczecia", cursor.getString(cursor.getColumnIndex("godzina_rozpoczecia")));
+                user.put("godzina_zakonczenia", cursor.getString(cursor.getColumnIndex("godzina_zakonczenia")));
+                user.put("data", cursor.getString(cursor.getColumnIndex("data")));
+                break;
+            default:
+                break;
         }
-        return false;
+        return user;
     }
 
 }
+
+

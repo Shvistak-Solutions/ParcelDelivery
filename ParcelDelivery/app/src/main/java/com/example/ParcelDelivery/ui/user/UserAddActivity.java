@@ -52,7 +52,7 @@ public class UserAddActivity extends AppCompatActivity {
                 String SpinnerValue = position.getSelectedItem().toString();
                 int userPosition = positionStringToint(SpinnerValue);
                 DatabaseHelper dbHandler = new DatabaseHelper(UserAddActivity.this);
-                long res = dbHandler.insertUserDetails(userName,userSurname,userPosition,userEmail,userPesel,userId,userAddress,userPostal);
+                long res = dbHandler.insertNewUser(userName,userSurname,userPosition,userEmail,userPesel,userId,userAddress,userPostal);
                 if(res > 0)
                 {
                     intent = new Intent(UserAddActivity.this, com.example.ParcelDelivery.ui.user.UserListActivity.class);

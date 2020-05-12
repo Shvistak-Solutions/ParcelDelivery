@@ -21,7 +21,7 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     TextView name, surname, pesel, email, idNum, address, postal, position;
     int userId;
-    Button buttonRmv;
+    Button buttonRmv, buttonResetPassword;
     Intent intent;
     DatabaseHelper db;
 
@@ -40,27 +40,52 @@ public class UserDetailsActivity extends AppCompatActivity {
         address = (TextView)findViewById(R.id.textDetailAddress);
         postal = (TextView)findViewById(R.id.textDetailPostal);
         buttonRmv = (Button)findViewById(R.id.buttonRemoveAccount);
+        buttonResetPassword = (Button)findViewById(R.id.buttonResetPasswd);
 
         db = new DatabaseHelper(this);
-        final HashMap<String,String> details = db.getUserDetails(userId);
+        final HashMap<String,String> details = db.getUserDetails("Pracownicy",userId);
         fillTextViews(details);
 
-        final AlertDialog dialog = removeAlert(details.get("email"));
+        final AlertDialog dialogRemove = removeAlert(details.get("email"));
+        final AlertDialog dialogReset = resetAlert(details.get("email"));
+
+
 
         buttonRmv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.show();
+                dialogRemove.show();
+            }
+        });
+
+        buttonResetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogReset.show();
             }
         });
 
 
-
-
     }
 
-    private AlertDialog removeAlert(String email)
-    {
+    private AlertDialog resetAlert(final String email) {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(UserDetailsActivity.this);
+        builder.setMessage("Reset password for user:\n"+email)
+                .setTitle("Are you sure?");
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                db.updatePassword(email, "Reset123");
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        return builder.create();
+    }
+    private AlertDialog removeAlert(String email) {
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(UserDetailsActivity.this);
         builder.setMessage("Remove user: "+email)
                 .setTitle("Are you sure?");
@@ -78,8 +103,8 @@ public class UserDetailsActivity extends AppCompatActivity {
         return builder.create();
     }
 
-    private void fillTextViews(HashMap<String,String> details)
-    {
+    private void fillTextViews(HashMap<String,String> details) {
+
         name.setText(details.get("imie"));
         surname.setText(details.get("nazwisko"));
         email.setText(details.get("email"));
