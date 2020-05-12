@@ -12,9 +12,7 @@ import android.widget.Toast;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
-import com.example.ParcelDelivery.ui.coordinator.CoordinatorActivity;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +35,6 @@ public class ParcelAddActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Dodano przesyłkę",Toast.LENGTH_SHORT).show();
             }
         });
-
-        /*List<String> spinnerArray =  new ArrayList<String>();
-        spinnerArray.add("Pan Świstak");
-        spinnerArray.add("Mister Marmot");*/
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         String[] columns = {"id", "imie", "nazwisko"};
