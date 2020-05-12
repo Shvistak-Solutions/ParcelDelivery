@@ -8,9 +8,13 @@ import com.example.ParcelDelivery.R;
 
 public class CourierActivity extends AppCompatActivity {
 
+    int userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courier);
+
+        userId = getIntent().getIntExtra("userId", 0);
     }
 }

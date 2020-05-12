@@ -113,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cValues.put("id", id);
                 newRowId = db.insert(TAB_ACCOUNT, null, cValues);
                 if(newRowId != -1)
-                    AutoFillOtherTables(id, db);
+                    autoFillOtherTables(id, db);
             }
             else return -1;
         }
@@ -125,7 +125,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
-    public ArrayList<HashMap<String, String>> GetUsers(){
+    public ArrayList<HashMap<String, String>> getUsers(){
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<HashMap<String, String>> userList = new ArrayList<>();
         String position;
@@ -145,7 +145,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  userList;
     }
 
-    public HashMap<String, String> GetUserDetails(int id) {
+    public HashMap<String, String> getUserDetails(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         HashMap<String, String> user = new HashMap<>();
         String position;
@@ -167,7 +167,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  user;
     }
 
-    public String GetUserData(String name,String table, int id){
+    public String getDataById(String name,String table, int id){
         SQLiteDatabase db = this.getWritableDatabase();
         String result = "";
         String query = "SELECT "+name+" FROM "+table+" where id ="+id;
@@ -186,10 +186,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  result;
     }
 
-    public ArrayList<String> GetUsersWhatYouWant(String name){
+    public ArrayList<String> GetWhatYouWant(String name, String table){
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> userList = new ArrayList<>();
-        String query = "SELECT "+name+" FROM "+TAB_WORKERS;
+        String query = "SELECT "+name+" FROM "+table;
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
             if(name.equals("stanowisko"))
@@ -206,7 +206,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    private void AutoFillOtherTables(int id_worker, SQLiteDatabase db)
+    private void autoFillOtherTables(int id_worker, SQLiteDatabase db)
     {
         db.execSQL("Insert INTO "+TAB_SALARY+"(id) values ("+id_worker+") ");
         db.execSQL("Insert INTO "+TAB_AVAILABILITY+"(id) values ("+id_worker+") ");

@@ -77,14 +77,14 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent3 = new Intent(LoginActivity.this, CourierActivity.class);
         Intent intent4 = new Intent(LoginActivity.this, StorekeeperActivity.class);
         int id = db.getUserId(Name.getText().toString());
-        String position = db.GetUserData("stanowisko", "Pracownicy", id);
+        String position = db.getDataById("stanowisko", "Pracownicy", id);
         if(id == 0)
         {
             Toast.makeText(getApplicationContext(),"Nie ma takiego użytkownika w bazie danych.",Toast.LENGTH_SHORT).show();
         }
         else
         {
-            if( !(md5(Password.getText().toString()).equals(db.GetUserData("haslo","Konta", id ))))
+            if( !(md5(Password.getText().toString()).equals(db.getDataById("haslo","Konta", id ))))
             {
                 Toast.makeText(getApplicationContext(), "Błędne hasło.", Toast.LENGTH_SHORT).show();
             }
@@ -93,15 +93,19 @@ public class LoginActivity extends AppCompatActivity {
                 switch(position)
                 {
                     case "Kurier":
+                        intent3.putExtra("userId", id );
                         startActivity(intent3);
                         break;
                     case "Magazynier":
+                        intent4.putExtra("userId", id );
                         startActivity(intent4);
                         break;
                     case "Koordynator":
+                        intent2.putExtra("userId", id );
                         startActivity(intent2);
                         break;
                     case "Manager":
+                        intent1.putExtra("userId", id );
                         startActivity(intent1);
                         break;
                     default:

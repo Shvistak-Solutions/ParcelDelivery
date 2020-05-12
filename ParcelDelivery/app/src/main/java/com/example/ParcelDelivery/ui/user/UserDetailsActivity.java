@@ -42,7 +42,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         buttonRmv = (Button)findViewById(R.id.buttonRemoveAccount);
 
         db = new DatabaseHelper(this);
-        final HashMap<String,String> details = db.GetUserDetails(userId);
+        final HashMap<String,String> details = db.getUserDetails(userId);
         fillTextViews(details);
 
         final AlertDialog dialog = removeAlert(details.get("email"));

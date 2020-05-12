@@ -30,41 +30,33 @@ public class UserListActivity extends AppCompatActivity {
     Button saveBtn;
     SearchView search;
     Intent intent;
+    int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userlist);
 
+        userId = getIntent().getIntExtra("userId", 0);
+
         final DatabaseHelper db = new DatabaseHelper(this);
         final ListView lv = (ListView) findViewById(R.id.user_list);
-        final ArrayList<HashMap<String, String>> userList = db.GetUsers();
+        final ArrayList<HashMap<String, String>> userList = db.getUsers();
+        String myMail = db.getDataById("email","Pracownicy",userId);
+        int i = 0;
+        for( HashMap<String,String> a : userList)
+        {
+            String toCheck = a.get("email");
+            if(toCheck.equals(myMail)) {
+                userList.remove(i);
+                break;
+            }
+            i++;
+        }
         final SimpleAdapter adapter = new SimpleAdapter(UserListActivity.this, userList, R.layout.list_row,new String[]{"imie","nazwisko","email","stanowisko"}, new int[]{R.id.textListName, R.id.textListSurname,R.id.textListEmail, R.id.textListPosition});
         lv.setAdapter(adapter);
         lv.setClickable(true);
 
-        search = (SearchView)findViewById(R.id.searchView);
-        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                adapter.getFilter().filter(query);
-                //lv.setAdapter(adapter);
-                Toast.makeText(getApplicationContext(), "Oj... Coś poszło nie tak",Toast.LENGTH_SHORT).show();
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                adapter.getFilter().filter(newText);
-                //lv.setAdapter(adapter);
-                Toast.makeText(getApplicationContext(), "tyle"+adapter.getCount(),Toast.LENGTH_SHORT).show();
-
-                return false;
-            }
-        });
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

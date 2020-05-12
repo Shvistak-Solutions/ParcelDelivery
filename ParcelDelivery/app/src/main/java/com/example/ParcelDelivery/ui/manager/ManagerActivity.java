@@ -13,22 +13,23 @@ import com.example.ParcelDelivery.ui.user.UserListActivity;
 public class ManagerActivity extends AppCompatActivity {
 
     Intent intent;
+    int userId;
 
-//    public void toUserList(View view) {
-//
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager);
 
-        Button saveBtn = (Button) findViewById(R.id.buttonUserList);
+        userId = getIntent().getIntExtra("userId", 0);
 
-        saveBtn.setOnClickListener(new View.OnClickListener() {
+        Button buttonUserList = (Button) findViewById(R.id.buttonUserList);
+
+        buttonUserList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ManagerActivity.this, UserListActivity.class);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         });
