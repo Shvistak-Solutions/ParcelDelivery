@@ -154,76 +154,131 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
-    public ArrayList<HashMap<String, String>> getUsers(){
+
+    public HashMap<String, String> getData(String[] columns, String table, int id){
         SQLiteDatabase db = this.getWritableDatabase();
+        StringBuilder columnList = new StringBuilder();
+        HashMap<String,String> user = new HashMap<>();
+        int howManyColumns = columns.length;
+        for (int i = 0; i < howManyColumns; i++ )
+        {
+            columnList.append(columns[i]);
+            if(i != howManyColumns - 1)
+                columnList.append(", ");
+        }
+        String query = "SELECT "+columnList+" FROM "+table+" where id="+id;
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            for( String column : columns) {
+                if(column.equals("stanowisko"))
+                {
+                    user.put(column,getPosition(cursor.getString(cursor.getColumnIndex(column))));
+                }
+                else
+                user.put(column, cursor.getString(cursor.getColumnIndex(column)));
+            }
+        }
+        cursor.close();
+        db.close();
+        return user;
+    }
+
+    public ArrayList<HashMap<String, String>> getData(String[] columns, String table){
+        SQLiteDatabase db = this.getWritableDatabase();
+        StringBuilder columnList = new StringBuilder();
         ArrayList<HashMap<String, String>> userList = new ArrayList<>();
-        String position;
-        String query = "SELECT imie, nazwisko, stanowisko, email FROM "+TAB_WORKERS;
+
+        int howManyColumns = columns.length;
+        for (int i = 0; i < howManyColumns; i++ )
+        {
+            columnList.append(columns[i]);
+            if(i != howManyColumns - 1)
+                columnList.append(", ");
+        }
+        String query = "SELECT "+columnList+" FROM "+table;
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
             HashMap<String,String> user = new HashMap<>();
-            user.put("imie",cursor.getString(cursor.getColumnIndex("imie")));
-            user.put("nazwisko",cursor.getString(cursor.getColumnIndex("nazwisko")));
-            position = cursor.getString(cursor.getColumnIndex("stanowisko"));
-            user.put("stanowisko",getPosition( position ));
-            user.put("email",cursor.getString(cursor.getColumnIndex("email")));
+            for( String column : columns) {
+                if(column.equals("stanowisko"))
+                {
+                    user.put(column,getPosition(cursor.getString(cursor.getColumnIndex(column))));
+                }
+                else
+                    user.put(column, cursor.getString(cursor.getColumnIndex(column)));
+            }
             userList.add(user);
         }
         cursor.close();
         db.close();
-        return  userList;
+        return userList;
     }
 
-    public HashMap<String, String> getUserDetails(String table, int id) {
+    public String getData(String column, String table, int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String user ="";
+        String query = "SELECT "+column+" FROM "+table+" where id="+id;
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            if(column.equals("stanowisko"))
+            {
+                user = getPosition(cursor.getString(cursor.getColumnIndex(column)));
+            }
+            else
+                user = cursor.getString(cursor.getColumnIndex(column));
+        }
+        cursor.close();
+        db.close();
+        return user;
+    }
+
+    public ArrayList<String> getData(String column, String table){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<String> userList = new ArrayList<>();
+
+        String query = "SELECT "+column+" FROM "+table;
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            if(column.equals("stanowisko"))
+            {
+                userList.add(getPosition(cursor.getString(cursor.getColumnIndex(column))));
+            }
+            else
+                userList.add(cursor.getString(cursor.getColumnIndex(column)));
+        }
+        cursor.close();
+        db.close();
+        return userList;
+    }
+
+    public HashMap<String, String> getData(String table, int id){
+
         SQLiteDatabase db = this.getWritableDatabase();
         HashMap<String, String> user = new HashMap<>();
-        String position;
         String query = "SELECT * FROM "+table+" where id ="+id;
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
-                user = databaseContentToHashMap(table,cursor);
+            user = databaseContentToHashMap(table,cursor);
         }
         cursor.close();
         db.close();
         return  user;
     }
 
-    public String getDataById(String name,String table, int id){
+    public ArrayList<HashMap<String, String>> getData(String table){
         SQLiteDatabase db = this.getWritableDatabase();
-        String result = "";
-        String query = "SELECT "+name+" FROM "+table+" where id ="+id;
-        Cursor cursor = db.rawQuery(query,null);
-        while (cursor.moveToNext()){
-            if(name.equals("stanowisko"))
-            {
-                result = cursor.getString(cursor.getColumnIndex(name));
-                result = getPosition(result);
-            }
-            else
-               result =cursor.getString(cursor.getColumnIndex(name));
-        }
-        cursor.close();
-        db.close();
-        return  result;
-    }
+        ArrayList<HashMap<String, String>> userList = new ArrayList<>();
 
-    public ArrayList<String> GetWhatYouWant(String name, String table){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<String> userList = new ArrayList<>();
-        String query = "SELECT "+name+" FROM "+table;
+        String query = "SELECT * FROM "+table;
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
-            if(name.equals("stanowisko"))
-            {
-                String position = cursor.getString(cursor.getColumnIndex(name));
-                userList.add(getPosition( position ));
-            }
-            else
-            userList.add(cursor.getString(cursor.getColumnIndex(name)));
+            HashMap<String,String> user = new HashMap<>();
+            user = databaseContentToHashMap(table,cursor);
+            userList.add(user);
         }
         cursor.close();
         db.close();
-        return  userList;
+        return userList;
     }
 
 
@@ -245,9 +300,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    
-
-    
 
     // Ta funkcja to mocny snippet
     public static final String md5(final String s) {

@@ -77,14 +77,14 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent3 = new Intent(LoginActivity.this, CourierActivity.class);
         Intent intent4 = new Intent(LoginActivity.this, StorekeeperActivity.class);
         int id = db.getUserId(Name.getText().toString());
-        String position = db.getDataById("stanowisko", "Pracownicy", id);
+        String position = db.getData("stanowisko", "Pracownicy", id);
         if(id == 0)
         {
             Toast.makeText(getApplicationContext(),"Nie ma takiego użytkownika w bazie danych.",Toast.LENGTH_SHORT).show();
         }
         else
         {
-            if( !(md5(Password.getText().toString()).equals(db.getDataById("haslo","Konta", id ))))
+            if( !(md5(Password.getText().toString()).equals(db.getData("haslo","Konta", id ))))
             {
                 Toast.makeText(getApplicationContext(), "Błędne hasło.", Toast.LENGTH_SHORT).show();
             }

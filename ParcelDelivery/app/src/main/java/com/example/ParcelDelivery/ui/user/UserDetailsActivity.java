@@ -43,7 +43,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         buttonResetPassword = (Button)findViewById(R.id.buttonResetPasswd);
 
         db = new DatabaseHelper(this);
-        final HashMap<String,String> details = db.getUserDetails("Pracownicy",userId);
+        final HashMap<String,String> details = db.getData("Pracownicy",userId);
         fillTextViews(details);
 
         final AlertDialog dialogRemove = removeAlert(details.get("email"));
