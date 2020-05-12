@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.strictmode.SqliteObjectLeakedViolation;
+import android.provider.FontsContract;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -183,6 +183,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return user;
     }
 
+    public String getData(String column, String table, int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String user ="";
+        String query = "SELECT "+column+" FROM "+table+" where id="+id;
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            if(column.equals("stanowisko"))
+            {
+                user = getPosition(cursor.getString(cursor.getColumnIndex(column)));
+            }
+            else
+                user = cursor.getString(cursor.getColumnIndex(column));
+        }
+        cursor.close();
+        db.close();
+        return user;
+    }
+
+    public HashMap<String, String> getData(String table, int id){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        HashMap<String, String> user = new HashMap<>();
+        String query = "SELECT * FROM "+table+" where id ="+id;
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            user = databaseContentToHashMap(table,cursor);
+        }
+        cursor.close();
+        db.close();
+        return  user;
+    }
+
     public ArrayList<HashMap<String, String>> getData(String[] columns, String table){
         SQLiteDatabase db = this.getWritableDatabase();
         StringBuilder columnList = new StringBuilder();
@@ -214,24 +246,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
-    public String getData(String column, String table, int id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        String user ="";
-        String query = "SELECT "+column+" FROM "+table+" where id="+id;
-        Cursor cursor = db.rawQuery(query,null);
-        while (cursor.moveToNext()){
-            if(column.equals("stanowisko"))
-            {
-                user = getPosition(cursor.getString(cursor.getColumnIndex(column)));
-            }
-            else
-                user = cursor.getString(cursor.getColumnIndex(column));
-        }
-        cursor.close();
-        db.close();
-        return user;
-    }
-
     public ArrayList<String> getData(String column, String table){
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> userList = new ArrayList<>();
@@ -251,20 +265,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
-    public HashMap<String, String> getData(String table, int id){
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        HashMap<String, String> user = new HashMap<>();
-        String query = "SELECT * FROM "+table+" where id ="+id;
-        Cursor cursor = db.rawQuery(query,null);
-        while (cursor.moveToNext()){
-            user = databaseContentToHashMap(table,cursor);
-        }
-        cursor.close();
-        db.close();
-        return  user;
-    }
-
     public ArrayList<HashMap<String, String>> getData(String table){
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<HashMap<String, String>> userList = new ArrayList<>();
@@ -281,6 +281,63 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
+    public int updateData(String[] columns, String[] values, String table, String whereColumn, String whereValue)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues val = new ContentValues();
+        int res;
+        for(int i = 0; i < columns.length; i++)
+        {
+            if(columns[i].equals("haslo"))
+                values[i]=md5(values[i]);
+            val.put(columns[i],values[i]);
+        }
+        res = db.update(table,val,whereColumn+"= ?",new String[] {whereValue});
+        db.close();
+        return res;
+    }
+
+    public int updateData(String column,String value, String table,String whereColumn, String whereValue)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues val = new ContentValues();
+        int res;
+        if(column.equals("haslo"))
+            value=md5(value);
+        val.put(column,value);
+        res = db.update(table,val,whereColumn+"= ?",new String[] {whereValue});
+        db.close();
+        return res;
+    }
+
+    public int updateData(String[] columns, String[] values, String table)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues val = new ContentValues();
+        int res;
+        for(int i = 0; i < columns.length; i++)
+        {
+            if(columns[i].equals("haslo"))
+                values[i]=md5(values[i]);
+            val.put(columns[i],values[i]);
+        }
+        res = db.update(table,val,null,null);
+        db.close();
+        return res;
+    }
+
+    public int updateData(String column,String value, String table)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues val = new ContentValues();
+        int res;
+        if(column.equals("haslo"))
+            value=md5(value);
+        val.put(column,value);
+        res = db.update(table,val,null,null);
+        db.close();
+        return res;
+    }
 
     private void autoFillOtherTables(int id_worker, SQLiteDatabase db)
     {
@@ -358,6 +415,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         switch(table) {
             case "Pracownicy":
                 String position;
+                user.put("id", cursor.getString(cursor.getColumnIndex("id")));
                 user.put("imie", cursor.getString(cursor.getColumnIndex("imie")));
                 user.put("nazwisko", cursor.getString(cursor.getColumnIndex("nazwisko")));
                 position = cursor.getString(cursor.getColumnIndex("stanowisko"));
@@ -369,11 +427,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 user.put("kod_pocztowy", cursor.getString(cursor.getColumnIndex("kod_pocztowy")));
                 break;
             case "Pensje":
+                user.put("id", cursor.getString(cursor.getColumnIndex("id")));
                 user.put("pensja", cursor.getString(cursor.getColumnIndex("pensja")));
                 user.put("ilosc_godzin", cursor.getString(cursor.getColumnIndex("ilosc_godzin")));
                 user.put("data", cursor.getString(cursor.getColumnIndex("data")));
                 break;
             case "Grafik":
+                user.put("id", cursor.getString(cursor.getColumnIndex("id")));
                 user.put("godzina_rozpoczecia", cursor.getString(cursor.getColumnIndex("godzina_rozpoczecia")));
                 user.put("godzina_zakonczenia", cursor.getString(cursor.getColumnIndex("godzina_zakonczenia")));
                 user.put("data", cursor.getString(cursor.getColumnIndex("data")));
@@ -381,6 +441,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 user.put("wyjscie", cursor.getString(cursor.getColumnIndex("wyjscie")));
                 break;
             case "Dyspozycje":
+                user.put("id", cursor.getString(cursor.getColumnIndex("id")));
                 user.put("godzina_rozpoczecia", cursor.getString(cursor.getColumnIndex("godzina_rozpoczecia")));
                 user.put("godzina_zakonczenia", cursor.getString(cursor.getColumnIndex("godzina_zakonczenia")));
                 user.put("data", cursor.getString(cursor.getColumnIndex("data")));

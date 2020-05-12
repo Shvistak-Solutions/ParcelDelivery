@@ -6,9 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -75,7 +74,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                 .setTitle("Are you sure?");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                db.updatePassword(email, "Reset123");
+                db.updateData("haslo","Reset1234","Konta","email", email);
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
