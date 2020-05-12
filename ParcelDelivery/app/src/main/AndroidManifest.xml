@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.parcel.ParcelListActivity"></activity>
+        <activity android:name=".ui.parcel.ParcelAddActivity"></activity>
+        <activity android:name=".ui.parcel.ParcelListActivity" />
         <activity android:name=".ui.coordinator.CoordinatorActivity" />
         <activity android:name=".ui.storekeeper.StorekeeperActivity" />
         <activity android:name=".ui.courier.CourierActivity" />
