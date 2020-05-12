@@ -1,5 +1,6 @@
 package com.example.ParcelDelivery.db;
 
+import android.app.DownloadManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,6 +12,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
@@ -215,7 +217,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  user;
     }
 
-    public ArrayList<HashMap<String, String>> getData(String[] columns, String table){
+    public ArrayList<HashMap<String, String>> getData(String[] columns, String table, String whereClause,String whereValue){
         SQLiteDatabase db = this.getWritableDatabase();
         StringBuilder columnList = new StringBuilder();
         ArrayList<HashMap<String, String>> userList = new ArrayList<>();
@@ -227,7 +229,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(i != howManyColumns - 1)
                 columnList.append(", ");
         }
-        String query = "SELECT "+columnList+" FROM "+table;
+        String query;
+        if(whereClause != null)
+        {
+            if(whereClause.isEmpty())
+                query = "SELECT "+columnList+" FROM "+table;
+            else
+                query = "SELECT "+columnList+" FROM "+table+" where "+whereClause+"="+whereValue;
+
+        }
+        else
+            query = "SELECT "+columnList+" FROM "+table;
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
             HashMap<String,String> user = new HashMap<>();
@@ -246,11 +258,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
-    public ArrayList<String> getData(String column, String table){
+    public ArrayList<String> getData(String column, String table, String whereClause, String whereValue){
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> userList = new ArrayList<>();
 
-        String query = "SELECT "+column+" FROM "+table;
+        String query;
+        if(whereClause != null)
+        {
+            if(whereClause.isEmpty())
+                query = "SELECT "+column+" FROM "+table;
+            else
+                query = "SELECT "+column+" FROM "+table+" where "+whereClause+"="+whereValue;
+        }
+        else
+            query = "SELECT "+column+" FROM "+table;
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
             if(column.equals("stanowisko"))
@@ -265,11 +286,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
-    public ArrayList<HashMap<String, String>> getData(String table){
+    public ArrayList<HashMap<String, String>> getData(String table, String whereClause, String whereValue){
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<HashMap<String, String>> userList = new ArrayList<>();
 
-        String query = "SELECT * FROM "+table;
+        String query;
+        if(whereClause != null)
+        {
+            if(whereClause.isEmpty())
+                query = "SELECT * FROM "+table;
+            else
+                query = "SELECT * FROM "+table+" where "+whereClause+"="+whereValue;
+        }
+        else
+            query = "SELECT * FROM "+table;
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
             HashMap<String,String> user = new HashMap<>();

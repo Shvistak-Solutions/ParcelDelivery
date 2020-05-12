@@ -37,7 +37,7 @@ public class UserListActivity extends AppCompatActivity {
 
         final DatabaseHelper db = new DatabaseHelper(this);
         final ListView lv = (ListView) findViewById(R.id.user_list);
-        final ArrayList<HashMap<String, String>> userList = db.getData(new String[]{"imie","nazwisko","email","stanowisko"}, "Pracownicy");
+        final ArrayList<HashMap<String, String>> userList = db.getData(new String[]{"imie","nazwisko","email","stanowisko"}, "Pracownicy", null, null);
         String myMail = db.getData("email","Pracownicy",userId);
         int i = 0;
         for( HashMap<String,String> a : userList)

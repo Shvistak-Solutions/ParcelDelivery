@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.example.ParcelDelivery.R;
 
+
 public class ParcelListActivity extends AppCompatActivity {
     Intent intent;
 
@@ -16,7 +17,6 @@ public class ParcelListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parcel_list);
-
 
         Button saveBtn = (Button)findViewById(R.id.buttonAddParcel);
         saveBtn.setOnClickListener(new View.OnClickListener() {
