@@ -450,6 +450,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return user;
     }
 
+// =========================================== PARCEL =============================================================
+
+    //Dodaje nowych pracownikow
+    public long insertNewParcel(int courierId/*, int senderId, int ricipientId*/){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cValues = new ContentValues();
+        cValues.put("id_kuriera", courierId);
+        cValues.put("id_nadawcy", 23); // temporary solution - no proper table fills
+        cValues.put("id_odbiorcy", 23);
+
+        long newRowId = db.insert(TAB_PACKAGES,null, cValues);
+        db.close();
+
+        return newRowId;
+    }
 }
 
 
