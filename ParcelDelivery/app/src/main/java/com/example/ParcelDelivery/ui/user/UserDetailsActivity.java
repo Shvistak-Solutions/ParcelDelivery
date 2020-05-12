@@ -65,7 +65,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                 .setTitle("Are you sure?");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                if(db.updateStringData("stanowisko","1","Pracownicy","email", email) <= 0)
+                if(db.updateStringData("haslo","Reset1234","Konta","email", email) <= 0)
                     Toast.makeText(getApplicationContext(), "Nie udało się zresetować hasła",Toast.LENGTH_SHORT).show();
             }
         });
