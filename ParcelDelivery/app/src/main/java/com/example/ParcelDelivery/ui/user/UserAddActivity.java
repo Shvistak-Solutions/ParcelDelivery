@@ -2,10 +2,8 @@ package com.example.ParcelDelivery.ui.user;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +24,7 @@ public class UserAddActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_userdetails);
+        setContentView(R.layout.fragment_userdetails);
         findLayoutItems();
 
 

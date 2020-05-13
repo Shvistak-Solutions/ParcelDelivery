@@ -49,7 +49,7 @@ public class UserListActivity extends AppCompatActivity {
             }
             i++;
         }
-        final SimpleAdapter adapter = new SimpleAdapter(UserListActivity.this, userList, R.layout.list_row,new String[]{"imie","nazwisko","email","stanowisko"}, new int[]{R.id.textListName, R.id.textListSurname,R.id.textListEmail, R.id.textListPosition});
+        final SimpleAdapter adapter = new SimpleAdapter(UserListActivity.this, userList, R.layout.row_userlist,new String[]{"imie","nazwisko","email","stanowisko"}, new int[]{R.id.textListName, R.id.textListSurname,R.id.textListEmail, R.id.textListPosition});
         lv.setAdapter(adapter);
         lv.setClickable(true);
 

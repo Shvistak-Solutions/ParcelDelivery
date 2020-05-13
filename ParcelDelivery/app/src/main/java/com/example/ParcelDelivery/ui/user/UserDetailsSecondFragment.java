@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
@@ -53,7 +51,7 @@ public class UserDetailsSecondFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(
-                R.layout.activity_userdetails, container, false);
+                R.layout.fragment_userdetails, container, false);
         DatabaseHelper db = new DatabaseHelper(getContext());
         HashMap<String, String> details = db.getData("Pracownicy", userId);
         findLayoutItems(view);

@@ -59,7 +59,7 @@ public class UserDetailsFirstFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         return inflater.inflate(
-                R.layout.activity_userdetails, container, false);
+                R.layout.fragment_userdetails, container, false);
     }
 
     @Override

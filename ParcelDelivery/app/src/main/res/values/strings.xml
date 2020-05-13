@@ -7,7 +7,7 @@
         <item>Manager</item>
     </string-array>
     <string name="ok">Ok</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel">Anuluj</string>
     <string name="adres">Adres</string>
     <string name="nr_dowodu">Nr dowodu</string>
     <string name="stanowisko">Stanowisko</string>

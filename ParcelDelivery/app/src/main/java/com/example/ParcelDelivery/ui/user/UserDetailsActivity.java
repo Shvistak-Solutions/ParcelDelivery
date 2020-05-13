@@ -1,14 +1,10 @@
 package com.example.ParcelDelivery.ui.user;
 
 import android.os.Bundle;
-import android.widget.TableLayout;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -31,7 +27,7 @@ public class UserDetailsActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.viewpager);
+        setContentView(R.layout.viewpager_userdetails);
         ViewPager2 viewPager = findViewById(R.id.vpPager);
         thisUserId = getIntent().getIntExtra("id", 0);
         userId = getIntent().getIntExtra("userId", userId);
