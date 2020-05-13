@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -16,23 +15,25 @@ import com.example.ParcelDelivery.db.DatabaseHelper;
 
 import java.util.HashMap;
 
-public class UserDetailsFirstFragment extends Fragment {
+public class UserDetailsSecondFragment extends Fragment {
     private  int userId;
 
     private TextView name, surname, pesel, email, idNum, address, postal, position;
     private Button buttonRmv, buttonResetPassword, buttonTest;
     private DatabaseHelper db;
 
-    public static UserDetailsFirstFragment newInstance(int userId) {
-        UserDetailsFirstFragment fragment = new UserDetailsFirstFragment();
 
+
+    public static UserDetailsSecondFragment newInstance(int userId) {
+        UserDetailsSecondFragment fragment = new UserDetailsSecondFragment();
+
+        //this.userId = userId;
         Bundle args = new Bundle();
         args.putInt("userId", userId);
         fragment.setArguments(args);
 
         return fragment;
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,10 +53,6 @@ public class UserDetailsFirstFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
 
     private void fillTextViews(HashMap<String,String> details) {
 

@@ -5,59 +5,61 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
 
 import com.example.ParcelDelivery.R;
 
-public class UserTestActivity extends AppCompatActivity {
+public class UserTestActivity extends FragmentActivity {
 
-    FragmentPagerAdapter adapterViewPager;
 
+
+    
+    private static final int NUM_PAGES = 2;
+    private ViewPager2 viewPager;
+    FragmentStateAdapter adapterViewPager;
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.viewpager);
-        ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
-        adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
-        vpPager.setAdapter(adapterViewPager);
+        viewPager = findViewById(R.id.vpPager);
+        adapterViewPager = new ScreenPagerAdapter(this);
+        viewPager.setAdapter(adapterViewPager);
 
     }
 
-    public static class MyPagerAdapter extends FragmentPagerAdapter {
-        private static int NUM_ITEMS = 3;
+    public static class ScreenPagerAdapter extends FragmentStateAdapter {
+        
 
-        public MyPagerAdapter(FragmentManager fragmentManager) {
+        public ScreenPagerAdapter(FragmentActivity fragmentManager) {
             super(fragmentManager);
         }
 
-        // Returns total number of pages
         @Override
-        public int getCount() {
-            return NUM_ITEMS;
-        }
-
-        // Returns the fragment to display for that page
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0: // Fragment # 0 - This will show FirstFragment
-                    return UserDetailsFirstFragment.newInstance(0, "Page # 3",1);
-                case 1: // Fragment # 0 - This will show FirstFragment different title
-                    return UserDetailsFirstFragment.newInstance(1, "Page # 3",2);
-                case 2: // Fragment # 1 - This will show SecondFragment
-                    return UserDetailsFirstFragment.newInstance(2, "Page # 3",3);
-                default:
-                    return null;
+        public Fragment createFragment(int position) {
+            Fragment fragment = null;
+            if (position == 0) {
+                new UserDetailsFirstFragment();
+                fragment = UserDetailsFirstFragment.newInstance(1);
+            } else if (position == 1) {
+                new UserDetailsSecondFragment();
+                fragment = UserDetailsSecondFragment.newInstance(3);
             }
+            assert fragment != null;
+            return fragment;
         }
 
-        // Returns the page title for the top indicator
         @Override
-        public CharSequence getPageTitle(int position) {
-            return "Page " + position;
+        public int getItemCount() {
+            return NUM_PAGES;
         }
 
-    }
+        }
+
+
 }
