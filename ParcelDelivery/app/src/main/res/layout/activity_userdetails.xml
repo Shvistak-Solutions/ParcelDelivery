@@ -10,14 +10,36 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
         android:text="@string/reset_password"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonEditDetails"
         app:layout_constraintEnd_toStartOf="@+id/buttonRemoveAccount"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+    <Button
+        android:id="@+id/buttonEditDetails"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/editdetails"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonRemoveAccount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/remove_account"
+        app:layout_constraintBottom_toTopOf="@+id/buttonEditDetails"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonResetPasswd" />
+
+    <EditText
         android:id="@+id/textDetailPosition"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
@@ -30,9 +52,11 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailEmail"
+        android:autofillHints=""
+        android:inputType="none"/>
 
-    <TextView
+    <EditText
         android:id="@+id/textDetailIdNum"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
@@ -45,9 +69,11 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailPesel" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailPesel"
+        android:autofillHints=""
+        android:inputType="text"/>
 
-    <TextView
+    <EditText
         android:id="@+id/textDetailAddress"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
@@ -60,9 +86,11 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailIdNum" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailIdNum"
+        android:autofillHints=""
+        android:inputType="textPostalAddress"/>
 
-    <TextView
+    <EditText
         android:id="@+id/textDetailEmail"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
@@ -75,9 +103,11 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailSurname" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailSurname"
+        android:autofillHints=""
+        android:inputType="textEmailAddress" />
 
-    <TextView
+    <EditText
         android:id="@+id/textDetailPostal"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
@@ -90,9 +120,11 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailAddress"
+        android:autofillHints=""
+        android:inputType="number"/>
 
-    <TextView
+    <EditText
         android:id="@+id/textDetailPesel"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
@@ -105,9 +137,11 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailPosition" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailPosition"
+        android:autofillHints=""
+        android:inputType="number"/>
 
-    <TextView
+    <EditText
         android:id="@+id/textDetailSurname"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
@@ -120,9 +154,11 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailName" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailName"
+        android:autofillHints=""
+        android:inputType="textPersonName"/>
 
-    <TextView
+    <EditText
         android:id="@+id/textDetailName"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
@@ -138,19 +174,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:autofillHints=""
+        android:inputType="textPersonName"/>
 
-    <Button
-        android:id="@+id/buttonRemoveAccount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/remove_account"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonResetPasswd" />
+
 
     <TextView
         android:id="@+id/textDetailNameText"
@@ -256,26 +284,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDetailAddressText" />
 
-    <Button
-        android:id="@+id/buttonTest"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/buttonResetPasswd"
-        app:layout_constraintEnd_toStartOf="@+id/button4"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/buttonRemoveAccount"
+
+    <Spinner
+        android:id="@+id/spinnerDetailPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="24dp"
+        android:background="#F1EEEE"
+        android:ems="10"
+        android:gravity="center|fill_vertical"
+        android:hint="@string/stanowisko"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonTest" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDetailEmail"
+        tools:visibility="gone"
+        android:entries="@array/array_name" />
+
+    
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

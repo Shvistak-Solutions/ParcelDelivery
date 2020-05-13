@@ -4,10 +4,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,7 @@ public class UserDetailsFirstFragment extends Fragment {
 
     private TextView name, surname, pesel, email, idNum, address, postal, position;
     private Button buttonRmv, buttonResetPassword;
+    private Spinner spinner;
     private DatabaseHelper db;
     private HashMap<String, String> details;
     private AlertDialog dialogRemove;
@@ -90,8 +93,8 @@ public class UserDetailsFirstFragment extends Fragment {
     private AlertDialog resetAlert(final String email) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("Reset password for user:\n"+email)
-                .setTitle("Are you sure?");
+        builder.setMessage("Zresetuj hasło dla:\n"+email)
+                .setTitle("Czy Napewno?");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if(db.updateStringData("haslo","Reset1234","Konta","email", email) <= 0)
@@ -107,8 +110,8 @@ public class UserDetailsFirstFragment extends Fragment {
     private AlertDialog removeAlert(String email) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("Remove user: "+email)
-                .setTitle("Are you sure?");
+        builder.setMessage("Usuń użytkownika:\n"+email)
+                .setTitle("Czy Napewno?");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 db.deleteUser(thisUserId);
@@ -146,7 +149,20 @@ public class UserDetailsFirstFragment extends Fragment {
         idNum = (TextView)view.findViewById(R.id.textDetailIdNum);
         address = (TextView)view.findViewById(R.id.textDetailAddress);
         postal = (TextView)view.findViewById(R.id.textDetailPostal);
+        spinner = (Spinner)view.findViewById(R.id.spinnerDetailPosition);
+
         buttonRmv = (Button)view.findViewById(R.id.buttonRemoveAccount);
         buttonResetPassword = (Button)view.findViewById(R.id.buttonResetPasswd);
+
+        name.setInputType(InputType.TYPE_NULL);
+        surname.setInputType(InputType.TYPE_NULL);
+        email.setInputType(InputType.TYPE_NULL);
+        position.setInputType(InputType.TYPE_NULL);
+        pesel.setInputType(InputType.TYPE_NULL);
+        idNum.setInputType(InputType.TYPE_NULL);
+        address.setInputType(InputType.TYPE_NULL);
+        postal.setInputType(InputType.TYPE_NULL);
+
+        spinner.setVisibility(View.GONE);
     }
 }

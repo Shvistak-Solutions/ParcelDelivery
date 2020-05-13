@@ -2,10 +2,12 @@ package com.example.ParcelDelivery.ui.user;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,16 +17,16 @@ import com.example.ParcelDelivery.R;
 
 public class UserAddActivity extends AppCompatActivity {
 
-    EditText name, surname, pesel, email, idNum, address, postal;
-    Spinner position;
-    Button saveBtn;
+    TextView name, surname, pesel, email, idNum, address, postal, position;
+    Spinner positionSpinner;
+    Button saveBtn, buttonGone1, buttonGone2;
     Intent intent;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_useradd);
+        setContentView(R.layout.activity_userdetails);
         findLayoutItems();
 
 
@@ -39,7 +41,7 @@ public class UserAddActivity extends AppCompatActivity {
                 String userAddress = surname.getText().toString();
                 String userPostal = postal.getText().toString();
 
-                String SpinnerValue = position.getSelectedItem().toString();
+                String SpinnerValue = positionSpinner.getSelectedItem().toString();
                 int userPosition = positionStringToint(SpinnerValue);
                 DatabaseHelper dbHandler = new DatabaseHelper(UserAddActivity.this);
                 long res = dbHandler.insertNewUser(userName,userSurname,userPosition,userEmail,userPesel,userId,userAddress,userPostal);
@@ -86,15 +88,40 @@ public class UserAddActivity extends AppCompatActivity {
 
     private void findLayoutItems()
     {
-        name = (EditText)findViewById(R.id.editTextName);
-        surname = (EditText)findViewById(R.id.editTextSurname);
-        email = (EditText)findViewById(R.id.editTextEmail) ;
-        position = (Spinner)findViewById(R.id.spinnerPosition);
-        pesel = (EditText)findViewById(R.id.editTextPesel);
-        idNum = (EditText)findViewById(R.id.editTextIdNum);
-        address = (EditText)findViewById(R.id.editTextAddress);
-        postal = (EditText)findViewById(R.id.editTextPostal);
-        saveBtn = (Button)findViewById(R.id.buttonResetPasswd);
+
+        positionSpinner = (Spinner)findViewById(R.id.spinnerDetailPosition);
+
+        name = (TextView)findViewById(R.id.textDetailName);
+        surname = (TextView)findViewById(R.id.textDetailSurname);
+        email = (TextView)findViewById(R.id.textDetailEmail) ;
+        position = (TextView) findViewById(R.id.textDetailPosition);
+        pesel = (TextView)findViewById(R.id.textDetailPesel);
+        idNum = (TextView)findViewById(R.id.textDetailIdNum);
+        address = (TextView)findViewById(R.id.textDetailAddress);
+        postal = (TextView)findViewById(R.id.textDetailPostal);
+
+//        name.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+//        surname.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+//        email.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+//        address.setInputType(InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS);
+//        pesel.setInputType(InputType.TYPE_CLASS_NUMBER);
+//        idNum.setInputType(InputType.TYPE_CLASS_TEXT);
+//        postal.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+
+        position.setVisibility(View.INVISIBLE);
+        positionSpinner.setVisibility(View.VISIBLE);
+        
+
+
+        saveBtn = (Button)findViewById(R.id.buttonEditDetails);
+        saveBtn.setText("Zapisz Dane");
+        buttonGone1 = (Button)findViewById(R.id.buttonRemoveAccount);
+        buttonGone2 = (Button)findViewById(R.id.buttonResetPasswd);
+        buttonGone1.setVisibility(View.GONE);
+        buttonGone2.setVisibility(View.GONE);
+
+
     }
 
 

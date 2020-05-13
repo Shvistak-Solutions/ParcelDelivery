@@ -25,7 +25,7 @@ public class UserDetailsSecondFragment extends Fragment {
     private  int userId;
 
     private TextView name, surname, pesel, email, idNum, address, postal, position;
-    private Button buttonRmv, buttonResetPassword, buttonTest;
+    private Button buttonRmv, buttonResetPassword;
 
 
     ViewPager viewPager;
@@ -91,7 +91,6 @@ public class UserDetailsSecondFragment extends Fragment {
         postal = (TextView)view.findViewById(R.id.textDetailPostal);
         buttonRmv = (Button)view.findViewById(R.id.buttonRemoveAccount);
         buttonResetPassword = (Button)view.findViewById(R.id.buttonResetPasswd);
-        buttonTest = (Button)view.findViewById(R.id.buttonTest);
     }
 
 }

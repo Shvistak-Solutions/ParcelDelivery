@@ -11,11 +11,14 @@
     <string name="adres">Adres</string>
     <string name="nr_dowodu">Nr dowodu</string>
     <string name="stanowisko">Stanowisko</string>
-    <string name="reset_password">Reset Password</string>
+    <string name="reset_password">Zresetuj Hasło</string>
     <string name="email">Email</string>
     <string name="kod_pocztowy">Kod pocztowy</string>
     <string name="pesel">Pesel</string>
     <string name="nazwisko">Nazwisko</string>
-    <string name="remove_account">Remove Account</string>
+    <string name="remove_account">Usuń Konto</string>
     <string name="imie">Imię</string>
+    <string name="editdetails">Edytuj Dane</string>
+    <string name="user_list">Lista Pracowników</string>
+    <string name="add_user">Dodaj Pracownika</string>
 </resources>
