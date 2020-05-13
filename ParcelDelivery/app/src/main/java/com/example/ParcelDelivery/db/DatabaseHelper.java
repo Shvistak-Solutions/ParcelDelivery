@@ -113,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    //Dodaje nowych pracownikow
+    //ADDs New Users
     public long insertNewUser(String name, String surname, int position,String email, String pesel, String idNum, String address, String postal){
         //Get the Data Repository in write mode
         if(surname.isEmpty() || name.isEmpty() || email.isEmpty())
@@ -153,7 +153,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
-
+    //===========================================VERY IMPORTANT ANNOUNCEMENT===================================
+    //
+    // The getData func Family is implemented to get probably any value from the database ( At least i fink so ) and the output will be always of type of String
+    //
+    // The parameters column means one column, the parameter, String[] columns means that you need to pu something like this: getd=Data(new String[]{"firstcolumn","secondcolumn"}, ... , ...) etc
+    // Parameter table is the name of Table, id is userId, whereClause is where Clause, whereValue is whereValue, basic thing
+    //
+    // There are few different Return Types associated with the funcs
+    //
+    // HashMap will return a pair String String like key:"imie", value: $value. to get conten of HashMap you need to use method get("key")
+    // EXAMPLE HashMap<String,String> result = getData(new String[]{"imie", "email"},"Pracownicy",id) then result.get("imie") will give imie
+    //
+    // ArrayList<HashMap<String,String>> is implemented to get more than one row, with same dependency key = value, here you took elements by indexes Arraylist a = get... a.get(index)
+    // or if you want everything -> nice for(HashMap<String,String> b : a)
+    //
+    // There Are also String types but it's rather easy to handle
+    //
+    // there are funcs that have where clause with id, cause it is more commonly used, but some have where Clauses, if you pass null or empty string to whereClause parameter, there will work like with no Clause giving or the records
+    //
+    // That's It i Think
+    //
+    // THERE ARE ALSO UPDATEFUNCS, updateStringData, but all the values that can be inserted by it are Strings - > however they also works on other types and database is not screaming -> but i don't know how will they handle when u need too use the values later
     public HashMap<String, String> getData(String[] columns, String table, int id){
         SQLiteDatabase db = this.getWritableDatabase();
         StringBuilder columnList = new StringBuilder();
