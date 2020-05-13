@@ -162,7 +162,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //
     // There are few different Return Types associated with the funcs
     //
-    // HashMap will return a pair String String like key:"imie", value: $value. to get conten of HashMap you need to use method get("key")
+    // HashMap will return a pair String String like key:"imie", value: value. to get conten of HashMap you need to use method get("key")
     // EXAMPLE HashMap<String,String> result = getData(new String[]{"imie", "email"},"Pracownicy",id) then result.get("imie") will give imie
     //
     // ArrayList<HashMap<String,String>> is implemented to get more than one row, with same dependency key = value, here you took elements by indexes Arraylist a = get... a.get(index)
