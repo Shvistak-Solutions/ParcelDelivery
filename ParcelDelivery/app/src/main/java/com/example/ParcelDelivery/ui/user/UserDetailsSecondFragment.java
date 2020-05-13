@@ -7,21 +7,28 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
 
 import java.util.HashMap;
 
+
+
 public class UserDetailsSecondFragment extends Fragment {
     private  int userId;
 
     private TextView name, surname, pesel, email, idNum, address, postal, position;
     private Button buttonRmv, buttonResetPassword, buttonTest;
-    private DatabaseHelper db;
 
+
+    ViewPager viewPager;
 
 
     public static UserDetailsSecondFragment newInstance(int userId) {
@@ -41,16 +48,22 @@ public class UserDetailsSecondFragment extends Fragment {
         userId = getArguments().getInt("userId", 0);
     }
 
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(
                 R.layout.activity_userdetails, container, false);
-        db = new DatabaseHelper(getContext());
+        DatabaseHelper db = new DatabaseHelper(getContext());
         HashMap<String, String> details = db.getData("Pracownicy", userId);
         findLayoutItems(view);
         fillTextViews(details);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
 
@@ -80,4 +93,5 @@ public class UserDetailsSecondFragment extends Fragment {
         buttonResetPassword = (Button)view.findViewById(R.id.buttonResetPasswd);
         buttonTest = (Button)view.findViewById(R.id.buttonTest);
     }
+
 }

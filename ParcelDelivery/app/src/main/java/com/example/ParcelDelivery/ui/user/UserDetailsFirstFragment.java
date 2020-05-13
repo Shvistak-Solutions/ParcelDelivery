@@ -1,11 +1,15 @@
 package com.example.ParcelDelivery.ui.user;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,16 +21,21 @@ import com.example.ParcelDelivery.db.DatabaseHelper;
 import java.util.HashMap;
 
 public class UserDetailsFirstFragment extends Fragment {
+    private int thisUserId;
     private  int userId;
 
     private TextView name, surname, pesel, email, idNum, address, postal, position;
-    private Button buttonRmv, buttonResetPassword, buttonTest;
+    private Button buttonRmv, buttonResetPassword;
     private DatabaseHelper db;
+    private HashMap<String, String> details;
+    private AlertDialog dialogRemove;
+    private AlertDialog dialogReset;
 
-    public static UserDetailsFirstFragment newInstance(int userId) {
+    public static UserDetailsFirstFragment newInstance(int thisUserId, int userId) {
         UserDetailsFirstFragment fragment = new UserDetailsFirstFragment();
 
         Bundle args = new Bundle();
+        args.putInt("thisUserId", thisUserId);
         args.putInt("userId", userId);
         fragment.setArguments(args);
 
@@ -37,24 +46,82 @@ public class UserDetailsFirstFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        assert getArguments() != null;
         userId = getArguments().getInt("userId", 0);
+        thisUserId = getArguments().getInt("thisUserId", 0);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(
+
+        return inflater.inflate(
                 R.layout.activity_userdetails, container, false);
-        db = new DatabaseHelper(getContext());
-        HashMap<String, String> details = db.getData("Pracownicy", userId);
-        findLayoutItems(view);
-        fillTextViews(details);
-        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        db = new DatabaseHelper(getContext());
+        details = db.getData("Pracownicy", thisUserId);
+        findLayoutItems(view);
+        fillTextViews(details);
+
+        dialogRemove = removeAlert(details.get("email"));
+        dialogReset = resetAlert(details.get("email"));
+
+        buttonRmv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialogRemove.show();
+            }
+        });
+
+        buttonResetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogReset.show();
+            }
+        });
+    }
+
+    private AlertDialog resetAlert(final String email) {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Reset password for user:\n"+email)
+                .setTitle("Are you sure?");
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if(db.updateStringData("haslo","Reset1234","Konta","email", email) <= 0)
+                    Toast.makeText(getContext(), "Nie udało się zresetować hasła", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        return builder.create();
+    }
+    private AlertDialog removeAlert(String email) {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Remove user: "+email)
+                .setTitle("Are you sure?");
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                db.deleteUser(thisUserId);
+                Intent intent = new Intent(getContext(), UserListActivity.class);
+                intent.putExtra("userId",userId);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        return builder.create();
     }
 
     private void fillTextViews(HashMap<String,String> details) {
@@ -81,6 +148,5 @@ public class UserDetailsFirstFragment extends Fragment {
         postal = (TextView)view.findViewById(R.id.textDetailPostal);
         buttonRmv = (Button)view.findViewById(R.id.buttonRemoveAccount);
         buttonResetPassword = (Button)view.findViewById(R.id.buttonResetPasswd);
-        buttonTest = (Button)view.findViewById(R.id.buttonTest);
     }
 }

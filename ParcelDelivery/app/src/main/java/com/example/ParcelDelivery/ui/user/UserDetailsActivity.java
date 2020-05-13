@@ -1,6 +1,7 @@
 package com.example.ParcelDelivery.ui.user;
 
 import android.os.Bundle;
+import android.widget.TableLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,11 +12,17 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import com.google.android.material.tabs.TabLayout;
+
+
 
 import com.example.ParcelDelivery.R;
 
 public class UserDetailsActivity extends FragmentActivity {
 
+    int thisUserId;
     int userId;
 
     private static final int NUM_PAGES = 2;
@@ -26,11 +33,21 @@ public class UserDetailsActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.viewpager);
         ViewPager2 viewPager = findViewById(R.id.vpPager);
-        userId = getIntent().getIntExtra("id", 0);
+        thisUserId = getIntent().getIntExtra("id", 0);
+        userId = getIntent().getIntExtra("userId", userId);
         adapterViewPager = new ScreenPagerAdapter(this);
         viewPager.setAdapter(adapterViewPager);
+        
+        String[] description = new String[]{"Detale","Pensja"};
+
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        new TabLayoutMediator(tabLayout, viewPager,
+                (tab, position) -> tab.setText(description[position])
+        ).attach();
 
     }
+
+
 
     public class ScreenPagerAdapter extends FragmentStateAdapter {
 
@@ -45,10 +62,10 @@ public class UserDetailsActivity extends FragmentActivity {
             Fragment fragment = null;
             if (position == 0) {
                 new UserDetailsFirstFragment();
-                fragment = UserDetailsFirstFragment.newInstance(userId);
+                fragment = UserDetailsFirstFragment.newInstance(thisUserId,userId);
             } else if (position == 1) {
                 new UserDetailsSecondFragment();
-                fragment = UserDetailsSecondFragment.newInstance(3);
+                fragment = UserDetailsSecondFragment.newInstance(thisUserId);
             }
             assert fragment != null;
             return fragment;

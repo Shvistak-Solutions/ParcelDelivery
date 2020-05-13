@@ -31,9 +31,6 @@
         <activity
             android:name=".ui.user.UserDetailsActivity"
             android:label="@string/app_name" />
-        <activity
-            android:name=".ui.user.UserTestActivity"
-            android:label="@string/app_name" />
         <activity android:name=".ui.password_reset.ForgotPasswordActivity" />
     </application>
 

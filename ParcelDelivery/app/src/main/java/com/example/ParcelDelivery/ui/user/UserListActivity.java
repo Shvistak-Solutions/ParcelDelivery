@@ -63,6 +63,7 @@ public class UserListActivity extends AppCompatActivity {
                 intent = new Intent(UserListActivity.this, UserDetailsActivity.class);
                 int idWorker = db.getUserId(email);
                 intent.putExtra("id", idWorker );
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         });
