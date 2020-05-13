@@ -406,7 +406,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    // Ta funkcja to mocny snippet
+
     public static final String md5(final String s) {
         final String MD5 = "MD5";
         try {
@@ -449,7 +449,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 position = "Manager";
                 break;
             default:
-                position = "WTF";
+                position = "";
                 break;
         }
         return position;
