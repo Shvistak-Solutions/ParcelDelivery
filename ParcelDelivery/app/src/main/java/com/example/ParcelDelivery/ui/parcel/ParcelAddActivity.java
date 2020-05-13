@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
+
 public class ParcelAddActivity extends AppCompatActivity {
     Intent intent;
 
@@ -25,28 +27,39 @@ public class ParcelAddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parcel_add);
 
-        Button buttonParcelConfirm = (Button) findViewById(R.id.buttonConfirmParcel);
-
-        buttonParcelConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent = new Intent(ParcelAddActivity.this, ParcelListActivity.class);
-                startActivity(intent);
-                Toast.makeText(getApplicationContext(), "Dodano przesyłkę",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        // get couriers from database
+        final DatabaseHelper dbHelper = new DatabaseHelper(this);
         String[] columns = {"id", "imie", "nazwisko"};
         ArrayList<HashMap<String, String>> couriers = dbHelper.getData(columns, "Pracownicy", "stanowisko", "0");
         List<String> spinnerArray =  new ArrayList<String>();
         for (HashMap<String,String> item : couriers) {
-            spinnerArray.add(item.get("nazwisko"));
+            spinnerArray.add(item.get("id"));
         }
 
+        // assign courier list to spinner component
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner spinnerItems = (Spinner) findViewById(R.id.spinnerCourierSelect);
-        spinnerItems.setAdapter(adapter);
+        final Spinner spinnerCouriers = (Spinner) findViewById(R.id.spinnerCourierSelect);
+        spinnerCouriers.setAdapter(adapter);
+
+        // add parcel into database and get back to parcel list
+        Button buttonParcelConfirm = (Button) findViewById(R.id.buttonConfirmParcel);
+        buttonParcelConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String courierId = spinnerCouriers.getSelectedItem().toString();
+
+                long result = dbHelper.insertNewParcel(parseInt(courierId));
+                if (result > 0) {
+                    intent = new Intent(ParcelAddActivity.this, ParcelListActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(getApplicationContext(), "Dodano przesyłkę", Toast.LENGTH_SHORT).show();
+                }
+                else if (result == 0)
+                    Toast.makeText(getApplicationContext(), "Pola nie mogą być puste", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getApplicationContext(), "Nie udało się dodać zamówienia", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
