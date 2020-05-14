@@ -43,140 +43,140 @@
         android:id="@+id/textDetailPosition"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="120dp"
         android:layout_marginTop="24dp"
+        android:autofillHints=""
         android:background="#F1EEEE"
         android:ems="10"
         android:gravity="center|fill_vertical"
         android:hint="@string/stanowisko"
+        android:inputType="none"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailEmail"
-        android:autofillHints=""
-        android:inputType="none"/>
+        app:layout_constraintTop_toBottomOf="@+id/textDetailEmail" />
 
     <EditText
         android:id="@+id/textDetailIdNum"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="120dp"
         android:layout_marginTop="24dp"
+        android:autofillHints=""
         android:background="#F1EEEE"
         android:ems="10"
         android:gravity="center|fill_vertical"
         android:hint="@string/nr_dowodu"
+        android:inputType="text"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailPesel"
-        android:autofillHints=""
-        android:inputType="text"/>
+        app:layout_constraintTop_toBottomOf="@+id/textDetailPesel" />
 
     <EditText
         android:id="@+id/textDetailAddress"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="120dp"
         android:layout_marginTop="24dp"
+        android:autofillHints=""
         android:background="#F1EEEE"
         android:ems="10"
         android:gravity="center|fill_vertical"
         android:hint="@string/adres"
+        android:inputType="textPostalAddress"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailIdNum"
-        android:autofillHints=""
-        android:inputType="textPostalAddress"/>
+        app:layout_constraintTop_toBottomOf="@+id/textDetailIdNum" />
 
     <EditText
         android:id="@+id/textDetailEmail"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="120dp"
         android:layout_marginTop="24dp"
+        android:autofillHints=""
         android:background="#F1EEEE"
         android:ems="10"
         android:gravity="center|fill_vertical"
         android:hint="@string/email"
+        android:inputType="textEmailAddress"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailSurname"
-        android:autofillHints=""
-        android:inputType="textEmailAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/textDetailSurname" />
 
     <EditText
         android:id="@+id/textDetailPostal"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="120dp"
         android:layout_marginTop="24dp"
+        android:autofillHints=""
         android:background="#F1EEEE"
         android:ems="10"
         android:gravity="center|fill_vertical"
         android:hint="@string/kod_pocztowy"
+        android:inputType="number"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailAddress"
-        android:autofillHints=""
-        android:inputType="number"/>
+        app:layout_constraintTop_toBottomOf="@+id/textDetailAddress" />
 
     <EditText
         android:id="@+id/textDetailPesel"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="120dp"
         android:layout_marginTop="24dp"
+        android:autofillHints=""
         android:background="#F1EEEE"
         android:ems="10"
         android:gravity="center|fill_vertical"
         android:hint="@string/pesel"
+        android:inputType="number"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailPosition"
-        android:autofillHints=""
-        android:inputType="number"/>
+        app:layout_constraintTop_toBottomOf="@+id/textDetailPosition" />
 
     <EditText
         android:id="@+id/textDetailSurname"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="120dp"
         android:layout_marginTop="24dp"
+        android:autofillHints=""
         android:background="#F1EEEE"
         android:ems="10"
         android:gravity="center|fill_vertical"
         android:hint="@string/nazwisko"
+        android:inputType="textPersonName"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDetailName"
-        android:autofillHints=""
-        android:inputType="textPersonName"/>
+        app:layout_constraintTop_toBottomOf="@+id/textDetailName" />
 
     <EditText
         android:id="@+id/textDetailName"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="120dp"
         android:layout_marginTop="32dp"
+        android:autofillHints=""
         android:background="#F1EEEE"
         android:clickable="false"
         android:ems="10"
         android:fadingEdge="horizontal|vertical|none"
         android:gravity="center|fill_vertical"
         android:hint="@string/imie"
+        android:inputType="textPersonName"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible"
-        android:autofillHints=""
-        android:inputType="textPersonName"/>
+        tools:visibility="visible" />
 
 
 

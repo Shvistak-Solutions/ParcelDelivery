@@ -6,6 +6,7 @@
         <item>Koordynator</item>
         <item>Manager</item>
     </string-array>
+    <string name="save_rate">Zapisz zmiany</string>
     <string name="ok">Ok</string>
     <string name="cancel">Anuluj</string>
     <string name="adres">Adres</string>
@@ -21,4 +22,9 @@
     <string name="editdetails">Edytuj Dane</string>
     <string name="user_list">Lista Pracowników</string>
     <string name="add_user">Dodaj Pracownika</string>
+    <string name="salary">Pensja</string>
+    <string name="rate">Stawka</string>
+    <string name="hours_count">Ilość godzin</string>
+    <string name="how_to_salary">Notka: Pensja = ilość godzin * stawka</string>
+    <string name="edit_rate">Edytuj stawkę</string>
 </resources>

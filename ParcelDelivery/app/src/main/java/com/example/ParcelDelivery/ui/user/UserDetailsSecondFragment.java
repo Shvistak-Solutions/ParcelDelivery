@@ -22,10 +22,6 @@ import java.util.HashMap;
 public class UserDetailsSecondFragment extends Fragment {
     private  int userId;
 
-    private TextView name, surname, pesel, email, idNum, address, postal, position;
-    private Button buttonRmv, buttonResetPassword;
-
-
     ViewPager viewPager;
 
 
@@ -51,7 +47,7 @@ public class UserDetailsSecondFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(
-                R.layout.fragment_userdetails, container, false);
+                R.layout.fragment_userdetails2, container, false);
         DatabaseHelper db = new DatabaseHelper(getContext());
         HashMap<String, String> details = db.getData("Pracownicy", userId);
         findLayoutItems(view);
@@ -67,28 +63,28 @@ public class UserDetailsSecondFragment extends Fragment {
 
     private void fillTextViews(HashMap<String,String> details) {
 
-        name.setText(details.get("imie"));
-        surname.setText(details.get("nazwisko"));
-        email.setText(details.get("email"));
-        position.setText(details.get("stanowisko"));
-        pesel.setText(details.get("pesel"));
-        address.setText(details.get("adres"));
-        idNum.setText(details.get("nr_dowodu"));
-        postal.setText(details.get("kod_pocztowy"));
+//        name.setText(details.get("imie"));
+//        surname.setText(details.get("nazwisko"));
+//        email.setText(details.get("email"));
+//        position.setText(details.get("stanowisko"));
+//        pesel.setText(details.get("pesel"));
+//        address.setText(details.get("adres"));
+//        idNum.setText(details.get("nr_dowodu"));
+//        postal.setText(details.get("kod_pocztowy"));
 
     }
 
     private void findLayoutItems(View view){
-        name = (TextView)view.findViewById(R.id.textDetailName);
-        surname = (TextView)view.findViewById(R.id.textDetailSurname);
-        email = (TextView)view.findViewById(R.id.textDetailEmail) ;
-        position = (TextView) view.findViewById(R.id.textDetailPosition);
-        pesel = (TextView)view.findViewById(R.id.textDetailPesel);
-        idNum = (TextView)view.findViewById(R.id.textDetailIdNum);
-        address = (TextView)view.findViewById(R.id.textDetailAddress);
-        postal = (TextView)view.findViewById(R.id.textDetailPostal);
-        buttonRmv = (Button)view.findViewById(R.id.buttonRemoveAccount);
-        buttonResetPassword = (Button)view.findViewById(R.id.buttonResetPasswd);
+//        name = (TextView)view.findViewById(R.id.textDetailName);
+//        surname = (TextView)view.findViewById(R.id.textDetailSurname);
+//        email = (TextView)view.findViewById(R.id.textDetailEmail) ;
+//        position = (TextView) view.findViewById(R.id.textDetailPosition);
+//        pesel = (TextView)view.findViewById(R.id.textDetailPesel);
+//        idNum = (TextView)view.findViewById(R.id.textDetailIdNum);
+//        address = (TextView)view.findViewById(R.id.textDetailAddress);
+//        postal = (TextView)view.findViewById(R.id.textDetailPostal);
+//        buttonRmv = (Button)view.findViewById(R.id.buttonRemoveAccount);
+//        buttonResetPassword = (Button)view.findViewById(R.id.buttonResetPasswd);
     }
 
 }

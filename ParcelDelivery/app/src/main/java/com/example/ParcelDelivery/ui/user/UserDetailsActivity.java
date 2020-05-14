@@ -20,27 +20,42 @@ public class UserDetailsActivity extends FragmentActivity {
 
     int thisUserId;
     int userId;
+    ViewPager2 viewPager;
 
-    private static final int NUM_PAGES = 2;
+    private static final int NUM_PAGES = 3;
     FragmentStateAdapter adapterViewPager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.viewpager_userdetails);
-        ViewPager2 viewPager = findViewById(R.id.vpPager);
+        viewPager = findViewById(R.id.vpPager);
         thisUserId = getIntent().getIntExtra("id", 0);
         userId = getIntent().getIntExtra("userId", userId);
         adapterViewPager = new ScreenPagerAdapter(this);
         viewPager.setAdapter(adapterViewPager);
         
-        String[] description = new String[]{"Detale","Pensja"};
+        String[] description = new String[]{"Detale","Grafik","Pensja"};
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> tab.setText(description[position])
         ).attach();
 
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (viewPager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        } else {
+            // Otherwise, select the previous step.
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        }
     }
 
 
@@ -62,6 +77,10 @@ public class UserDetailsActivity extends FragmentActivity {
             } else if (position == 1) {
                 new UserDetailsSecondFragment();
                 fragment = UserDetailsSecondFragment.newInstance(thisUserId);
+            }
+            else if (position == 2){
+                new UserDetailsThirdFragment();
+                fragment = UserDetailsThirdFragment.newInstance(thisUserId);
             }
             assert fragment != null;
             return fragment;

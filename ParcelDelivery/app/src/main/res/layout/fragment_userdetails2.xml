@@ -7,39 +7,101 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonSalary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="@string/edit_rate"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/editText"
+    <TextView
+        android:id="@+id/textSalary"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginBottom="32dp"
+        android:autofillHints=""
         android:background="#F1EEEE"
         android:clickable="false"
         android:ems="10"
         android:fadingEdge="horizontal|vertical|none"
         android:gravity="center|fill_vertical"
-        android:hint="@string/imie"
+        android:hint="@string/salary"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/textSalaryRate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+    <EditText
+        android:id="@+id/textSalaryRate"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginBottom="32dp"
+        android:autofillHints=""
+        android:background="#F1EEEE"
+        android:clickable="false"
+        android:ems="10"
+        android:fadingEdge="horizontal|vertical|none"
+        android:gravity="center|fill_vertical"
+        android:hint="@string/rate"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSalary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.369"
         tools:visibility="visible"
-        android:autofillHints=""
-        android:inputType="textPersonName"/>
+        android:inputType="none" />
 
-    <EditText
-        android:id="@+id/editText2"
+    <TextView
+        android:id="@+id/textSalaryText"
+        android:layout_width="120dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center_vertical"
+        android:text="@string/salary"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/textSalaryRateText"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textSalaryRateText"
+        android:layout_width="120dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center_vertical"
+        android:text="@string/rate"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSalary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.37" />
+
+    <TextView
+        android:id="@+id/textSakaryHoursText"
+        android:layout_width="120dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center_vertical"
+        android:text="@string/hours_count"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textSalaryRateText" />
+
+    <TextView
+        android:id="@+id/textSalaryHours"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="120dp"
         android:layout_marginTop="32dp"
         android:autofillHints=""
         android:background="#F1EEEE"
@@ -47,38 +109,21 @@
         android:ems="10"
         android:fadingEdge="horizontal|vertical|none"
         android:gravity="center|fill_vertical"
-
-        android:hint="@string/imie"
-        android:inputType="textPersonName"
+        android:hint="@string/hours_count"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textSakaryHoursText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@+id/textSalaryRate" />
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="120dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:gravity="center_vertical"
-        android:text="@string/imie"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#000000"
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/how_to_salary"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSalary"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textSalaryHours" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="120dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:gravity="center_vertical"
-        android:text="@string/imie"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#000000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView1" />
 </androidx.constraintlayout.widget.ConstraintLayout>

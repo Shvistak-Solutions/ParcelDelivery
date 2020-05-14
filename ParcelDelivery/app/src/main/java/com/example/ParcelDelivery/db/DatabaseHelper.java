@@ -31,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL("CREATE TABLE "+TAB_ACCOUNT+"(id INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR)");
         database.execSQL("CREATE TABLE "+TAB_WORKERS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, stanowisko INTEGER, email VARCHAR unique, pesel VARCHAR unique, nr_dowodu VARCHAR unique, adres VARCHAR, kod_pocztowy VARCHAR);");
-        database.execSQL("CREATE TABLE "+TAB_SALARY+"(id INTEGER, pensja FLOAT, ilosc_godzin INTEGER, data DATE, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
+        database.execSQL("CREATE TABLE "+TAB_SALARY+"(id INTEGER, pensja FLOAT,stawka FLOAT, ilosc_godzin INTEGER, data DATE, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
         database.execSQL("CREATE TABLE "+TAB_AVAILABILITY+"(id INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
         database.execSQL("CREATE TABLE "+TAB_SCHEDULE+"(id INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id) REFERENCES Pracownicy(id))");
         database.execSQL("CREATE TABLE "+TAB_CLIENTS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
@@ -474,6 +474,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 break;
             case "Pensje":
                 user.put("id", cursor.getString(cursor.getColumnIndex("id")));
+                user.put("stawka",cursor.getString(cursor.getColumnIndex("stawka")));
                 user.put("pensja", cursor.getString(cursor.getColumnIndex("pensja")));
                 user.put("ilosc_godzin", cursor.getString(cursor.getColumnIndex("ilosc_godzin")));
                 user.put("data", cursor.getString(cursor.getColumnIndex("data")));

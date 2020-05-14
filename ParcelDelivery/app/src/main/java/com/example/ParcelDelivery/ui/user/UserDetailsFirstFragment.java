@@ -74,20 +74,9 @@ public class UserDetailsFirstFragment extends Fragment {
         dialogRemove = removeAlert(details.get("email"));
         dialogReset = resetAlert(details.get("email"));
 
-        buttonRmv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonRmv.setOnClickListener(v -> dialogRemove.show());
 
-                dialogRemove.show();
-            }
-        });
-
-        buttonResetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogReset.show();
-            }
-        });
+        buttonResetPassword.setOnClickListener(v -> dialogReset.show());
     }
 
     private AlertDialog resetAlert(final String email) {
