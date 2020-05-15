@@ -27,4 +27,5 @@
     <string name="hours_count">Ilość godzin</string>
     <string name="how_to_salary">Notka: Pensja = ilość godzin * stawka</string>
     <string name="edit_rate">Edytuj stawkę</string>
+    <string name="schedule">Grafik</string>
 </resources>
