@@ -176,6 +176,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //
     // there are funcs that have where clause with id, cause it is more commonly used, but some have where Clauses, if you pass null or empty string to whereClause parameter, there will work like with no Clause giving or the records
     //
+    //// WARNING - IMPORTANTE - getDataSQL funcs allow you to retrieve data by typing sql querry -> but it must be SELECT columns  FROM <- from must be uppercase rather no joins XD
+    //
     // That's It i Think
     //
     // THERE ARE ALSO UPDATEFUNCS, updateStringData, but all the values that can be inserted by it are Strings - > however they also works on other types and database is not screaming -> but i don't know how will they handle when u need too use the values later
