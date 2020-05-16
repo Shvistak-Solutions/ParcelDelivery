@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ParcelListRecyclerViewAdapter extends RecyclerView.Adapter<ParcelListRecyclerViewAdapter.ViewHolder>{
 
-    HashMap<String,String> mParcelData = new HashMap<>();
+    private ArrayList<HashMap<String,String>> mParcelData = new ArrayList<>();
 
-    public ParcelListRecyclerViewAdapter(HashMap<String, String> mParcelData) {
+    public ParcelListRecyclerViewAdapter(ArrayList<HashMap<String, String>> mParcelData) {
         this.mParcelData = mParcelData;
     }
 
@@ -32,8 +33,9 @@ public class ParcelListRecyclerViewAdapter extends RecyclerView.Adapter<ParcelLi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //TODO: get contents of mParcelData hashmap and put them in viewholder fields
-
+        holder.parcel_id.setText("id paczki: " + mParcelData.get(position).get("id") );
+        holder.parcel_courier_id.setText("id kuriera"+mParcelData.get(position).get("id_kuriera"));
+        holder.parcel_status.setText("status paczki: " + mParcelData.get(position).get("status"));
     }
 
     @Override
