@@ -55,7 +55,7 @@ public class UserScheduleActivity extends AppCompatActivity {
         buttonSchedule.setOnClickListener(v -> {
             calendar = Calendar.getInstance();
             list = db.getDataBetween(new String[]{"data"},"Grafik","id_prac",Integer.toString(userId),"data","2020-05-15","2020-05-21");
-            list = db.getDataSQL("SELECT data FROM Grafik where id_prac = 7");
+            list = db.getDataSQL("SELECT * FROM Grafik where id_prac = 7");
             for(HashMap<String,String> a : list)
             {
                 Toast.makeText(getApplicationContext(),a.get("data"), Toast.LENGTH_SHORT).show();

@@ -385,21 +385,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<HashMap<String, String>> userList = new ArrayList<>();
 
         String[] helper = queryCutter(query);
-        StringBuilder res = new StringBuilder();
+        String table = query.split("FROM")[1].split(" ")[1];
 
-        res.append("SELECT ");
-        int length = helper.length;
-        for(int i = 0; i< length; i++){
-            res.append(helper[i]);
-            if(i < length - 1)
-                res.append(",");
-        }
-
-        res.append(" FROM ");
-        res.append(query.split("FROM")[1]);
-        Cursor cursor = db.rawQuery(res.toString(),null);
+        Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
             HashMap<String,String> user = new HashMap<>();
+            if(helper[helper.length-1].equals("*")) {
+                user = databaseContentToHashMap(table,cursor);
+                userList.add(user);
+            }
+            else
             for (String s : helper) {
                 user.put(s, cursor.getString(cursor.getColumnIndex(s)));
             }
@@ -501,7 +496,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
-    // =========================================== Date Helpers ========================================================
+    // =========================================== Schedule/avability Helpers ========================================================
 
     public long insertSchedule(String date,String startHour,String endHour, int userId) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -533,8 +528,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return newRowId;
     }
-
-
 
 
 
@@ -614,6 +607,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 break;
             case "Grafik":
                 user.put("id", cursor.getString(cursor.getColumnIndex("id")));
+                user.put("id_prac", cursor.getString(cursor.getColumnIndex("id_prac")));
                 user.put("godzina_rozpoczecia", cursor.getString(cursor.getColumnIndex("godzina_rozpoczecia")));
                 user.put("godzina_zakonczenia", cursor.getString(cursor.getColumnIndex("godzina_zakonczenia")));
                 user.put("data", cursor.getString(cursor.getColumnIndex("data")));
@@ -622,6 +616,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 break;
             case "Dyspozycje":
                 user.put("id", cursor.getString(cursor.getColumnIndex("id")));
+                user.put("id_prac", cursor.getString(cursor.getColumnIndex("id_prac")));
                 user.put("godzina_rozpoczecia", cursor.getString(cursor.getColumnIndex("godzina_rozpoczecia")));
                 user.put("godzina_zakonczenia", cursor.getString(cursor.getColumnIndex("godzina_zakonczenia")));
                 user.put("data", cursor.getString(cursor.getColumnIndex("data")));
