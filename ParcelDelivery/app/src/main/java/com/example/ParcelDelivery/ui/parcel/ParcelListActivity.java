@@ -1,6 +1,8 @@
 package com.example.ParcelDelivery.ui.parcel;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +10,15 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.ParcelDelivery.R;
+import com.example.ParcelDelivery.db.DatabaseHelper;
+
+import java.util.HashMap;
 
 
 public class ParcelListActivity extends AppCompatActivity {
     Intent intent;
+    private HashMap<String,String> mParcelData = new HashMap<>();
+    private DatabaseHelper dbHelper = new DatabaseHelper(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,5 +33,26 @@ public class ParcelListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        getParcelData();
+        initRecyclerView();
+
+
+    }
+
+
+    private void getParcelData() {
+        //TODO:fill mParcelData field from database
+        //mParcelData = dbHelper.getData(/*TODO*/);
+    }
+
+    private void initRecyclerView(){
+        RecyclerView recyclerView = findViewById(R.id.parcel_list_recycler_view);
+
+        ParcelListRecyclerViewAdapter adapter = new ParcelListRecyclerViewAdapter(mParcelData);
+
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
     }
 }
