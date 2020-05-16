@@ -385,7 +385,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<HashMap<String, String>> userList = new ArrayList<>();
 
         String[] helper = queryCutter(query);
-        String table = query.split("FROM")[1].split(" ")[1];
+        String table = query.split("(?i)from")[1].split(" ")[1];
 
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
@@ -629,7 +629,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private String[] queryCutter(String query){
         query = query.substring(6);
-        String[] helper = query.split("FROM");
+        String[] helper = query.split("(?i)from");
         helper = helper[0].split(",");
         for(int i = 0; i < helper.length; i++)
             helper[i] = helper[i].replaceAll("\\s+","");
