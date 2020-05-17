@@ -55,7 +55,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,imageNames.get(position), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context,imageNames.get(position), Toast.LENGTH_SHORT).show();
+
             }
         });
 
