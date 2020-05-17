@@ -12,13 +12,14 @@ import android.widget.Button;
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class ParcelListActivity extends AppCompatActivity {
     Intent intent;
-    private HashMap<String,String> mParcelData = new HashMap<>();
-    private DatabaseHelper dbHelper = new DatabaseHelper(this);
+    private ArrayList<HashMap<String,String>> mParcelData = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +43,9 @@ public class ParcelListActivity extends AppCompatActivity {
 
 
     private void getParcelData() {
-        //TODO:fill mParcelData field from database
-        //mParcelData = dbHelper.getData(/*TODO*/);
+        final DatabaseHelper dbHelper = new DatabaseHelper(this);
+        mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki");
+
     }
 
     private void initRecyclerView(){
