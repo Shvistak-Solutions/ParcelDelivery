@@ -54,11 +54,13 @@ public class UserScheduleActivity extends AppCompatActivity {
 
         buttonSchedule.setOnClickListener(v -> {
             calendar = Calendar.getInstance();
-            list = db.getDataBetween(new String[]{"data"},"Grafik","id_prac",Integer.toString(userId),"data","2020-05-15","2020-05-21");
-            list = db.getDataSQL("SELECT * FROM Grafik where id_prac = 7");
-            for(HashMap<String,String> a : list)
+            //list = db.getDataBetween(new String[]{"data"},"Grafik","id_prac",Integer.toString(userId),"data","2020-05-15","2020-05-21");
+            //list = db.getDataSQL("SELECT * FROM Grafik where id_prac = 7");
+            ArrayList<String> lista;
+            lista = db.getData("id","Paczki","id_kuriera",Integer.toString(2));
+            for(String a : lista)
             {
-                Toast.makeText(getApplicationContext(),a.get("data"), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),a, Toast.LENGTH_SHORT).show();
             }
 
             Toast.makeText(getApplicationContext(),"cos powinno byc", Toast.LENGTH_SHORT).show();
