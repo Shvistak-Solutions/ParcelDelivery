@@ -33,7 +33,7 @@ public class ParcelAddActivity extends AppCompatActivity {
         ArrayList<HashMap<String, String>> couriers = dbHelper.getData(columns, "Pracownicy", "stanowisko", "0");
         List<String> spinnerArray =  new ArrayList<String>();
         for (HashMap<String,String> item : couriers) {
-            spinnerArray.add(item.get("id"));
+            spinnerArray.add(item.get("imie") + " " + item.get("nazwisko"));
         }
 
         // assign courier list to spinner component
@@ -47,7 +47,8 @@ public class ParcelAddActivity extends AppCompatActivity {
         buttonParcelConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String courierId = spinnerCouriers.getSelectedItem().toString();
+                String courierSurname = spinnerCouriers.getSelectedItem().toString().split(" ")[1];
+                String courierId = dbHelper.getData("id", "Pracownicy", "nazwisko", courierSurname).get(0);
 
                 long result = dbHelper.insertNewParcel(parseInt(courierId));
                 if (result > 0) {
