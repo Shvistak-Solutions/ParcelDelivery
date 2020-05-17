@@ -32,8 +32,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("CREATE TABLE "+TAB_ACCOUNT+"(id INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR)");
         database.execSQL("CREATE TABLE "+TAB_WORKERS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, stanowisko INTEGER, email VARCHAR unique, pesel VARCHAR unique, nr_dowodu VARCHAR unique, adres VARCHAR, kod_pocztowy VARCHAR);");
         database.execSQL("CREATE TABLE "+TAB_SALARY+"(id INTEGER, pensja FLOAT,stawka FLOAT, ilosc_godzin INTEGER, data DATE, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
-        database.execSQL("CREATE TABLE "+TAB_AVAILABILITY+"(id INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
-        database.execSQL("CREATE TABLE "+TAB_SCHEDULE+"(id INTEGER, data DATE, godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id) REFERENCES Pracownicy(id))");
+        database.execSQL("CREATE TABLE "+TAB_SCHEDULE+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id))");
+        database.execSQL("CREATE TABLE "+TAB_AVAILABILITY+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id));");
         database.execSQL("CREATE TABLE "+TAB_CLIENTS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
         database.execSQL("CREATE TABLE "+TAB_PACKAGES+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_kuriera INTEGER, status INTEGER, id_nadawcy INTEGER, id_odbiorcy INTEGER, FOREIGN KEY(id_kuriera) REFERENCES Pracownicy(id), FOREIGN KEY(id_odbiorcy) REFERENCES Klienci(id), FOREIGN KEY(id_nadawcy) REFERENCES Klienci(id));");
     }
@@ -158,7 +158,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // The getData func Family is implemented to get probably any value from the database ( At least i fink so ) and the output will be always of type of String
     //
     // The parameters column means one column, the parameter, String[] columns means that you need to pu something like this: getd=Data(new String[]{"firstcolumn","secondcolumn"}, ... , ...) etc
-    // Parameter table is the name of Table, id is userId, whereClause is where Clause, whereValue is whereValue, basic thing
+    // Parameter table is the name of Table, id is id, whereClause is where Clause, whereValue is whereValue, basic thing
+    //
+    //
+    // IN WORKERS, SALARY, ACCOUNTS id is ID of EMPLOYEE, in SCHEDULE and AVABILITY -> it's ID of A ROW, in Clients ->ID of clients, in PACKAGES -> ID of PACKAGE
+    //
     //
     // There are few different Return Types associated with the funcs
     //
@@ -171,6 +175,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // There Are also String types but it's rather easy to handle
     //
     // there are funcs that have where clause with id, cause it is more commonly used, but some have where Clauses, if you pass null or empty string to whereClause parameter, there will work like with no Clause giving or the records
+    //
+    //// WARNING - IMPORTANTE - getDataSQL funcs allow you to retrieve data by typing sql querry -> but it must be SELECT columns  FROM <- from must be uppercase rather no joins XD
     //
     // That's It i Think
     //
@@ -238,22 +244,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<HashMap<String, String>> getData(String[] columns, String table, String whereClause,String whereValue){
         SQLiteDatabase db = this.getWritableDatabase();
         StringBuilder columnList = new StringBuilder();
+        StringBuilder whereList = new StringBuilder();
         ArrayList<HashMap<String, String>> userList = new ArrayList<>();
 
-        int howManyColumns = columns.length;
-        for (int i = 0; i < howManyColumns; i++ )
+        int howMany = columns.length;
+        for (int i = 0; i < howMany; i++ )
         {
             columnList.append(columns[i]);
-            if(i != howManyColumns - 1)
+            if(i != howMany - 1)
                 columnList.append(", ");
         }
+
         String query;
         if(whereClause != null)
         {
             if(whereClause.isEmpty())
                 query = "SELECT "+columnList+" FROM "+table;
             else
-                query = "SELECT "+columnList+" FROM "+table+" where "+whereClause+"="+whereValue;
+                query = "SELECT "+columnList+" FROM "+table+" where "+whereClause+"='"+whereValue+"'";
 
         }
         else
@@ -286,7 +294,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(whereClause.isEmpty())
                 query = "SELECT "+column+" FROM "+table;
             else
-                query = "SELECT "+column+" FROM "+table+" where "+whereClause+"="+whereValue;
+                query = "SELECT "+column+" FROM "+table+" where "+whereClause+"='"+whereValue+"'";
         }
         else
             query = "SELECT "+column+" FROM "+table;
@@ -314,7 +322,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(whereClause.isEmpty())
                 query = "SELECT * FROM "+table;
             else
-                query = "SELECT * FROM "+table+" where "+whereClause+"="+whereValue;
+                query = "SELECT * FROM "+table+" where "+whereClause+"='"+whereValue+"'";
         }
         else
             query = "SELECT * FROM "+table;
@@ -322,6 +330,74 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()){
             HashMap<String,String> user = new HashMap<>();
             user = databaseContentToHashMap(table,cursor);
+            userList.add(user);
+        }
+        cursor.close();
+        db.close();
+        return userList;
+    }
+
+    public ArrayList<HashMap<String, String>> getDataBetween(String[] columns, String table, String whereClause,String whereValue,String betweenColumn, String betweenValue1,String betweenValue2){
+        SQLiteDatabase db = this.getWritableDatabase();
+        StringBuilder columnList = new StringBuilder();
+        ArrayList<HashMap<String, String>> userList = new ArrayList<>();
+
+        int howManyColumns = columns.length;
+        for (int i = 0; i < howManyColumns; i++ )
+        {
+            columnList.append(columns[i]);
+            if(i != howManyColumns - 1)
+                columnList.append(", ");
+        }
+        String query;
+        if(whereClause != null)
+        {
+            if(whereClause.isEmpty())
+                query = "SELECT "+columnList+" FROM "+table+" AND "+betweenColumn+" BETWEEN "+betweenValue1+" AND "+betweenValue2;
+            else
+                query = "SELECT "+columnList+" FROM "+table+" where "+whereClause+"='"+whereValue+"' AND "+betweenColumn+" BETWEEN '"+betweenValue1+"' AND '"+betweenValue2+"'";
+
+        }
+        else
+            query = "SELECT "+columnList+" FROM "+table+" AND "+betweenColumn+" BETWEEN "+betweenValue1+" AND "+betweenValue2;
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            HashMap<String,String> user = new HashMap<>();
+            for( String column : columns) {
+                if(column.equals("stanowisko"))
+                {
+                    user.put(column,getPosition(cursor.getString(cursor.getColumnIndex(column))));
+                }
+                else
+                    user.put(column, cursor.getString(cursor.getColumnIndex(column)));
+            }
+            userList.add(user);
+        }
+        cursor.close();
+        db.close();
+        return userList;
+    }
+
+
+    // WARNING - IMPORTANTE - This funcs allow you to retrieve data by typing sql querry -> but it must be SELECT columns  FROM <- from must be uppercase rather no joins XD
+    public ArrayList<HashMap<String, String>> getDataSQL(String query){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<HashMap<String, String>> userList = new ArrayList<>();
+
+        String[] helper = queryCutter(query);
+        String table = query.split("(?i)from")[1].split(" ")[1];
+
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            HashMap<String,String> user = new HashMap<>();
+            if(helper[helper.length-1].equals("*")) {
+                user = databaseContentToHashMap(table,cursor);
+                userList.add(user);
+            }
+            else
+            for (String s : helper) {
+                user.put(s, cursor.getString(cursor.getColumnIndex(s)));
+            }
             userList.add(user);
         }
         cursor.close();
@@ -390,8 +466,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void autoFillOtherTables(int id_worker, SQLiteDatabase db)
     {
         db.execSQL("Insert INTO "+TAB_SALARY+"(id) values ("+id_worker+") ");
-        db.execSQL("Insert INTO "+TAB_AVAILABILITY+"(id) values ("+id_worker+") ");
-        db.execSQL("Insert INTO "+TAB_SCHEDULE+"(id) values ("+id_worker+") ");
+        //db.execSQL("Insert INTO "+TAB_AVAILABILITY+"(id) values ("+id_worker+") ");
+        //db.execSQL("Insert INTO "+TAB_SCHEDULE+"(id) values ("+id_worker+") ");
 
     }
 
@@ -405,7 +481,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    // =========================================== PARCEL =============================================================
 
+    // Adding new parcel into database
+    public long insertNewParcel(int courierId/*, int senderId, int ricipientId*/){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cValues = new ContentValues();
+        cValues.put("id_kuriera", courierId);
+        cValues.put("id_nadawcy", 23); // temporary solution - no proper table fills
+        cValues.put("id_odbiorcy", 23);
+        cValues.put("status", 1);
+        long newRowId = db.insert(TAB_PACKAGES,null, cValues);
+        db.close();
+        return newRowId;
+    }
+
+    // =========================================== Schedule/avability Helpers ========================================================
+
+    public long insertSchedule(String date,String startHour,String endHour, int userId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cValues = new ContentValues();
+        cValues.put("id_prac", userId);
+        cValues.put("data",date);
+        cValues.put("godzina_rozpoczecia",startHour);
+        cValues.put("godzina_zakonczenia",endHour);
+        long newRowId = db.insert(TAB_SCHEDULE,null, cValues);
+        if (newRowId != -1)
+            newRowId = db.insert(TAB_AVAILABILITY,null, cValues);
+        db.close();
+        return newRowId;
+    }
+
+
+    public long updateDate(String date,String startHour,String endHour,int schedule_1_avability_0, int userId){ // schedule_avability - > 0 -> avability 1 -> schedule
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cValues = new ContentValues();
+        cValues.put("godzina_rozpoczecia",startHour);
+        cValues.put("godzina_zakonczenia",endHour);
+        cValues.put("data",date);
+        long newRowId = -1;
+        if( schedule_1_avability_0 == 1)
+            newRowId = db.update(TAB_SCHEDULE, cValues,"data= ? AND id_prac= ?", new String[]{date, Integer.toString(userId)});
+        else if (schedule_1_avability_0 == 0)
+            newRowId = db.update(TAB_AVAILABILITY, cValues, "data= ? AND id_prac= ?", new String[]{date, Integer.toString(userId)});
+        db.close();
+        return newRowId;
+    }
+
+
+
+    // ============================ Auxiliary functions ( Pomocnicze ) ============================================
 
     public static final String md5(final String s) {
         final String MD5 = "MD5";
@@ -481,6 +607,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 break;
             case "Grafik":
                 user.put("id", cursor.getString(cursor.getColumnIndex("id")));
+                user.put("id_prac", cursor.getString(cursor.getColumnIndex("id_prac")));
                 user.put("godzina_rozpoczecia", cursor.getString(cursor.getColumnIndex("godzina_rozpoczecia")));
                 user.put("godzina_zakonczenia", cursor.getString(cursor.getColumnIndex("godzina_zakonczenia")));
                 user.put("data", cursor.getString(cursor.getColumnIndex("data")));
@@ -489,6 +616,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 break;
             case "Dyspozycje":
                 user.put("id", cursor.getString(cursor.getColumnIndex("id")));
+                user.put("id_prac", cursor.getString(cursor.getColumnIndex("id_prac")));
                 user.put("godzina_rozpoczecia", cursor.getString(cursor.getColumnIndex("godzina_rozpoczecia")));
                 user.put("godzina_zakonczenia", cursor.getString(cursor.getColumnIndex("godzina_zakonczenia")));
                 user.put("data", cursor.getString(cursor.getColumnIndex("data")));
@@ -499,20 +627,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return user;
     }
 
-// =========================================== PARCEL =============================================================
+    private String[] queryCutter(String query){
+        query = query.substring(6);
+        String[] helper = query.split("(?i)from");
+        helper = helper[0].split(",");
+        for(int i = 0; i < helper.length; i++)
+            helper[i] = helper[i].replaceAll("\\s+","");
 
-    // Adding new parcel into database
-    public long insertNewParcel(int courierId/*, int senderId, int ricipientId*/){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cValues = new ContentValues();
-        cValues.put("id_kuriera", courierId);
-        cValues.put("id_nadawcy", 23); // temporary solution - no proper table fills
-        cValues.put("id_odbiorcy", 23);
-        cValues.put("status", 1);
-        long newRowId = db.insert(TAB_PACKAGES,null, cValues);
-        db.close();
-        return newRowId;
+        return helper;
     }
+
+
+
+
 }
 
 
