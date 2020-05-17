@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
@@ -34,6 +35,7 @@ public class CourierParcelListActivity extends AppCompatActivity {
         userId = getIntent().getIntExtra("userId", 0);
 
         tempParcelIdArray = db.getData("id", "Paczki","id_kuriera", String.valueOf(userId));
+
         initImageBitmaps();
 
     }
@@ -43,8 +45,8 @@ public class CourierParcelListActivity extends AppCompatActivity {
 
 
         for(String x : tempParcelIdArray) {
-            imageUrls.add("https://i.redd.it/tpsnoz5bzo501.jpg");
-            parcelIdArray.add(x);
+            imageUrls.add("https://en.pimg.jp/059/212/115/1/59212115.jpg");
+            parcelIdArray.add("id paczki: " + x);
         }
 
         initRecyclerView();
