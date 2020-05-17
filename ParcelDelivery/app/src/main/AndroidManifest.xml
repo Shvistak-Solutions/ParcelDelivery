@@ -15,6 +15,8 @@
         <activity android:name=".ui.parcel.ParcelListActivity" />
         <activity android:name=".ui.coordinator.CoordinatorActivity" />
         <activity android:name=".ui.storekeeper.StorekeeperActivity" />
+        <activity android:name=".ui.storekeeper.StorehouseActivity" />
+        <activity android:name=".ui.storekeeper.PackActivity" />
         <activity android:name=".ui.courier.CourierActivity" />
         <activity android:name=".ui.manager.ManagerActivity" />
         <activity android:name=".ui.login.LoginActivity">

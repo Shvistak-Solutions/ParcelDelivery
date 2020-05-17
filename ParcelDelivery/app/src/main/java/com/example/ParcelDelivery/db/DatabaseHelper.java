@@ -496,6 +496,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
+    public Cursor getAllParcelIdByStatus(String wantedStatus){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "select id from Paczki where status ="+"'"+wantedStatus+"'";
+        Cursor cursor = db.rawQuery(query,null);
+        return cursor;
+    }
+
+    public void changePackStatus(String packId,String newStatus) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("status", Integer.parseInt(newStatus));
+        db.update("Paczki", values, "id = ?", new String[]{packId});
+        db.close();
+    }
+
+    public Cursor getCourierInfoByPack(String packId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "select Pracownicy.id, Pracownicy.imie, Pracownicy.nazwisko from Pracownicy inner join Paczki" +
+                " on Pracownicy.id = Paczki.id_kuriera GROUP by" +
+                " Pracownicy.imie, Pracownicy.nazwisko, Pracownicy.id, Paczki.id having Paczki.id = "+"'"+packId+"'";
+        Cursor cursor = db.rawQuery(query,null);
+        return cursor;
+    }
+
+    public boolean checkIfInStorehouse(String packId){
+        SQLiteDatabase  db = this.getWritableDatabase();
+        String query = "select status from Paczki where id = "+"'"+packId+"'";
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        if( cursor.getInt(0) == 3)
+            return true;
+        else
+            return false;
+    }
+
+
+
+
     // =========================================== Schedule/avability Helpers ========================================================
 
     public long insertSchedule(String date,String startHour,String endHour, int userId) {
