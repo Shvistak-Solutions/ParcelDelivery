@@ -92,6 +92,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
 
     private void newPasswordStep2(){
+
         if(password.isEmpty()){
             Toast.makeText(this,"Podaj nowe haslo",Toast.LENGTH_SHORT).show();
             newPasswordAgain.setText("");
@@ -115,6 +116,5 @@ public class ChangePasswordActivity extends AppCompatActivity {
             dbH.updatePassword(email,password);
             Toast.makeText(this,"Hasło zostało zmienione",Toast.LENGTH_SHORT).show();
         }
-
     }
 }

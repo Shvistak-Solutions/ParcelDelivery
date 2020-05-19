@@ -44,9 +44,5 @@ public class CoordinatorActivity extends AppCompatActivity {
             }
         });
         //----------------------------------------
-
-
-
-
     }
 }
