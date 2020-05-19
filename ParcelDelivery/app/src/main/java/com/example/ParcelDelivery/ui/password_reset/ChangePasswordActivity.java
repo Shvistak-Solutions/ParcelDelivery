@@ -28,7 +28,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
     Button nextStep;
     TextView note;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

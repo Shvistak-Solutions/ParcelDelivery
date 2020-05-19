@@ -41,4 +41,5 @@
             android:label="@string/app_name" />
         <activity android:name=".ui.password_reset.ForgotPasswordActivity" />
     </application>
+
 </manifest>

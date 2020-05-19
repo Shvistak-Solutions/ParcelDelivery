@@ -43,6 +43,6 @@ public class CoordinatorActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        //----------------------------------------
+        //------------------------------------
     }
 }
