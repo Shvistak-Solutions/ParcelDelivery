@@ -33,7 +33,6 @@ public class CoordinatorActivity extends AppCompatActivity {
             }
         });
 
-
         //--------------- ZMIANA HASLA - DEMO
         Button changePassword = (Button)findViewById(R.id.ID_CHANGE_PASSWORD);
         changePassword.setOnClickListener(new View.OnClickListener() {

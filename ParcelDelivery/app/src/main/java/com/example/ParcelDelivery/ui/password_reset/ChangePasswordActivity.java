@@ -24,7 +24,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
     EditText oldPasswordTyped;
     EditText newPassword;
     EditText newPasswordAgain;
-
     String passwordCompare;
     Button nextStep;
     TextView note;
@@ -118,9 +117,4 @@ public class ChangePasswordActivity extends AppCompatActivity {
         }
 
     }
-
-
-
-
-
 }
