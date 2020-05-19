@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
+import com.example.ParcelDelivery.ui.password_reset.ChangePasswordActivity;
 
 public class CoordinatorActivity extends AppCompatActivity {
 
@@ -31,5 +32,22 @@ public class CoordinatorActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        //--------------- ZMIANA HASLA - DEMO
+        Button changePassword = (Button)findViewById(R.id.ID_CHANGE_PASSWORD);
+        changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CoordinatorActivity.this, ChangePasswordActivity.class);
+                intent.putExtra("userId", userId);
+                startActivity(intent);
+            }
+        });
+        //----------------------------------------
+
+
+
+
     }
 }
