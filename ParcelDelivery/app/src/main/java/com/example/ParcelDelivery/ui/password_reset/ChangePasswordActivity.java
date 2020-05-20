@@ -38,7 +38,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
         dbH = new DatabaseHelper(this);
         nextStep = (Button) findViewById(R.id.ID_VERIFY_PASSWORD);
 
-
         oldPassword = dbH.getData("haslo","Konta",userId).trim();
         oldPasswordTyped = (EditText)findViewById(R.id.ID_OLD_PASSWORD);
         newPassword = (EditText)findViewById(R.id.ID_NEW_PASSWORD);
@@ -72,9 +71,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     password = newPassword.getText().toString().trim();
                     again = newPasswordAgain.getText().toString().trim();
                     newPasswordStep2();
-
-
-
                 }
             });
 
@@ -99,6 +95,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         else if(password.length() < 5){
             Toast.makeText(this,"Podane haslo jest za krótkie. Minimum 5 znaków",Toast.LENGTH_SHORT).show();
             newPassword.setText("");
+            newPasswordAgain.setText("");
         }
 
         else if(again.isEmpty()){
