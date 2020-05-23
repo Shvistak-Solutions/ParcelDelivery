@@ -8,7 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -29,9 +31,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL("CREATE TABLE "+TAB_ACCOUNT+"(id INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR)");
+        database.execSQL("CREATE TABLE "+TAB_ACCOUNT+"(id INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR, FOREIGN KEY(id) REFERENCES Pracownicy(id))");
         database.execSQL("CREATE TABLE "+TAB_WORKERS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, stanowisko INTEGER, email VARCHAR unique, pesel VARCHAR unique, nr_dowodu VARCHAR unique, adres VARCHAR, kod_pocztowy VARCHAR);");
-        database.execSQL("CREATE TABLE "+TAB_SALARY+"(id INTEGER, pensja FLOAT,stawka FLOAT, ilosc_godzin INTEGER, data DATE, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
+        database.execSQL("CREATE TABLE "+TAB_SALARY+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, pensja FLOAT,stawka FLOAT, ilosc_godzin INTEGER, data DATE, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id));");
         database.execSQL("CREATE TABLE "+TAB_SCHEDULE+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id))");
         database.execSQL("CREATE TABLE "+TAB_AVAILABILITY+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id));");
         database.execSQL("CREATE TABLE "+TAB_CLIENTS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
@@ -465,7 +467,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void autoFillOtherTables(int id_worker, SQLiteDatabase db)
     {
-        db.execSQL("Insert INTO "+TAB_SALARY+"(id) values ("+id_worker+") ");
+        db.execSQL("Insert INTO "+TAB_SALARY+"(id_prac) values ("+id_worker+") ");
         //db.execSQL("Insert INTO "+TAB_AVAILABILITY+"(id) values ("+id_worker+") ");
         //db.execSQL("Insert INTO "+TAB_SCHEDULE+"(id) values ("+id_worker+") ");
 
@@ -567,9 +569,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
+    public void updateHours(int userId, String date){
+        int Hours = Integer.parseInt(getDataSQL("Select ilosc_godzin from Pensja where date like "+date+" and id_prac ="+userId).get(0).get("ilosc_godzin"));
+        ArrayList<HashMap<String,String>> data = getDataSQL("Select wejscie, wyjscie, godzina_rozpoczecia, godzina_zakoczenia from Grafik where id_prac ="+userId+" and data like "+date);
+        long hours = computeDifference(dateTimeConvert(data.get(0).get("wyjscie")),dateTimeConvert(data.get(0).get("wyjscie")));
+    }
+
+    private long computeDifference(Calendar cal1, Calendar cal2){
+        return cal1.getTimeInMillis()-cal2.getTimeInMillis();
+    }
+
+    private Calendar dateTimeConvert(String data){
+        String[] date = data.split(" ")[0].split("-");
+        String[] time = data.split(" ")[1].split(":");
+        Calendar cal = Calendar.getInstance();
+        cal.set(Integer.parseInt(date[0]), Integer.parseInt(date[1]),Integer.parseInt(date[2]),Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2]));
+        return cal;
+    }
+
+    private String makeDate(Calendar calendar){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
+        dateFormat.setTimeZone(calendar.getTimeZone());
+        return dateFormat.format(calendar.getTime());
+
+    }
+
+    private String makeDateTime(Calendar calendar){
+        SimpleDateFormat datetimeFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        datetimeFormat.setTimeZone(calendar.getTimeZone());
+        return datetimeFormat.format(calendar.getTime());
+    }
+
 
 
     // ============================ Auxiliary functions ( Pomocnicze ) ============================================
+
+
 
     public static final String md5(final String s) {
         final String MD5 = "MD5";
