@@ -33,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL("CREATE TABLE "+TAB_ACCOUNT+"(id INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR, FOREIGN KEY(id) REFERENCES Pracownicy(id))");
         database.execSQL("CREATE TABLE "+TAB_WORKERS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, stanowisko INTEGER, email VARCHAR unique, pesel VARCHAR unique, nr_dowodu VARCHAR unique, adres VARCHAR, kod_pocztowy VARCHAR);");
-        database.execSQL("CREATE TABLE "+TAB_SALARY+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, pensja FLOAT,stawka FLOAT, ilosc_godzin INTEGER, data DATE, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id));");
+        database.execSQL("CREATE TABLE "+TAB_SALARY+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, pensja FLOAT,stawka FLOAT, ilosc_godzin FLOAT, data DATE, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id));");
         database.execSQL("CREATE TABLE "+TAB_SCHEDULE+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id))");
         database.execSQL("CREATE TABLE "+TAB_AVAILABILITY+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id));");
         database.execSQL("CREATE TABLE "+TAB_CLIENTS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
@@ -387,7 +387,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<HashMap<String, String>> userList = new ArrayList<>();
 
         String[] helper = queryCutter(query);
-        String table = query.split("(?i)from")[1].split(" ")[1];
+        String table = query.split("(?i)\\bfrom\\b")[1].split(" ")[1];
 
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
@@ -407,66 +407,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
-    public int updateStringData(String[] columns, String[] values, String table, String whereColumn, String whereValue)
-    {
+
+    // WARNING - IMPORTANTE - This funcs allow you to update data by typing sql querry -> but it must be update table set, and the wheres if you want more than one, must be by and
+    public int updateDataSQL(String sql){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues val = new ContentValues();
-        int res;
-        for(int i = 0; i < columns.length; i++)
+
+        String[] data = queryUpdateCutter(sql);
+        int i;
+        for(i = 1; i < data.length; i++ )
         {
-            if(columns[i].equals("haslo"))
-                values[i]=md5(values[i]);
-            val.put(columns[i],values[i]);
+            if(data[i].equals("where"))
+                break;
+            if(data[i].equals("haslo")) {
+                String value = md5(data[i + 1]);
+                val.put(data[i++],value);
+            }
+            else
+                val.put(data[i++],data[i]);
         }
-        res = db.update(table,val,whereColumn+"= ?",new String[] {whereValue});
-        db.close();
-        return res;
-    }
-
-    public int updateStringData(String column,String value, String table,String whereColumn, String whereValue)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues val = new ContentValues();
-        int res;
-        if(column.equals("haslo"))
-            value=md5(value);
-        val.put(column,value);
-        res = db.update(table,val,whereColumn+"= ?",new String[] {whereValue});
-        db.close();
-        return res;
-    }
-
-    public int updateStringData(String[] columns, String[] values, String table)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues val = new ContentValues();
-        int res;
-        for(int i = 0; i < columns.length; i++)
+        StringBuilder wheres = new StringBuilder();
+        String[] values = new String[(data.length - (i+1))/2];
+        int j = 0;
+        for(i+=1; i < data.length; i++)
         {
-            if(columns[i].equals("haslo"))
-                values[i]=md5(values[i]);
-            val.put(columns[i],values[i]);
+            wheres.append(data[i++]);
+            wheres.append("=?");
+            if(i+1 < data.length)
+                wheres.append(" AND ");
+            values[j++] = data[i];
         }
-        res = db.update(table,val,null,null);
+
+        int res = db.update(data[0],val,wheres.toString(),values);
         db.close();
         return res;
     }
 
-    public int updateStringData(String column,String value, String table)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues val = new ContentValues();
-        int res;
-        if(column.equals("haslo"))
-            value=md5(value);
-        val.put(column,value);
-        res = db.update(table,val,null,null);
-        db.close();
-        return res;
-    }
-
-    private void autoFillOtherTables(int id_worker, SQLiteDatabase db)
-    {
+    private void autoFillOtherTables(int id_worker, SQLiteDatabase db){
         db.execSQL("Insert INTO "+TAB_SALARY+"(id_prac) values ("+id_worker+") ");
         //db.execSQL("Insert INTO "+TAB_AVAILABILITY+"(id) values ("+id_worker+") ");
         //db.execSQL("Insert INTO "+TAB_SCHEDULE+"(id) values ("+id_worker+") ");
@@ -570,13 +547,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateHours(int userId, String date){
-        int Hours = Integer.parseInt(getDataSQL("Select ilosc_godzin from Pensja where date like "+date+" and id_prac ="+userId).get(0).get("ilosc_godzin"));
+        float hours = Integer.parseInt(getDataSQL("Select ilosc_godzin from Pensja where date like "+date+" and id_prac ="+userId).get(0).get("ilosc_godzin"));
         ArrayList<HashMap<String,String>> data = getDataSQL("Select wejscie, wyjscie, godzina_rozpoczecia, godzina_zakoczenia from Grafik where id_prac ="+userId+" and data like "+date);
-        long hours = computeDifference(dateTimeConvert(data.get(0).get("wyjscie")),dateTimeConvert(data.get(0).get("wyjscie")));
+        hours +=  makeHours(computeDifference(dateTimeConvert(data.get(0).get("wyjscie")),dateTimeConvert(data.get(0).get("wyjscie"))));
     }
 
     private long computeDifference(Calendar cal1, Calendar cal2){
         return cal1.getTimeInMillis()-cal2.getTimeInMillis();
+    }
+    private float makeHours(long millis){
+        return millis/(60f*60f*100f);
     }
 
     private Calendar dateTimeConvert(String data){
@@ -702,7 +682,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private String[] queryCutter(String query){
         query = query.substring(6);
-        String[] helper = query.split("(?i)from");
+        String[] helper = query.split("(?i)\\bfrom\\b");
         helper = helper[0].split(",");
         for(int i = 0; i < helper.length; i++)
             helper[i] = helper[i].replaceAll("\\s+","");
@@ -710,7 +690,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return helper;
     }
 
+    private  String[] queryUpdateCutter(String query){
+        query = query.substring(6);
+        String[] helper = query.split("(?i)\\bset\\b");
+        String table  = helper[0];
+        helper = helper[1].split("(?i)\\bwhere\\b");
+        query = helper[1];
+        helper = helper[0].split(",");
+        int length = (helper.length*2)+2;
+        String[] toWhere = new String[length];
+        int i = 0;
+        toWhere[i++] = table;
+        for(String a : helper)
+        {
+            toWhere[i++] = a.split("=")[0];
+            toWhere[i++] = a.split("=")[1];
+        }
+        toWhere[i] = "where";
+        helper = query.split("(?i)\\band\\b");
+        String[] where = new String[helper.length*2];
+        i = 0;
+        for(String a : helper)
+        {
+            where[i++] = a.split("=")[0];
+            where[i++] = a.split("=")[1];
+        }
+        String[] res = new String[length+where.length];
+        i = 0;
+        for(String a : toWhere)
+            res[i++] = a.replace(" ", "");
+        for (String a : where)
+            res[i++] = a.replace(" ", "");
 
+        return res;
+    }
+
+
+
+    private String computeUpdateString(String[] string) {
+        StringBuilder res = new StringBuilder();
+        for(String a : string)
+            res.append(a);
+        return res.toString();
+    }
 
 
 }

@@ -86,8 +86,8 @@ public class UserDetailsFirstFragment extends Fragment {
                 .setTitle("Czy Napewno?");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                if(db.updateStringData("haslo","Reset1234","Konta","email", email) <= 0)
-                    Toast.makeText(getContext(), "Nie udało się zresetować hasła", Toast.LENGTH_SHORT).show();
+                if(db.updateDataSQL("Update Konta set haslo = Reset1234 where email ="+email+" and id = "+thisUserId) <= 0)
+                    Toast.makeText(getContext(), "Nie udało się zmienić hasła", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
