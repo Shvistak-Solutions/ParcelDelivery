@@ -512,7 +512,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-
     // =========================================== Schedule/avability Helpers ========================================================
 
     public long insertSchedule(String date,String startHour,String endHour, int userId) {
