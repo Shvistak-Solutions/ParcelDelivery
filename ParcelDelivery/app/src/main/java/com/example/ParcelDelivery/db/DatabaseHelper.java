@@ -182,34 +182,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //
     // That's It i Think
     //
-    // THERE ARE ALSO UPDATEFUNCS, updateStringData, but all the values that can be inserted by it are Strings - > however they also works on other types and database is not screaming -> but i don't know how will they handle when u need too use the values later
-    public HashMap<String, String> getData(String[] columns, String table, int id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        StringBuilder columnList = new StringBuilder();
-        HashMap<String,String> user = new HashMap<>();
-        int howManyColumns = columns.length;
-        for (int i = 0; i < howManyColumns; i++ )
-        {
-            columnList.append(columns[i]);
-            if(i != howManyColumns - 1)
-                columnList.append(", ");
-        }
-        String query = "SELECT "+columnList+" FROM "+table+" where id="+id;
-        Cursor cursor = db.rawQuery(query,null);
-        while (cursor.moveToNext()){
-            for( String column : columns) {
-                if(column.equals("stanowisko"))
-                {
-                    user.put(column,getPosition(cursor.getString(cursor.getColumnIndex(column))));
-                }
-                else
-                user.put(column, cursor.getString(cursor.getColumnIndex(column)));
-            }
-        }
-        cursor.close();
-        db.close();
-        return user;
-    }
 
     public String getData(String column, String table, int id){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -314,73 +286,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
-    public ArrayList<HashMap<String, String>> getData(String table, String whereClause, String whereValue){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<HashMap<String, String>> userList = new ArrayList<>();
-
-        String query;
-        if(whereClause != null)
-        {
-            if(whereClause.isEmpty())
-                query = "SELECT * FROM "+table;
-            else
-                query = "SELECT * FROM "+table+" where "+whereClause+"='"+whereValue+"'";
-        }
-        else
-            query = "SELECT * FROM "+table;
-        Cursor cursor = db.rawQuery(query,null);
-        while (cursor.moveToNext()){
-            HashMap<String,String> user = new HashMap<>();
-            user = databaseContentToHashMap(table,cursor);
-            userList.add(user);
-        }
-        cursor.close();
-        db.close();
-        return userList;
-    }
-
-    public ArrayList<HashMap<String, String>> getDataBetween(String[] columns, String table, String whereClause,String whereValue,String betweenColumn, String betweenValue1,String betweenValue2){
-        SQLiteDatabase db = this.getWritableDatabase();
-        StringBuilder columnList = new StringBuilder();
-        ArrayList<HashMap<String, String>> userList = new ArrayList<>();
-
-        int howManyColumns = columns.length;
-        for (int i = 0; i < howManyColumns; i++ )
-        {
-            columnList.append(columns[i]);
-            if(i != howManyColumns - 1)
-                columnList.append(", ");
-        }
-        String query;
-        if(whereClause != null)
-        {
-            if(whereClause.isEmpty())
-                query = "SELECT "+columnList+" FROM "+table+" AND "+betweenColumn+" BETWEEN "+betweenValue1+" AND "+betweenValue2;
-            else
-                query = "SELECT "+columnList+" FROM "+table+" where "+whereClause+"='"+whereValue+"' AND "+betweenColumn+" BETWEEN '"+betweenValue1+"' AND '"+betweenValue2+"'";
-
-        }
-        else
-            query = "SELECT "+columnList+" FROM "+table+" AND "+betweenColumn+" BETWEEN "+betweenValue1+" AND "+betweenValue2;
-        Cursor cursor = db.rawQuery(query,null);
-        while (cursor.moveToNext()){
-            HashMap<String,String> user = new HashMap<>();
-            for( String column : columns) {
-                if(column.equals("stanowisko"))
-                {
-                    user.put(column,getPosition(cursor.getString(cursor.getColumnIndex(column))));
-                }
-                else
-                    user.put(column, cursor.getString(cursor.getColumnIndex(column)));
-            }
-            userList.add(user);
-        }
-        cursor.close();
-        db.close();
-        return userList;
-    }
-
-
     // WARNING - IMPORTANTE - This funcs allow you to retrieve data by typing sql querry -> but it must be SELECT columns  FROM <- from must be uppercase rather no joins XD
     public ArrayList<HashMap<String, String>> getDataSQL(String query){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -408,7 +313,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    // WARNING - IMPORTANTE - This funcs allow you to update data by typing sql querry -> but it must be update table set, and the wheres if you want more than one, must be by and
+    // WARNING - IMPORTANTE - This funcs allow you to update data by typing sql querry -> but it must be update table set, and the wheres if you want more than one, must be by and,
+    // no other things allowed like beetweens etc, quality checked by = not like
+
     public int updateDataSQL(String sql){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues val = new ContentValues();
