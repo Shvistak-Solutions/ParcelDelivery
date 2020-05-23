@@ -39,7 +39,7 @@ public class CoordinatorActivity extends AppCompatActivity {
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
-                Toast.makeText(CoordinatorActivity.this, "Nope", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CoordinatorActivity.this, "Nope", Toast.LENGTH_SHORT).show();
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
