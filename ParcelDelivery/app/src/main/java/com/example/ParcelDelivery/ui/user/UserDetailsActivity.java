@@ -1,7 +1,9 @@
 package com.example.ParcelDelivery.ui.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -42,8 +44,14 @@ public class UserDetailsActivity extends FragmentActivity {
                 (tab, position) -> tab.setText(description[position])
         ).attach();
 
-
-
+        // back button
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                startActivity(new Intent(UserDetailsActivity.this, UserListActivity.class));
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
