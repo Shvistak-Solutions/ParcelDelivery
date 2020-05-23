@@ -54,7 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void dbSeed()
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        onUpgrade(db, 1, 2);
+        //onUpgrade(db, 1, 2);
         insertNewUser("Katarzyna","Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
         insertNewUser("Rafał","Świstak", 0, "bober@email.com", "555555555555", "koza", "mielec", "11111");
         insertNewUser("Szczepan","'Szlachta' Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
