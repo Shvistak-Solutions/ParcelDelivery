@@ -24,4 +24,13 @@
         app:layout_constraintBottom_toTopOf="@+id/buttonUserList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonMyAccount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/my_account"
+        app:layout_constraintBottom_toTopOf="@+id/buttonScheduleView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
