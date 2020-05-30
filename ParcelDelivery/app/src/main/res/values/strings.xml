@@ -29,4 +29,5 @@
     <string name="edit_rate">Edytuj stawkę</string>
     <string name="schedule">Grafik</string>
     <string name="parcel_list">Lista paczek</string>
+    <string name="my_account">Moje konto</string>
 </resources>

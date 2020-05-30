@@ -26,8 +26,8 @@ import java.util.Objects;
 
 
 public class UserDetailsThirdFragment extends Fragment {
-    private  int userId, hours ;
-    private float rate, salary;
+    private  int userId ;
+    private float rate, salary, hours;
 
     private TextView textRate, textSalary, textHours;
     private Button buttonEdit;
@@ -92,7 +92,11 @@ public class UserDetailsThirdFragment extends Fragment {
                 Toast.makeText(getContext(), "Należy ustawić wartość", Toast.LENGTH_SHORT).show();
             } else {
                 rate = Float.parseFloat(textRate.getText().toString());
-                db.updateStringData("stawka", Float.toString(rate), "Pensje", "id", Integer.toString(userId));
+                db.updateDataSQL("Update Pensje set stawka="+rate+" where id="+userId);
+                salary = rate * hours;
+                String newSalary = "";
+                newSalary+=salary;
+                db.updateDataSQL("Update Pensje set pensja="+newSalary+" where id="+userId);
                 buttonEdit.setText(R.string.edit_rate);
                 details = db.getData("Pensje", userId);
                 fillTextViews(details);
@@ -127,15 +131,13 @@ public class UserDetailsThirdFragment extends Fragment {
         else
             rate = 0;
         if(details.get("ilosc_godzin") != null)
-            hours = Integer.parseInt((Objects.requireNonNull(details.get("ilosc_godzin"))));
+            hours = Float.parseFloat((Objects.requireNonNull(details.get("ilosc_godzin"))));
         else
             hours = 0;
         textRate.setText(details.get("stawka"));
-        textHours.setText(Integer.toString(hours));
-        salary = rate * (float)hours;
-        String newSalary = "";
-        newSalary+=salary;
-        textSalary.setText(newSalary);
+        textHours.setText(Float.toString(hours));
+
+        textSalary.setText(details.get("pensja"));
 
 
     }
