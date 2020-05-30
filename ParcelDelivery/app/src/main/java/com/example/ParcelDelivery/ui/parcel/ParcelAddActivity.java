@@ -65,6 +65,7 @@ public class ParcelAddActivity extends AppCompatActivity {
                 long result = dbHelper.insertNewParcel(parseInt(courierId));
                 if (result > 0) {
                     intent = new Intent(ParcelAddActivity.this, ParcelListActivity.class);
+                    intent.putExtra("userId",getIntent().getIntExtra("userId",0));
                     startActivity(intent);
                     Toast.makeText(getApplicationContext(), "Dodano przesyłkę", Toast.LENGTH_SHORT).show();
                 }

@@ -23,6 +23,9 @@ public class ParcelListActivity extends AppCompatActivity {
     Intent intent;
     private ArrayList<HashMap<String,String>> mParcelData = new ArrayList<>();
     private int userId;
+    Button saveBtn;
+
+
     private static final String TAG = "ParcelListActivity";
 
     @Override
@@ -41,11 +44,12 @@ public class ParcelListActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, callback);
 
         // add a new parcel
-        Button saveBtn = (Button)findViewById(R.id.buttonAddParcel);
+        Button saveBtn = findViewById(R.id.buttonAddParcel);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent = new Intent(ParcelListActivity.this, ParcelAddActivity.class);
+                intent.putExtra("userId",userId);
                 startActivity(intent);
             }
         });
@@ -53,25 +57,32 @@ public class ParcelListActivity extends AppCompatActivity {
         userId = getIntent().getIntExtra("userId",0);
         getParcelData();
         initRecyclerView();
+
+
     }
 
 
     private void getParcelData() {
         final DatabaseHelper dbHelper = new DatabaseHelper(this);
-        String userPosition = dbHelper.getData("stanowisko","Pracownicy","id",Integer.toString(userId)).get(0);
+
+        String userPosition = dbHelper.getData("stanowisko","Pracownicy",userId);
         Log.d(TAG, "getParcelData: entered with userpos: "+userPosition);
         switch(userPosition){
             case "Kurier":
                 mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki WHERE id_kuriera = " + userId);
+
+                //saveBtn.setVisibility(View.GONE);
                 break;
             case "Koordynator":
                 mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki");
                 break;
             case "Magazynier":
                 mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki WHERE status = 3");// tylko te paczki które w magazynie
+
+                //saveBtn.setVisibility(View.GONE);
                 break;
             default:
-                mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki");
+                break;
 
         }
     }
