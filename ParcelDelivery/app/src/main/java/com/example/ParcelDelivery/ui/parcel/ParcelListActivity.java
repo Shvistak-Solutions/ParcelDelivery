@@ -1,5 +1,6 @@
 package com.example.ParcelDelivery.ui.parcel;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.Button;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
+import com.example.ParcelDelivery.ui.coordinator.CoordinatorActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +30,17 @@ public class ParcelListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parcel_list);
 
+        // back button
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                intent = new Intent(ParcelListActivity.this, CoordinatorActivity.class);
+                startActivity(intent);
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
+
+        // add a new parcel
         Button saveBtn = (Button)findViewById(R.id.buttonAddParcel);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,8 +53,6 @@ public class ParcelListActivity extends AppCompatActivity {
         userId = getIntent().getIntExtra("userId",0);
         getParcelData();
         initRecyclerView();
-
-
     }
 
 

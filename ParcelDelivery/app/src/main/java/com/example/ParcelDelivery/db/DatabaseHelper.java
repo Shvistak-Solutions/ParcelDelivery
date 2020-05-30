@@ -8,11 +8,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
+    private static final int databaseVersion = 2;
 
     private String TAB_ACCOUNT = "Konta";
     private String TAB_WORKERS = "Pracownicy";
@@ -23,23 +27,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String TAB_PACKAGES = "Paczki";
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, databaseVersion);
         SQLiteDatabase database = this.getWritableDatabase();
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL("CREATE TABLE "+TAB_ACCOUNT+"(id INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR)");
+        database.execSQL("CREATE TABLE "+TAB_ACCOUNT+"(id INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR, FOREIGN KEY(id) REFERENCES Pracownicy(id))");
         database.execSQL("CREATE TABLE "+TAB_WORKERS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, stanowisko INTEGER, email VARCHAR unique, pesel VARCHAR unique, nr_dowodu VARCHAR unique, adres VARCHAR, kod_pocztowy VARCHAR);");
-        database.execSQL("CREATE TABLE "+TAB_SALARY+"(id INTEGER, pensja FLOAT,stawka FLOAT, ilosc_godzin INTEGER, data DATE, FOREIGN KEY(id) REFERENCES Pracownicy(id));");
-        database.execSQL("CREATE TABLE "+TAB_SCHEDULE+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id))");
-        database.execSQL("CREATE TABLE "+TAB_AVAILABILITY+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id));");
+        database.execSQL("CREATE TABLE "+TAB_SALARY+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, pensja FLOAT,stawka FLOAT, ilosc_godzin FLOAT, data DATE, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id), UNIQUE(id_prac, data));");
+        database.execSQL("CREATE TABLE "+TAB_SCHEDULE+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id),UNIQUE(id_prac, data))");
+        database.execSQL("CREATE TABLE "+TAB_AVAILABILITY+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id), UNIQUE(id_prac, data));");
         database.execSQL("CREATE TABLE "+TAB_CLIENTS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
         database.execSQL("CREATE TABLE "+TAB_PACKAGES+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_kuriera INTEGER, status INTEGER, id_nadawcy INTEGER, id_odbiorcy INTEGER, FOREIGN KEY(id_kuriera) REFERENCES Pracownicy(id), FOREIGN KEY(id_odbiorcy) REFERENCES Klienci(id), FOREIGN KEY(id_nadawcy) REFERENCES Klienci(id));");
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+TAB_PACKAGES);
         db.execSQL("DROP TABLE IF EXISTS "+TAB_SCHEDULE);
         db.execSQL("DROP TABLE IF EXISTS "+TAB_AVAILABILITY);
@@ -47,22 +51,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+TAB_ACCOUNT);
         db.execSQL("DROP TABLE IF EXISTS "+TAB_WORKERS);
         db.execSQL("DROP TABLE IF EXISTS "+TAB_CLIENTS);
-
         onCreate(db);
     }
 
-    public void dbSeed()
-    {
+    public void dbSeed() {
         SQLiteDatabase db = this.getWritableDatabase();
-        onUpgrade(db, 1, 2);
-        insertNewUser("Katarzyna","Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
-        insertNewUser("Rafał","Świstak", 0, "bober@email.com", "555555555555", "koza", "mielec", "11111");
-        insertNewUser("Szczepan","'Szlachta' Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
-        insertNewUser("Krzysztof","Dżachym", 1, "dżadża@email.com", "333333333333333", "jachym", "krakow", "11111");
-        insertNewUser("Patryk","Frasio", 2, "frasio@email.com", "222222222222", "frasio", "konkurencyjnaKopalniaSiarki", "11111");
-        insertNewUser("Łukasz","Scared", 1, "scared@email.com", "1111111111111", "difrent", "myślenice", "11111");
-        insertNewUser("Zdzisław","Siwy", 3, "siwy@email.com", "0000000000000", "siwy", "kanciapa", "11111");
 
+        onUpgrade(db,0,1);
+        insertNewUser("Katarzyna", "Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
+        insertNewUser("Rafał", "Świstak", 0, "bober@email.com", "555555555555", "koza", "mielec", "11111");
+        insertNewUser("Szczepan", "'Szlachta' Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
+        insertNewUser("Krzysztof", "Dżachym", 1, "dżadża@email.com", "333333333333333", "jachym", "krakow", "11111");
+        insertNewUser("Patryk", "Frasio", 2, "frasio@email.com", "222222222222", "frasio", "konkurencyjnaKopalniaSiarki", "11111");
+        insertNewUser("Łukasz", "Scared", 1, "scared@email.com", "1111111111111", "difrent", "myślenice", "11111");
+        insertNewUser("Zdzisław", "Siwy", 3, "siwy@email.com", "0000000000000", "siwy", "kanciapa", "11111");
     }
 
     public void updatePassword(String email, String password){
@@ -180,34 +182,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //
     // That's It i Think
     //
-    // THERE ARE ALSO UPDATEFUNCS, updateStringData, but all the values that can be inserted by it are Strings - > however they also works on other types and database is not screaming -> but i don't know how will they handle when u need too use the values later
-    public HashMap<String, String> getData(String[] columns, String table, int id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        StringBuilder columnList = new StringBuilder();
-        HashMap<String,String> user = new HashMap<>();
-        int howManyColumns = columns.length;
-        for (int i = 0; i < howManyColumns; i++ )
-        {
-            columnList.append(columns[i]);
-            if(i != howManyColumns - 1)
-                columnList.append(", ");
-        }
-        String query = "SELECT "+columnList+" FROM "+table+" where id="+id;
-        Cursor cursor = db.rawQuery(query,null);
-        while (cursor.moveToNext()){
-            for( String column : columns) {
-                if(column.equals("stanowisko"))
-                {
-                    user.put(column,getPosition(cursor.getString(cursor.getColumnIndex(column))));
-                }
-                else
-                user.put(column, cursor.getString(cursor.getColumnIndex(column)));
-            }
-        }
-        cursor.close();
-        db.close();
-        return user;
-    }
 
     public String getData(String column, String table, int id){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -312,80 +286,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
-    public ArrayList<HashMap<String, String>> getData(String table, String whereClause, String whereValue){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<HashMap<String, String>> userList = new ArrayList<>();
-
-        String query;
-        if(whereClause != null)
-        {
-            if(whereClause.isEmpty())
-                query = "SELECT * FROM "+table;
-            else
-                query = "SELECT * FROM "+table+" where "+whereClause+"='"+whereValue+"'";
-        }
-        else
-            query = "SELECT * FROM "+table;
-        Cursor cursor = db.rawQuery(query,null);
-        while (cursor.moveToNext()){
-            HashMap<String,String> user = new HashMap<>();
-            user = databaseContentToHashMap(table,cursor);
-            userList.add(user);
-        }
-        cursor.close();
-        db.close();
-        return userList;
-    }
-
-    public ArrayList<HashMap<String, String>> getDataBetween(String[] columns, String table, String whereClause,String whereValue,String betweenColumn, String betweenValue1,String betweenValue2){
-        SQLiteDatabase db = this.getWritableDatabase();
-        StringBuilder columnList = new StringBuilder();
-        ArrayList<HashMap<String, String>> userList = new ArrayList<>();
-
-        int howManyColumns = columns.length;
-        for (int i = 0; i < howManyColumns; i++ )
-        {
-            columnList.append(columns[i]);
-            if(i != howManyColumns - 1)
-                columnList.append(", ");
-        }
-        String query;
-        if(whereClause != null)
-        {
-            if(whereClause.isEmpty())
-                query = "SELECT "+columnList+" FROM "+table+" AND "+betweenColumn+" BETWEEN "+betweenValue1+" AND "+betweenValue2;
-            else
-                query = "SELECT "+columnList+" FROM "+table+" where "+whereClause+"='"+whereValue+"' AND "+betweenColumn+" BETWEEN '"+betweenValue1+"' AND '"+betweenValue2+"'";
-
-        }
-        else
-            query = "SELECT "+columnList+" FROM "+table+" AND "+betweenColumn+" BETWEEN "+betweenValue1+" AND "+betweenValue2;
-        Cursor cursor = db.rawQuery(query,null);
-        while (cursor.moveToNext()){
-            HashMap<String,String> user = new HashMap<>();
-            for( String column : columns) {
-                if(column.equals("stanowisko"))
-                {
-                    user.put(column,getPosition(cursor.getString(cursor.getColumnIndex(column))));
-                }
-                else
-                    user.put(column, cursor.getString(cursor.getColumnIndex(column)));
-            }
-            userList.add(user);
-        }
-        cursor.close();
-        db.close();
-        return userList;
-    }
-
-
     // WARNING - IMPORTANTE - This funcs allow you to retrieve data by typing sql querry -> but it must be SELECT columns  FROM <- from must be uppercase rather no joins XD
     public ArrayList<HashMap<String, String>> getDataSQL(String query){
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<HashMap<String, String>> userList = new ArrayList<>();
 
         String[] helper = queryCutter(query);
-        String table = query.split("(?i)from")[1].split(" ")[1];
+        String table = query.split("(?i)\\bfrom\\b")[1].split(" ")[1];
 
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
@@ -405,67 +312,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
-    public int updateStringData(String[] columns, String[] values, String table, String whereColumn, String whereValue)
-    {
+
+    // WARNING - IMPORTANTE - This funcs allow you to update data by typing sql querry -> but it must be update table set, and the wheres if you want more than one, must be by and,
+    // no other things allowed like beetweens etc, quality checked by = not like
+    //
+    // You Can Clearly use execSQl, but this will return if it worked.
+
+    public int updateDataSQL(String sql){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues val = new ContentValues();
-        int res;
-        for(int i = 0; i < columns.length; i++)
+
+        String[] data = queryUpdateCutter(sql);
+        int i;
+        for(i = 1; i < data.length; i++ )
         {
-            if(columns[i].equals("haslo"))
-                values[i]=md5(values[i]);
-            val.put(columns[i],values[i]);
+            if(data[i].equals("where"))
+                break;
+            if(data[i].equals("haslo")) {
+                String value = md5(data[i + 1]);
+                val.put(data[i++],value);
+            }
+            else
+                val.put(data[i++],data[i]);
         }
-        res = db.update(table,val,whereColumn+"= ?",new String[] {whereValue});
-        db.close();
-        return res;
-    }
-
-    public int updateStringData(String column,String value, String table,String whereColumn, String whereValue)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues val = new ContentValues();
-        int res;
-        if(column.equals("haslo"))
-            value=md5(value);
-        val.put(column,value);
-        res = db.update(table,val,whereColumn+"= ?",new String[] {whereValue});
-        db.close();
-        return res;
-    }
-
-    public int updateStringData(String[] columns, String[] values, String table)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues val = new ContentValues();
-        int res;
-        for(int i = 0; i < columns.length; i++)
+        StringBuilder wheres = new StringBuilder();
+        String[] values = new String[(data.length - (i+1))/2];
+        int j = 0;
+        for(i+=1; i < data.length; i++)
         {
-            if(columns[i].equals("haslo"))
-                values[i]=md5(values[i]);
-            val.put(columns[i],values[i]);
+            wheres.append(data[i++]);
+            wheres.append("=?");
+            if(i+1 < data.length)
+                wheres.append(" AND ");
+            values[j++] = data[i];
         }
-        res = db.update(table,val,null,null);
+
+        int res = db.update(data[0],val,wheres.toString(),values);
         db.close();
         return res;
     }
 
-    public int updateStringData(String column,String value, String table)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues val = new ContentValues();
-        int res;
-        if(column.equals("haslo"))
-            value=md5(value);
-        val.put(column,value);
-        res = db.update(table,val,null,null);
-        db.close();
-        return res;
-    }
+    private void autoFillOtherTables(int id_worker, SQLiteDatabase db){
 
-    private void autoFillOtherTables(int id_worker, SQLiteDatabase db)
-    {
-        db.execSQL("Insert INTO "+TAB_SALARY+"(id) values ("+id_worker+") ");
+//        Calendar calendar = Calendar.getInstance();
+//        String date = makeDateYM(calendar);
+        db.execSQL("Insert INTO "+TAB_SALARY+"(id_prac,data,pensja,stawka,ilosc_godzin) values ("+id_worker+",'"+makeDateYM(Calendar.getInstance())+"',0,0,0) ");
         //db.execSQL("Insert INTO "+TAB_AVAILABILITY+"(id) values ("+id_worker+") ");
         //db.execSQL("Insert INTO "+TAB_SCHEDULE+"(id) values ("+id_worker+") ");
 
@@ -533,7 +424,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-
     // =========================================== Schedule/avability Helpers ========================================================
 
     public long insertSchedule(String date,String startHour,String endHour, int userId) {
@@ -550,8 +440,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
-
-    public long updateDate(String date,String startHour,String endHour,int schedule_1_avability_0, int userId){ // schedule_avability - > 0 -> avability 1 -> schedule
+    public long updateSchedule(String date,String startHour,String endHour,int schedule_1_avability_0, int userId){ // schedule/avability:avability -> 0, schedule -> 1
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cValues = new ContentValues();
@@ -567,9 +456,65 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
+    public long updatePresence(String date,String startHour,String endHour, int userId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long newRowId = 1;
+        newRowId = updateDataSQL("update "+TAB_SCHEDULE+" set wejscie="+startHour+", wyjscie="+endHour+" where id_prac="+userId+" and data="+date);
+
+        db.close();
+        updateHoursSalary(userId,date);
+        return newRowId;
+    }
+
+
+    public void updateHoursSalary(int userId, String date){
+        HashMap<String,String> salaryTable =  getDataSQL("Select ilosc_godzin, stawka from "+TAB_SALARY+" where data like '"+date.substring(0,7)+"' and id_prac ="+userId).get(0);
+        float hours = Float.parseFloat(Objects.requireNonNull(salaryTable.get("ilosc_godzin")));
+        ArrayList<HashMap<String,String>> data = getDataSQL("Select wejscie, wyjscie, godzina_rozpoczecia, godzina_zakonczenia from "+TAB_SCHEDULE+" where id_prac="+userId+" and data like '"+date+"'");
+        hours +=  makeHours(computeDifference(dateTimeConvert(Objects.requireNonNull(data.get(0).get("wyjscie"))),dateTimeConvert(Objects.requireNonNull(data.get(0).get("wejscie")))));
+        float salary = hours*Float.parseFloat(Objects.requireNonNull(salaryTable.get("stawka")));
+        updateDataSQL("update "+TAB_SALARY+" set ilosc_godzin="+hours+", pensja="+salary+" where id_prac="+userId+" and data="+date.substring(0,7));
+    }
+
+    private long computeDifference(Calendar cal1, Calendar cal2){
+        return cal1.getTimeInMillis()-cal2.getTimeInMillis();
+    }
+    private float makeHours(long millis){
+        return millis/(60f*60f*1000f);
+    }
+
+    private Calendar dateTimeConvert(String data){
+        String[] date = data.split(" ")[0].split("-");
+        String[] time = data.split(" ")[1].split(":");
+        Calendar cal = Calendar.getInstance();
+        cal.set(Integer.parseInt(date[0]), Integer.parseInt(date[1]),Integer.parseInt(date[2]),Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2]));
+        return cal;
+    }
+
+    public String makeDateYM(Calendar calendar){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM");
+        dateFormat.setTimeZone(calendar.getTimeZone());
+        return dateFormat.format(calendar.getTime());
+    }
+
+    public String makeDateYMD(Calendar calendar){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
+        dateFormat.setTimeZone(calendar.getTimeZone());
+        return dateFormat.format(calendar.getTime());
+
+    }
+
+    public String makeDateTime(Calendar calendar){
+        SimpleDateFormat datetimeFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        datetimeFormat.setTimeZone(calendar.getTimeZone());
+        return datetimeFormat.format(calendar.getTime());
+    }
+
 
 
     // ============================ Auxiliary functions ( Pomocnicze ) ============================================
+
+
 
     public static final String md5(final String s) {
         final String MD5 = "MD5";
@@ -667,7 +612,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private String[] queryCutter(String query){
         query = query.substring(6);
-        String[] helper = query.split("(?i)from");
+        String[] helper = query.split("(?i)\\bfrom\\b");
         helper = helper[0].split(",");
         for(int i = 0; i < helper.length; i++)
             helper[i] = helper[i].replaceAll("\\s+","");
@@ -675,7 +620,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return helper;
     }
 
+    private  String[] queryUpdateCutter(String query){
+        query = query.substring(6);
+        String[] helper = query.split("(?i)\\bset\\b");
+        String table  = helper[0];
+        helper = helper[1].split("(?i)\\bwhere\\b");
+        query = helper[1];
+        helper = helper[0].split(",");
+        int length = (helper.length*2)+2;
+        String[] toWhere = new String[length];
+        int i = 0;
+        toWhere[i++] = table.replace(" ", "");;
+        for(String a : helper)
+        {
+            toWhere[i++] = a.split("=")[0].replace(" ", "");
+            toWhere[i++] = a.split("=")[1];
+        }
+        toWhere[i] = "where";
+        helper = query.split("(?i)\\band\\b");
+        String[] where = new String[helper.length*2];
+        i = 0;
+        for(String a : helper)
+        {
+            where[i++] = a.split("=")[0].replace(" ", "");;
+            where[i++] = a.split("=")[1];
+        }
+        String[] res = new String[length+where.length];
+        i = 0;
+        for(String a : toWhere)
+            res[i++] = a;
+        for (String a : where)
+            res[i++] = a;
 
+        return res;
+    }
+
+
+
+    private String computeUpdateString(String[] string) {
+        StringBuilder res = new StringBuilder();
+        for(String a : string)
+            res.append(a);
+        return res.toString();
+    }
 
 
 }

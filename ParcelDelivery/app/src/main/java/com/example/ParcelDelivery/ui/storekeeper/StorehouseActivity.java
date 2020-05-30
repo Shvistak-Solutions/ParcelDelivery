@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ParcelDelivery.R;
@@ -25,10 +26,6 @@ public class StorehouseActivity extends AppCompatActivity {
     DatabaseHelper dbH;
     SearchView searchView;
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,13 +33,20 @@ public class StorehouseActivity extends AppCompatActivity {
 
         packList = (ListView)findViewById(R.id.ID_PACK_LIST);
 
-
         dbH = new DatabaseHelper(this);
         Cursor data = dbH.getAllParcelIdByStatus("3");
         ArrayList<String>  list = new ArrayList<>();
         searchView = (SearchView)findViewById(R.id.ID_SEARCH_FOR_PACK);
         ArrayAdapter<String> arrayAdapter;
 
+        // back button
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                startActivity(new Intent(StorehouseActivity.this, StorekeeperActivity.class));
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
         if( data.getCount() == 0){
             Toast.makeText(StorehouseActivity.this,"Empty",Toast.LENGTH_LONG).show();

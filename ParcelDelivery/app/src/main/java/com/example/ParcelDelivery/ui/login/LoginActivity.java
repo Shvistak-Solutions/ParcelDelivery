@@ -1,5 +1,6 @@
 package com.example.ParcelDelivery.ui.login;
 
+        import androidx.activity.OnBackPressedCallback;
         import androidx.appcompat.app.AppCompatActivity;
 
         import android.content.Intent;
@@ -34,10 +35,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        // back button
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
         db = new DatabaseHelper(this);
-        db.dbSeed(); // to robi dropa i insertuje seeda
+        db.dbSeed(); //insertuje seeda
 
         Name = (EditText)findViewById(R.id.etName);
         Password = (EditText)findViewById(R.id.etPassword);

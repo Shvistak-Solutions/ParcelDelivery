@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
@@ -28,8 +29,16 @@ public class PackActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pack);
 
-        changeStatus = (Button)findViewById(R.id.ID_CHANGE_PACK_STATUS);
+        // back button
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                startActivity(new Intent(PackActivity.this, StorehouseActivity.class));
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
+        changeStatus = (Button)findViewById(R.id.ID_CHANGE_PACK_STATUS);
 
         Intent intent = getIntent();
         idMessage = intent.getStringExtra("EXTRA_PACK_ID");

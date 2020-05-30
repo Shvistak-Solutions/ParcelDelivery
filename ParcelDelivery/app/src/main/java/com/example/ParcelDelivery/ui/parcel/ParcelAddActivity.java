@@ -1,5 +1,6 @@
 package com.example.ParcelDelivery.ui.parcel;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
+import com.example.ParcelDelivery.ui.coordinator.CoordinatorActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +43,16 @@ public class ParcelAddActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         final Spinner spinnerCouriers = (Spinner) findViewById(R.id.spinnerCourierSelect);
         spinnerCouriers.setAdapter(adapter);
+
+        // back button
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                intent = new Intent(ParcelAddActivity.this, ParcelListActivity.class);
+                startActivity(intent);
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
         // add parcel into database and get back to parcel list
         Button buttonParcelConfirm = (Button) findViewById(R.id.buttonConfirmParcel);
