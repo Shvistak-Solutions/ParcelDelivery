@@ -8,6 +8,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ParcelDelivery.db.DatabaseHelper;
@@ -27,6 +28,14 @@ public class UserAddActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_userdetails);
         findLayoutItems();
 
+        // back button
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                startActivity(new Intent(UserAddActivity.this, UserListActivity.class));
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override

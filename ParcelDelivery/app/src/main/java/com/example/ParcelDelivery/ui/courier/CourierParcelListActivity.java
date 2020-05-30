@@ -1,9 +1,11 @@
 package com.example.ParcelDelivery.ui.courier;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -32,10 +34,17 @@ public class CourierParcelListActivity extends AppCompatActivity {
 
         final DatabaseHelper db = new DatabaseHelper(this);
 
+        // back button
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                startActivity(new Intent(CourierParcelListActivity.this, CourierActivity.class));
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
+
         userId = getIntent().getIntExtra("userId", 0);
-
         tempParcelIdArray = db.getData("id", "Paczki","id_kuriera", String.valueOf(userId));
-
         initImageBitmaps();
 
     }

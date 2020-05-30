@@ -11,10 +11,12 @@ import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
+import com.example.ParcelDelivery.ui.manager.ManagerActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +36,15 @@ public class UserListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_userlist);
 
         userId = getIntent().getIntExtra("userId", 0);
+
+        // back button
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                startActivity(new Intent(UserListActivity.this, ManagerActivity.class));
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
         final DatabaseHelper db = new DatabaseHelper(this);
         final ListView lv = (ListView) findViewById(R.id.user_list);

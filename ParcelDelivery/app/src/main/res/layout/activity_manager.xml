@@ -26,11 +26,15 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonMyAccount"
-        android:layout_width="0dp"
+        android:id="@+id/buttonLogoutManag"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/my_account"
-        app:layout_constraintBottom_toTopOf="@+id/buttonScheduleView"
+        android:layout_marginStart="164dp"
+        android:layout_marginTop="103dp"
+        android:layout_marginEnd="159dp"
+        android:text="Wyloguj"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
