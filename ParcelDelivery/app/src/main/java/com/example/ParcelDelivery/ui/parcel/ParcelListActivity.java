@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,7 +22,8 @@ import java.util.HashMap;
 public class ParcelListActivity extends AppCompatActivity {
     Intent intent;
     private ArrayList<HashMap<String,String>> mParcelData = new ArrayList<>();
-
+    private int userId;
+    private static final String TAG = "ParcelListActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class ParcelListActivity extends AppCompatActivity {
             }
         });
 
+        userId = getIntent().getIntExtra("userId",0);
         getParcelData();
         initRecyclerView();
     }
@@ -55,8 +58,22 @@ public class ParcelListActivity extends AppCompatActivity {
 
     private void getParcelData() {
         final DatabaseHelper dbHelper = new DatabaseHelper(this);
-        mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki");
+        String userPosition = dbHelper.getData("stanowisko","Pracownicy","id",Integer.toString(userId)).get(0);
+        Log.d(TAG, "getParcelData: entered with userpos: "+userPosition);
+        switch(userPosition){
+            case "Kurier":
+                mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki WHERE id_kuriera = " + userId);
+                break;
+            case "Koordynator":
+                mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki");
+                break;
+            case "Magazynier":
+                mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki WHERE status = 3");// tylko te paczki które w magazynie
+                break;
+            default:
+                mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki");
 
+        }
     }
 
     private void initRecyclerView(){

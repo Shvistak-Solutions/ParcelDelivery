@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.ParcelDelivery.R;
+import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
 import com.example.ParcelDelivery.ui.login.LoginActivity;
 
 public class CourierActivity extends AppCompatActivity {
@@ -42,7 +43,7 @@ public class CourierActivity extends AppCompatActivity {
         buttonParcelList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CourierActivity.this, CourierParcelListActivity.class);
+                Intent intent = new Intent(CourierActivity.this, ParcelListActivity.class);
                 intent.putExtra("userId", userId);
                 startActivity(intent);
             }
