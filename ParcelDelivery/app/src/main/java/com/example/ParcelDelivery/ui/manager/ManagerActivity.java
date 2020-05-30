@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.ParcelDelivery.R;
+import com.example.ParcelDelivery.ui.user.UserDetailsActivity;
 import com.example.ParcelDelivery.ui.user.UserListActivity;
 import com.example.ParcelDelivery.ui.user.UserScheduleActivity;
 
@@ -26,6 +27,7 @@ public class ManagerActivity extends AppCompatActivity {
 
         Button buttonUserList = (Button) findViewById(R.id.buttonUserList);
         Button buttonSchedule = (Button) findViewById(R.id.buttonScheduleView);
+        Button buttonMyAccount = (Button) findViewById(R.id.buttonMyAccount);
 
         buttonSchedule.setOnClickListener(v -> {
 
@@ -38,6 +40,13 @@ public class ManagerActivity extends AppCompatActivity {
         buttonUserList.setOnClickListener(v -> {
             Intent intent = new Intent(ManagerActivity.this, UserListActivity.class);
             intent.putExtra("userId", userId);
+            startActivity(intent);
+        });
+
+        buttonMyAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(ManagerActivity.this, UserDetailsActivity.class);
+            intent.putExtra("userId", userId);
+            intent.putExtra("id", userId);
             startActivity(intent);
         });
     }

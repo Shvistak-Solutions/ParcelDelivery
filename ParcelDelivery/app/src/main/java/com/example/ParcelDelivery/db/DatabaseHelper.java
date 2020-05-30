@@ -12,9 +12,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
+    private static final int databaseVersion = 2;
 
     private String TAB_ACCOUNT = "Konta";
     private String TAB_WORKERS = "Pracownicy";
@@ -25,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String TAB_PACKAGES = "Paczki";
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, databaseVersion);
         SQLiteDatabase database = this.getWritableDatabase();
     }
 
@@ -33,15 +35,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL("CREATE TABLE "+TAB_ACCOUNT+"(id INTEGER PRIMARY KEY, email VARCHAR unique, haslo VARCHAR, FOREIGN KEY(id) REFERENCES Pracownicy(id))");
         database.execSQL("CREATE TABLE "+TAB_WORKERS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, stanowisko INTEGER, email VARCHAR unique, pesel VARCHAR unique, nr_dowodu VARCHAR unique, adres VARCHAR, kod_pocztowy VARCHAR);");
-        database.execSQL("CREATE TABLE "+TAB_SALARY+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, pensja FLOAT,stawka FLOAT, ilosc_godzin FLOAT, data DATE, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id));");
-        database.execSQL("CREATE TABLE "+TAB_SCHEDULE+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id))");
-        database.execSQL("CREATE TABLE "+TAB_AVAILABILITY+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id));");
+        database.execSQL("CREATE TABLE "+TAB_SALARY+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, pensja FLOAT,stawka FLOAT, ilosc_godzin FLOAT, data DATE, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id), UNIQUE(id_prac, data));");
+        database.execSQL("CREATE TABLE "+TAB_SCHEDULE+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id),UNIQUE(id_prac, data))");
+        database.execSQL("CREATE TABLE "+TAB_AVAILABILITY+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id), UNIQUE(id_prac, data));");
         database.execSQL("CREATE TABLE "+TAB_CLIENTS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
         database.execSQL("CREATE TABLE "+TAB_PACKAGES+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_kuriera INTEGER, status INTEGER, id_nadawcy INTEGER, id_odbiorcy INTEGER, FOREIGN KEY(id_kuriera) REFERENCES Pracownicy(id), FOREIGN KEY(id_odbiorcy) REFERENCES Klienci(id), FOREIGN KEY(id_nadawcy) REFERENCES Klienci(id));");
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+TAB_PACKAGES);
         db.execSQL("DROP TABLE IF EXISTS "+TAB_SCHEDULE);
         db.execSQL("DROP TABLE IF EXISTS "+TAB_AVAILABILITY);
@@ -49,22 +51,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+TAB_ACCOUNT);
         db.execSQL("DROP TABLE IF EXISTS "+TAB_WORKERS);
         db.execSQL("DROP TABLE IF EXISTS "+TAB_CLIENTS);
-
         onCreate(db);
     }
 
-    public void dbSeed()
-    {
+    public void dbSeed() {
         SQLiteDatabase db = this.getWritableDatabase();
-        onUpgrade(db, 1, 2);
-        insertNewUser("Katarzyna","Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
-        insertNewUser("Rafał","Świstak", 0, "bober@email.com", "555555555555", "koza", "mielec", "11111");
-        insertNewUser("Szczepan","'Szlachta' Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
-        insertNewUser("Krzysztof","Dżachym", 1, "dżadża@email.com", "333333333333333", "jachym", "krakow", "11111");
-        insertNewUser("Patryk","Frasio", 2, "frasio@email.com", "222222222222", "frasio", "konkurencyjnaKopalniaSiarki", "11111");
-        insertNewUser("Łukasz","Scared", 1, "scared@email.com", "1111111111111", "difrent", "myślenice", "11111");
-        insertNewUser("Zdzisław","Siwy", 3, "siwy@email.com", "0000000000000", "siwy", "kanciapa", "11111");
-
+        onUpgrade(db,0,1);
+        insertNewUser("Katarzyna", "Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
+        insertNewUser("Rafał", "Świstak", 0, "bober@email.com", "555555555555", "koza", "mielec", "11111");
+        insertNewUser("Szczepan", "'Szlachta' Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
+        insertNewUser("Krzysztof", "Dżachym", 1, "dżadża@email.com", "333333333333333", "jachym", "krakow", "11111");
+        insertNewUser("Patryk", "Frasio", 2, "frasio@email.com", "222222222222", "frasio", "konkurencyjnaKopalniaSiarki", "11111");
+        insertNewUser("Łukasz", "Scared", 1, "scared@email.com", "1111111111111", "difrent", "myślenice", "11111");
+        insertNewUser("Zdzisław", "Siwy", 3, "siwy@email.com", "0000000000000", "siwy", "kanciapa", "11111");
     }
 
     public void updatePassword(String email, String password){
@@ -315,6 +314,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // WARNING - IMPORTANTE - This funcs allow you to update data by typing sql querry -> but it must be update table set, and the wheres if you want more than one, must be by and,
     // no other things allowed like beetweens etc, quality checked by = not like
+    //
+    // You Can Clearly use execSQl, but this will return if it worked.
 
     public int updateDataSQL(String sql){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -351,7 +352,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void autoFillOtherTables(int id_worker, SQLiteDatabase db){
-        db.execSQL("Insert INTO "+TAB_SALARY+"(id_prac) values ("+id_worker+") ");
+
+//        Calendar calendar = Calendar.getInstance();
+//        String date = makeDateYM(calendar);
+        db.execSQL("Insert INTO "+TAB_SALARY+"(id_prac,data,pensja,stawka,ilosc_godzin) values ("+id_worker+",'"+makeDateYM(Calendar.getInstance())+"',0,0,0) ");
         //db.execSQL("Insert INTO "+TAB_AVAILABILITY+"(id) values ("+id_worker+") ");
         //db.execSQL("Insert INTO "+TAB_SCHEDULE+"(id) values ("+id_worker+") ");
 
@@ -435,8 +439,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
-
-    public long updateDate(String date,String startHour,String endHour,int schedule_1_avability_0, int userId){ // schedule_avability - > 0 -> avability 1 -> schedule
+    public long updateSchedule(String date,String startHour,String endHour,int schedule_1_avability_0, int userId){ // schedule/avability:avability -> 0, schedule -> 1
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cValues = new ContentValues();
@@ -452,17 +455,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
-    public void updateHours(int userId, String date){
-        float hours = Integer.parseInt(getDataSQL("Select ilosc_godzin from Pensja where date like "+date+" and id_prac ="+userId).get(0).get("ilosc_godzin"));
-        ArrayList<HashMap<String,String>> data = getDataSQL("Select wejscie, wyjscie, godzina_rozpoczecia, godzina_zakoczenia from Grafik where id_prac ="+userId+" and data like "+date);
-        hours +=  makeHours(computeDifference(dateTimeConvert(data.get(0).get("wyjscie")),dateTimeConvert(data.get(0).get("wyjscie"))));
+    public long updatePresence(String date,String startHour,String endHour, int userId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long newRowId = 1;
+        newRowId = updateDataSQL("update "+TAB_SCHEDULE+" set wejscie="+startHour+", wyjscie="+endHour+" where id_prac="+userId+" and data="+date);
+
+        db.close();
+        updateHoursSalary(userId,date);
+        return newRowId;
+    }
+
+
+    public void updateHoursSalary(int userId, String date){
+        HashMap<String,String> salaryTable =  getDataSQL("Select ilosc_godzin, stawka from "+TAB_SALARY+" where data like '"+date.substring(0,7)+"' and id_prac ="+userId).get(0);
+        float hours = Float.parseFloat(Objects.requireNonNull(salaryTable.get("ilosc_godzin")));
+        ArrayList<HashMap<String,String>> data = getDataSQL("Select wejscie, wyjscie, godzina_rozpoczecia, godzina_zakonczenia from "+TAB_SCHEDULE+" where id_prac="+userId+" and data like '"+date+"'");
+        hours +=  makeHours(computeDifference(dateTimeConvert(Objects.requireNonNull(data.get(0).get("wyjscie"))),dateTimeConvert(Objects.requireNonNull(data.get(0).get("wejscie")))));
+        float salary = hours*Float.parseFloat(Objects.requireNonNull(salaryTable.get("stawka")));
+        updateDataSQL("update "+TAB_SALARY+" set ilosc_godzin="+hours+", pensja="+salary+" where id_prac="+userId+" and data="+date.substring(0,7));
     }
 
     private long computeDifference(Calendar cal1, Calendar cal2){
         return cal1.getTimeInMillis()-cal2.getTimeInMillis();
     }
     private float makeHours(long millis){
-        return millis/(60f*60f*100f);
+        return millis/(60f*60f*1000f);
     }
 
     private Calendar dateTimeConvert(String data){
@@ -473,14 +490,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cal;
     }
 
-    private String makeDate(Calendar calendar){
+    public String makeDateYM(Calendar calendar){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM");
+        dateFormat.setTimeZone(calendar.getTimeZone());
+        return dateFormat.format(calendar.getTime());
+    }
+
+    public String makeDateYMD(Calendar calendar){
         SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
         dateFormat.setTimeZone(calendar.getTimeZone());
         return dateFormat.format(calendar.getTime());
 
     }
 
-    private String makeDateTime(Calendar calendar){
+    public String makeDateTime(Calendar calendar){
         SimpleDateFormat datetimeFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
         datetimeFormat.setTimeZone(calendar.getTimeZone());
         return datetimeFormat.format(calendar.getTime());
@@ -606,10 +629,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int length = (helper.length*2)+2;
         String[] toWhere = new String[length];
         int i = 0;
-        toWhere[i++] = table;
+        toWhere[i++] = table.replace(" ", "");;
         for(String a : helper)
         {
-            toWhere[i++] = a.split("=")[0];
+            toWhere[i++] = a.split("=")[0].replace(" ", "");
             toWhere[i++] = a.split("=")[1];
         }
         toWhere[i] = "where";
@@ -618,15 +641,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         i = 0;
         for(String a : helper)
         {
-            where[i++] = a.split("=")[0];
+            where[i++] = a.split("=")[0].replace(" ", "");;
             where[i++] = a.split("=")[1];
         }
         String[] res = new String[length+where.length];
         i = 0;
         for(String a : toWhere)
-            res[i++] = a.replace(" ", "");
+            res[i++] = a;
         for (String a : where)
-            res[i++] = a.replace(" ", "");
+            res[i++] = a;
 
         return res;
     }

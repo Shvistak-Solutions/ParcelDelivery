@@ -44,38 +44,29 @@ public class UserScheduleActivity extends AppCompatActivity {
         textSchedule = findViewById(R.id.textSchedule);
 
         calendar = Calendar.getInstance();
-        int i = 0;
-        while(i < 7) {
-            db.insertSchedule(makeDate(calendar), makeDateTime(calendar), makeDateTime(calendar), userId);
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-            i++;
-        }
+
+        db.insertSchedule(db.makeDateYMD(calendar), db.makeDateTime(calendar), db.makeDateTime(calendar), userId);
+        String entry = db.makeDateTime(calendar);
+        calendar.add(Calendar.HOUR, 5);
+        db.updateDataSQL("update Pensje set ilosc_godzin=5 where id_prac = 7");
+
 
 
         buttonSchedule.setOnClickListener(v -> {
-            calendar = Calendar.getInstance();
-            list = db.getDataSQL("SELECT data FROM Grafik where id_prac = 7 and data between '2020-05-23' and '2020-05-30'");
+
+            Toast.makeText(getApplicationContext(),entry+" id: "+userId, Toast.LENGTH_SHORT).show();
+            db.updatePresence(db.makeDateYMD(calendar),entry,db.makeDateTime(calendar),userId);
+            list = db.getDataSQL("SELECT wejscie,wyjscie from Grafik where id_prac ="+userId+" and data like '"+db.makeDateYMD(calendar)+"'");
             for(HashMap<String,String> a : list)
             {
-                Toast.makeText(getApplicationContext(),a.get("data"), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),a.get("wejscie")+" a wyszem "+a.get("wyjscie"), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),a.get("pensja")+" a ilosc godzin "+a.get("ilosc_godzin")+" a stawka "+a.get("stawka"), Toast.LENGTH_SHORT).show();
             }
 
-            Toast.makeText(getApplicationContext(),"cos powinno byc", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),res, Toast.LENGTH_SHORT).show();
 
         });
 
     }
 
-    private String makeDate(Calendar calendar){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
-        dateFormat.setTimeZone(calendar.getTimeZone());
-        return dateFormat.format(calendar.getTime());
-
-    }
-
-    private String makeDateTime(Calendar calendar){
-        SimpleDateFormat datetimeFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-        datetimeFormat.setTimeZone(calendar.getTimeZone());
-        return datetimeFormat.format(calendar.getTime());
-    }
 }
