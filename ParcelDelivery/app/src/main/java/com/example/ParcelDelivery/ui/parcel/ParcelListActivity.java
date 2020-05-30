@@ -31,14 +31,14 @@ public class ParcelListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_parcel_list);
 
         // back button
-        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
-            @Override
-            public void handleOnBackPressed() {
-                intent = new Intent(ParcelListActivity.this, CoordinatorActivity.class);
-                startActivity(intent);
-            }
-        };
-        getOnBackPressedDispatcher().addCallback(this, callback);
+//        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                intent = new Intent(ParcelListActivity.this, CoordinatorActivity.class);
+//                startActivity(intent);
+//            }
+//        };
+//        getOnBackPressedDispatcher().addCallback(this, callback);
 
         // add a new parcel
         Button saveBtn = (Button)findViewById(R.id.buttonAddParcel);

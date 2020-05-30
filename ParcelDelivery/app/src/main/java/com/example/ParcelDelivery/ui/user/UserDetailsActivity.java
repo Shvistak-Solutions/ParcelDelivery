@@ -45,13 +45,13 @@ public class UserDetailsActivity extends FragmentActivity {
         ).attach();
 
         // back button
-        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
-            @Override
-            public void handleOnBackPressed() {
-                startActivity(new Intent(UserDetailsActivity.this, UserListActivity.class));
-            }
-        };
-        getOnBackPressedDispatcher().addCallback(this, callback);
+//        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                startActivity(new Intent(UserDetailsActivity.this, UserListActivity.class));
+//            }
+//        };
+//        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
