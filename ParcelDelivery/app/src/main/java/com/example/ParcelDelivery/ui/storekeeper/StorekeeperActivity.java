@@ -11,12 +11,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
+import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
 import com.example.ParcelDelivery.ui.login.LoginActivity;
 
 public class StorekeeperActivity extends AppCompatActivity {
 
     int userId;
     int test = 0;
+
+    Intent intent;
 
     private Button viewStorehouse;
     private DatabaseHelper dbH;
@@ -51,7 +54,9 @@ public class StorekeeperActivity extends AppCompatActivity {
         viewStorehouse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(StorekeeperActivity.this, StorehouseActivity.class));
+                intent = new Intent(StorekeeperActivity.this, ParcelListActivity.class);
+                intent.putExtra("userId", userId);
+                startActivity(intent);
             }
         });
 

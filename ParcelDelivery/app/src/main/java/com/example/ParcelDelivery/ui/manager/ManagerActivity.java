@@ -30,7 +30,7 @@ public class ManagerActivity extends AppCompatActivity {
 
         Button buttonUserList = (Button) findViewById(R.id.buttonUserList);
         Button buttonSchedule = (Button) findViewById(R.id.buttonScheduleView);
-        Button buttonMyAccount = (Button) findViewById(R.id.buttonMyAccount);
+        //Button buttonMyAccount = (Button) findViewById(R.id.buttonMyAccount);
 
         // logout
         Button buttonLogout = findViewById(R.id.buttonLogoutManag);
@@ -59,12 +59,14 @@ public class ManagerActivity extends AppCompatActivity {
             intent.putExtra("userId", userId);
             startActivity(intent);
         });
-
+/*
         buttonMyAccount.setOnClickListener(v -> {
             Intent intent = new Intent(ManagerActivity.this, UserDetailsActivity.class);
             intent.putExtra("userId", userId);
             intent.putExtra("id", userId);
             startActivity(intent);
         });
+
+ */
     }
 }

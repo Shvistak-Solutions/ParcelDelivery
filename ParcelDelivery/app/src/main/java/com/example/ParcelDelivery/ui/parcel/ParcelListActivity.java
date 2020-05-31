@@ -14,6 +14,9 @@ import android.widget.Button;
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
 import com.example.ParcelDelivery.ui.coordinator.CoordinatorActivity;
+import com.example.ParcelDelivery.ui.courier.CourierActivity;
+import com.example.ParcelDelivery.ui.login.LoginActivity;
+import com.example.ParcelDelivery.ui.storekeeper.StorekeeperActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,55 +26,87 @@ public class ParcelListActivity extends AppCompatActivity {
     Intent intent;
     private ArrayList<HashMap<String,String>> mParcelData = new ArrayList<>();
     private int userId;
+    Button saveBtn;
+
+
     private static final String TAG = "ParcelListActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parcel_list);
-
+        userId = getIntent().getIntExtra("userId",0);
         // back button
-//        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
-//            @Override
-//            public void handleOnBackPressed() {
-//                intent = new Intent(ParcelListActivity.this, CoordinatorActivity.class);
-//                startActivity(intent);
-//            }
-//        };
-//        getOnBackPressedDispatcher().addCallback(this, callback);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+
+
+                Class<?> destinationActivity;
+                switch(getUserPosition(userId)){
+                    case "Kurier":
+                        destinationActivity = CourierActivity.class;
+                        break;
+                    case "Koordynator":
+                        destinationActivity = CoordinatorActivity.class;
+                        break;
+                    case "Magazynier":
+                        destinationActivity = StorekeeperActivity.class;
+                        break;
+                    default:
+                        destinationActivity = LoginActivity.class;
+                        break;
+
+                }
+
+                intent = new Intent(ParcelListActivity.this, destinationActivity);
+                intent.putExtra("userId", userId);
+                startActivity(intent);
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
+
 
         // add a new parcel
-        Button saveBtn = (Button)findViewById(R.id.buttonAddParcel);
+        saveBtn = findViewById(R.id.buttonAddParcel);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent = new Intent(ParcelListActivity.this, ParcelAddActivity.class);
+                intent.putExtra("userId",userId);
                 startActivity(intent);
             }
         });
 
-        userId = getIntent().getIntExtra("userId",0);
+
         getParcelData();
         initRecyclerView();
+
+
     }
 
 
     private void getParcelData() {
         final DatabaseHelper dbHelper = new DatabaseHelper(this);
-        String userPosition = dbHelper.getData("stanowisko","Pracownicy","id",Integer.toString(userId)).get(0);
-        Log.d(TAG, "getParcelData: entered with userpos: "+userPosition);
-        switch(userPosition){
+
+
+        switch(getUserPosition(userId)){
             case "Kurier":
                 mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki WHERE id_kuriera = " + userId);
+
+                saveBtn.setVisibility(View.GONE);
                 break;
             case "Koordynator":
                 mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki");
                 break;
             case "Magazynier":
                 mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki WHERE status = 3");// tylko te paczki które w magazynie
+
+                saveBtn.setVisibility(View.GONE);
                 break;
             default:
-                mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki");
+                break;
 
         }
     }
@@ -79,10 +114,16 @@ public class ParcelListActivity extends AppCompatActivity {
     private void initRecyclerView(){
         RecyclerView recyclerView = findViewById(R.id.parcel_list_recycler_view);
 
-        ParcelListRecyclerViewAdapter adapter = new ParcelListRecyclerViewAdapter(mParcelData);
+        ParcelListRecyclerViewAdapter adapter = new ParcelListRecyclerViewAdapter(mParcelData,userId);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+    }
+
+    private String getUserPosition(int userId)
+    {
+        final DatabaseHelper dbHelper = new DatabaseHelper(this);
+        return dbHelper.getData("stanowisko","Pracownicy",userId);
     }
 }
