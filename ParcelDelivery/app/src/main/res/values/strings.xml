@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ParcelDelivery</string>
+    <string name="app_name">Marmot Express</string>
     <string-array name="array_name">
         <item>Kurier</item>
         <item>Magazynier</item>
@@ -30,4 +30,7 @@
     <string name="schedule">Grafik</string>
     <string name="parcel_list">Lista paczek</string>
     <string name="my_account">Moje konto</string>
+
+    <string name="hintEmail"><b>EMAIL</b></string>
+    <string name="hintPass"><b>HASŁO</b></string>
 </resources>
