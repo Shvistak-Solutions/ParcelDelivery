@@ -3,6 +3,7 @@ package com.example.ParcelDelivery.ui.storekeeper;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,34 +15,46 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
+import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
 
 public class PackActivity extends AppCompatActivity {
 
     Button changeStatus;
     private DatabaseHelper dbH;
     String idMessage;
+    private int userId;
+    private int parcelId;
     TextView statusPrint;
     TextView courierPrint;
     TextView idPrint;
+    Intent intent;
+
+    private static final String TAG = "PackActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pack);
 
+        Log.d(TAG, "onCreate: started");
+        intent = getIntent();
+        userId = intent.getIntExtra("userId",0);
+        parcelId = intent.getIntExtra("parcelId",1);
+        idMessage = Integer.toString(parcelId);
         // back button
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
-                startActivity(new Intent(PackActivity.this, StorehouseActivity.class));
+                Intent intent = new Intent(PackActivity.this, ParcelListActivity.class);
+                intent.putExtra("userId",userId);
+                startActivity(intent);
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
 
         changeStatus = (Button)findViewById(R.id.ID_CHANGE_PACK_STATUS);
 
-        Intent intent = getIntent();
-        idMessage = intent.getStringExtra("EXTRA_PACK_ID");
+
 
         dbH = new DatabaseHelper(this);
 
@@ -50,6 +63,7 @@ public class PackActivity extends AppCompatActivity {
         courierPrint = (TextView)findViewById(R.id.ID_COURIER_INFO_VIEW);
 
         if( dbH.checkIfInStorehouse(idMessage)) {
+
 
 
             Cursor data = dbH.getCourierInfoByPack(idMessage);

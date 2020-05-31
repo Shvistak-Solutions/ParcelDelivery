@@ -20,9 +20,11 @@ import java.util.HashMap;
 public class ParcelListRecyclerViewAdapter extends RecyclerView.Adapter<ParcelListRecyclerViewAdapter.ViewHolder>{
 
     private ArrayList<HashMap<String,String>> mParcelData = new ArrayList<>();
+    private int userId;
 
-    public ParcelListRecyclerViewAdapter(ArrayList<HashMap<String, String>> mParcelData) {
+    public ParcelListRecyclerViewAdapter(ArrayList<HashMap<String, String>> mParcelData, int userId) {
         this.mParcelData = mParcelData;
+        this.userId = userId;
     }
 
     @NonNull
@@ -45,7 +47,8 @@ public class ParcelListRecyclerViewAdapter extends RecyclerView.Adapter<ParcelLi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext() , PackActivity.class);
-                intent.putExtra("EXTRA_PACK_ID",mParcelData.get(position).get("id"));
+                intent.putExtra("userId",userId);
+                intent.putExtra("parcelId",mParcelData.get(position).get("id"));
                 v.getContext().startActivity(intent);
             }
         });
