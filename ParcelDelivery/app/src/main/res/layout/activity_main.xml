@@ -8,53 +8,115 @@ tools:context=".ui.login.LoginActivity">
 
     <EditText
         android:id="@+id/etName"
-        android:layout_width="wrap_content"
+        android:layout_width="279dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="66dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="66dp"
+        android:layout_marginBottom="20dp"
         android:ems="10"
-        android:hint="Name"
+        android:gravity="center"
+        android:hint="@string/hintEmail"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/colorPrimary"
+        android:textColorHint="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/etPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.448" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <EditText
         android:id="@+id/etPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="279dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="66dp"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="66dp"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/hintPass"
+        android:gravity="center"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColorHint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.572" />
+        app:layout_constraintTop_toBottomOf="@+id/etName" />
 
     <Button
         android:id="@+id/btLogin"
-        android:layout_width="wrap_content"
+        android:layout_width="179dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="116dp"
+        android:layout_marginBottom="15dp"
+        android:background="@color/colorPrimary"
         android:text="Login"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/ID_PASSWORD_RESET"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.793" />
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
     <TextView
         android:id="@+id/ID_PASSWORD_RESET"
-        android:layout_width="wrap_content"
+        android:layout_width="199dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="328dp"
-        android:layout_marginEnd="150dp"
+        android:layout_marginStart="106dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="106dp"
+        android:gravity="center"
         android:text="Nie pamiętasz hasła ?"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/btLogin" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="415dp"
+        android:layout_height="170dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="415dp"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="279dp"
+        android:layout_height="170dp"
+        android:layout_marginStart="66dp"
+        android:layout_marginEnd="66dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="415dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="15dp"
+        android:gravity="center"
+        android:text="by Shvistak Solutions"
+        android:textColor="#ffffff"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

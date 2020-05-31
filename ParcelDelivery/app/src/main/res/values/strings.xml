@@ -30,4 +30,7 @@
     <string name="schedule">Grafik</string>
     <string name="parcel_list">Lista paczek</string>
     <string name="my_account">Moje konto</string>
+
+    <string name="hintEmail"><b>EMAIL</b></string>
+    <string name="hintPass"><b>HASŁO</b></string>
 </resources>
