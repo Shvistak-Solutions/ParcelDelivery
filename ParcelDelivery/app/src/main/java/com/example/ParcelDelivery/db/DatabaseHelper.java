@@ -17,6 +17,7 @@ import java.util.Objects;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
     private static final int databaseVersion = 2;
+    private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
     private String TAB_WORKERS = "Pracownicy";
@@ -43,22 +44,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS "+TAB_PACKAGES);
-        db.execSQL("DROP TABLE IF EXISTS "+TAB_SCHEDULE);
-        db.execSQL("DROP TABLE IF EXISTS "+TAB_AVAILABILITY);
-        db.execSQL("DROP TABLE IF EXISTS "+TAB_SALARY);
-        db.execSQL("DROP TABLE IF EXISTS "+TAB_ACCOUNT);
-        db.execSQL("DROP TABLE IF EXISTS "+TAB_WORKERS);
-        db.execSQL("DROP TABLE IF EXISTS "+TAB_CLIENTS);
-        onCreate(db);
-        dbSeed();
+    public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        database.execSQL("DROP TABLE IF EXISTS "+TAB_PACKAGES);
+        database.execSQL("DROP TABLE IF EXISTS "+TAB_SCHEDULE);
+        database.execSQL("DROP TABLE IF EXISTS "+TAB_AVAILABILITY);
+        database.execSQL("DROP TABLE IF EXISTS "+TAB_SALARY);
+        database.execSQL("DROP TABLE IF EXISTS "+TAB_ACCOUNT);
+        database.execSQL("DROP TABLE IF EXISTS "+TAB_WORKERS);
+        database.execSQL("DROP TABLE IF EXISTS "+TAB_CLIENTS);
+        onCreate(database);
+        update = true;
     }
 
-    public void dbSeed() {
-        SQLiteDatabase db = this.getWritableDatabase();
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.setVersion(oldVersion);
+    }
 
-        //onUpgrade(db,0,1);
+    public boolean getUpdate(){
+        return update;
+    }
+    public void setUpdate(boolean status){
+        update = status;
+    }
+
+
+    public void dbSeed() {
+        SQLiteDatabase database = this.getWritableDatabase();
         insertNewUser("Katarzyna", "Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
         insertNewUser("Rafał", "Świstak", 0, "bober@email.com", "555555555555", "koza", "mielec", "11111");
         insertNewUser("Szczepan", "'Szlachta' Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
