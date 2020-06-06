@@ -41,7 +41,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         newPasswordSign = (TextView)findViewById(R.id.ID_NEW_PASSWORD_TEXT);
         newPasswordSign.setVisibility(View.INVISIBLE);
         note = (TextView)findViewById(R.id.ID_NOTE);
-        note.setText("Po podaniu prawidlowego adresu email i kliknieciu klawisza resetujacego haslo zostanie wygenerowany nowy kod");
+        note.setText("Po podaniu prawidłowego adresu email i kliknięciu klawisza resetującego hasło, zostanie wygenerowany nowy kod");
         //email = (EditText)
 
 
@@ -82,12 +82,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             passwordPrint.setVisibility(View.VISIBLE);
             passwordPrint.setTextSize(35);
             passwordPrint.setText(password2);
-            Toast.makeText(this,"Powroc do strony logowania i zaloguj sie za pomoca nowego hasla",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Powróć do strony logowania i zaloguj się za pomocą nowego hasła", Toast.LENGTH_LONG).show();
 
 
         }
         else {
-            Toast.makeText(this,"Nieprawidlowy adres email",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Nieprawidłowy adres email", Toast.LENGTH_LONG).show();
             return;
 
         }
