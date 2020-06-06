@@ -33,4 +33,7 @@
 
     <string name="hintEmail"><b>EMAIL</b></string>
     <string name="hintPass"><b>HASŁO</b></string>
+    <string name="hintNewPass"><b>NOWE HASŁO</b></string>
+    <string name="hintOldPass"><b>STARE HASŁO</b></string>
+    <string name="hintConfPass"><b>POTWIERDŹ HASŁO</b></string>
 </resources>

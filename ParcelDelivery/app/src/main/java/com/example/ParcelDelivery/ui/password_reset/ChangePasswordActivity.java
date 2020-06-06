@@ -61,7 +61,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
     private void newPasswordStep1(){
         if( oldPassword.equals(passwordCompare) ){
             nextStep.setText("Zmień hasło");
-            note.setText("Podaj nowe hasło. W obu polach hasło musi byś takie same");
             oldPasswordTyped.setVisibility(View.INVISIBLE);
             newPassword.setVisibility(View.VISIBLE);
             newPasswordAgain.setVisibility(View.VISIBLE);
@@ -89,17 +88,17 @@ public class ChangePasswordActivity extends AppCompatActivity {
     private void newPasswordStep2(){
 
         if(password.isEmpty()){
-            Toast.makeText(this,"Podaj nowe haslo",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Podaj nowe hasło",Toast.LENGTH_SHORT).show();
             newPasswordAgain.setText("");
         }
         else if(password.length() < 5){
-            Toast.makeText(this,"Podane haslo jest za krótkie. Minimum 5 znaków",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Podane hasło jest za krótkie - minimum 5 znaków",Toast.LENGTH_SHORT).show();
             newPassword.setText("");
             newPasswordAgain.setText("");
         }
 
         else if(again.isEmpty()){
-            Toast.makeText(this,"Powtórz nowe haslo",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Powtórz nowe hasło",Toast.LENGTH_SHORT).show();
         }
         else if( !password.equals(again) ){
             Toast.makeText(this,"W obu polach hasło musi byś takie same",Toast.LENGTH_SHORT).show();
