@@ -52,7 +52,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 passwordCompare = oldPasswordTyped.getText().toString().trim();
                 passwordCompare = dbH.md5(passwordCompare);
                 newPasswordStep1();
-
             }
         });
     }
