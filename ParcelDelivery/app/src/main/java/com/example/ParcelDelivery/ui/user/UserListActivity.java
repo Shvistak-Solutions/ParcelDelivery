@@ -41,7 +41,10 @@ public class UserListActivity extends AppCompatActivity {
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
-                startActivity(new Intent(UserListActivity.this, ManagerActivity.class));
+                intent = new Intent(UserListActivity.this, ManagerActivity.class);
+                intent.putExtra("userId", userId);
+                startActivity(intent);
+
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);

@@ -1,6 +1,7 @@
 package com.example.ParcelDelivery.ui.user;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -49,13 +50,16 @@ public class UserScheduleActivity extends AppCompatActivity {
         String entry = db.makeDateTime(calendar);
         calendar.add(Calendar.HOUR, 5);
         db.updateDataSQL("update Pensje set ilosc_godzin=5 where id_prac = 7");
-
+//        SQLiteDatabase lol = db.getWritableDatabase();
+//        lol.delete("Pensje","Data=?",new String[]{db.makeDateYM(calendar)});
+//        lol.close();
+        db.monthlyUpdate();
 
 
         buttonSchedule.setOnClickListener(v -> {
 
             Toast.makeText(getApplicationContext(),entry+" id: "+userId, Toast.LENGTH_SHORT).show();
-            db.updatePresence(db.makeDateYMD(calendar),entry,db.makeDateTime(calendar),userId);
+            long test = db.updatePresence(db.makeDateYMD(calendar),entry,db.makeDateTime(calendar),userId);
             list = db.getDataSQL("SELECT wejscie,wyjscie from Grafik where id_prac ="+userId+" and data like '"+db.makeDateYMD(calendar)+"'");
             for(HashMap<String,String> a : list)
             {
@@ -63,7 +67,7 @@ public class UserScheduleActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(),a.get("pensja")+" a ilosc godzin "+a.get("ilosc_godzin")+" a stawka "+a.get("stawka"), Toast.LENGTH_SHORT).show();
             }
 
-            //Toast.makeText(getApplicationContext(),res, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),test+"", Toast.LENGTH_SHORT).show();
 
         });
 

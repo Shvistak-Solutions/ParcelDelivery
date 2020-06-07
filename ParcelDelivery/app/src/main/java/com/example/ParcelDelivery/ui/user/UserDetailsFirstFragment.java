@@ -70,6 +70,10 @@ public class UserDetailsFirstFragment extends Fragment {
         details = db.getData("Pracownicy", thisUserId);
         findLayoutItems(view);
         fillTextViews(details);
+        if( userId == thisUserId){
+            buttonRmv.setVisibility(View.GONE);
+            buttonResetPassword.setVisibility(View.GONE);
+        }
 
         dialogRemove = removeAlert(details.get("email"));
         dialogReset = resetAlert(details.get("email"));

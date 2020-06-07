@@ -88,7 +88,7 @@ public class UserDetailsActivity extends FragmentActivity {
             }
             else if (position == 2){
                 new UserDetailsThirdFragment();
-                fragment = UserDetailsThirdFragment.newInstance(thisUserId);
+                fragment = UserDetailsThirdFragment.newInstance(thisUserId, userId);
             }
             assert fragment != null;
             return fragment;

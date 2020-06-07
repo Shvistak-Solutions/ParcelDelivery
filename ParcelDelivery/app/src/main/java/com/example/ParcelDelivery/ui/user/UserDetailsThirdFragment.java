@@ -26,7 +26,7 @@ import java.util.Objects;
 
 
 public class UserDetailsThirdFragment extends Fragment {
-    private  int userId ;
+    private  int userId, thisUserId ;
     private float rate, salary, hours;
 
     private TextView textRate, textSalary, textHours;
@@ -36,12 +36,13 @@ public class UserDetailsThirdFragment extends Fragment {
 
 
 
-    public static UserDetailsThirdFragment newInstance(int userId) {
+    public static UserDetailsThirdFragment newInstance(int userId, int thisUserId) {
         UserDetailsThirdFragment fragment = new UserDetailsThirdFragment();
 
         //this.userId = userId;
         Bundle args = new Bundle();
         args.putInt("userId", userId);
+        args.putInt("thisUserId", thisUserId);
         fragment.setArguments(args);
 
         return fragment;
@@ -52,6 +53,7 @@ public class UserDetailsThirdFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userId = getArguments().getInt("userId", 0);
+        thisUserId = getArguments().getInt("thisUserId", 0);
     }
 
     @Nullable
@@ -64,6 +66,10 @@ public class UserDetailsThirdFragment extends Fragment {
         details = db.getData("Pensje", userId);
         findLayoutItems(view);
         fillTextViews(details);
+        if(userId == thisUserId)
+        {
+            buttonEdit.setVisibility(View.GONE);
+        }
         return view;
     }
 
