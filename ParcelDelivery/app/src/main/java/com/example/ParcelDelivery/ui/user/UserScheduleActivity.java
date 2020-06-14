@@ -50,6 +50,7 @@ public class UserScheduleActivity extends AppCompatActivity {
         String entry = db.makeDateTime(calendar);
         calendar.add(Calendar.HOUR, 5);
         db.updateDataSQL("update Pensje set ilosc_godzin=5 where id_prac = 7");
+        db.updateDataSQL("update Pensje set ilosc_godzin=5 where id_prac = 1");
 //        SQLiteDatabase lol = db.getWritableDatabase();
 //        lol.delete("Pensje","Data=?",new String[]{db.makeDateYM(calendar)});
 //        lol.close();

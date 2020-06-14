@@ -483,7 +483,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public int updateHoursSalary(int userId, String date){
+    private int updateHoursSalary(int userId, String date){
         ArrayList<HashMap<String,String>> salaryTable =  getDataSQL("Select ilosc_godzin, stawka from "+TAB_SALARY+" where data like '"+date.substring(0,7)+"' and id_prac ="+userId);
         if(salaryTable.size() == 0)
             return -1;
