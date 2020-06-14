@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 2;
+    private static final int databaseVersion = 4;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
@@ -532,11 +532,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ============================ Regular Updaters ==============================================================
 
-    public void monthlyUpdate(){
+    public void updateDates(){
         Calendar cal = Calendar.getInstance();
         String date = makeDateYM(cal);
-        cal.add(Calendar.MONTH, -1);
+        cal.add(Calendar.DATE, 7);
+        String date2 = makeDateYM(cal);
+        ArrayList<HashMap<String,String>> users = getDataSQL("select data from Pensje order by data Desc Limit 1");
+        if(users.size() > 0)
+        {
+            if(date.compareTo(users.get(0).get("data")) > 0)
+                monthlyUpdate(1);
+            else if(date2.compareTo(users.get(0).get("data")) > 0)
+                monthlyUpdate(2);
+        }
+
+    }
+
+
+    public void monthlyUpdate(int state){
+        Calendar cal = Calendar.getInstance();
         String LastMonth = makeDateYM(cal);
+        String date = makeDateYM(cal);
+        if( state == 1){
+            date = makeDateYM(cal);
+            cal.add(Calendar.MONTH, -1);
+            LastMonth = makeDateYM(cal);
+        } else if (state == 2) {
+            LastMonth = makeDateYM(cal);
+            cal.add(Calendar.MONTH, +1);
+            date = makeDateYM(cal);
+        }
+
 
         ArrayList<HashMap<String,String>> users = getDataSQL("select id from Konta");
 

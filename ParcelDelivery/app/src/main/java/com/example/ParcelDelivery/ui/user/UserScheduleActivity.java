@@ -53,7 +53,7 @@ public class UserScheduleActivity extends AppCompatActivity {
 //        SQLiteDatabase lol = db.getWritableDatabase();
 //        lol.delete("Pensje","Data=?",new String[]{db.makeDateYM(calendar)});
 //        lol.close();
-        db.monthlyUpdate();
+        //db.monthlyUpdate();
 
 
         buttonSchedule.setOnClickListener(v -> {

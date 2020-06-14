@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
             db.dbSeed();
             db.setUpdate(false);
         }
+        db.updateDates();
 
         Name = (EditText)findViewById(R.id.etName);
         Password = (EditText)findViewById(R.id.etPassword);
