@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 2;
+    private static final int databaseVersion = 5;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
@@ -73,7 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         insertNewUser("Katarzyna", "Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
         insertNewUser("Rafał", "Świstak", 0, "bober@email.com", "555555555555", "koza", "mielec", "11111");
-        insertNewUser("Szczepan", "'Szlachta' Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
+        insertNewUser("Szczepan", "Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
         insertNewUser("Krzysztof", "Dżachym", 1, "dżadża@email.com", "333333333333333", "jachym", "krakow", "11111");
         insertNewUser("Patryk", "Frasio", 2, "frasio@email.com", "222222222222", "frasio", "konkurencyjnaKopalniaSiarki", "11111");
         insertNewUser("Łukasz", "Scared", 1, "scared@email.com", "1111111111111", "difrent", "myślenice", "11111");
@@ -473,20 +473,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         long newRowId = 1;
         newRowId = updateDataSQL("update "+TAB_SCHEDULE+" set wejscie="+startHour+", wyjscie="+endHour+" where id_prac="+userId+" and data="+date);
-
         db.close();
-        updateHoursSalary(userId,date);
+        if( newRowId < 1 )
+            return -3;
+        int test = updateHoursSalary(userId,date);
+        if(test < 1)
+            return test;
         return newRowId;
     }
 
 
-    public void updateHoursSalary(int userId, String date){
-        HashMap<String,String> salaryTable =  getDataSQL("Select ilosc_godzin, stawka from "+TAB_SALARY+" where data like '"+date.substring(0,7)+"' and id_prac ="+userId).get(0);
-        float hours = Float.parseFloat(Objects.requireNonNull(salaryTable.get("ilosc_godzin")));
+    private int updateHoursSalary(int userId, String date){
+        ArrayList<HashMap<String,String>> salaryTable =  getDataSQL("Select ilosc_godzin, stawka from "+TAB_SALARY+" where data like '"+date.substring(0,7)+"' and id_prac ="+userId);
+        if(salaryTable.size() == 0)
+            return -1;
+        float hours = Float.parseFloat(Objects.requireNonNull(salaryTable.get(0).get("ilosc_godzin")));
         ArrayList<HashMap<String,String>> data = getDataSQL("Select wejscie, wyjscie, godzina_rozpoczecia, godzina_zakonczenia from "+TAB_SCHEDULE+" where id_prac="+userId+" and data like '"+date+"'");
+        if(data.size() == 0)
+            return -2;
         hours +=  makeHours(computeDifference(dateTimeConvert(Objects.requireNonNull(data.get(0).get("wyjscie"))),dateTimeConvert(Objects.requireNonNull(data.get(0).get("wejscie")))));
-        float salary = hours*Float.parseFloat(Objects.requireNonNull(salaryTable.get("stawka")));
-        updateDataSQL("update "+TAB_SALARY+" set ilosc_godzin="+hours+", pensja="+salary+" where id_prac="+userId+" and data="+date.substring(0,7));
+        float salary = hours*Float.parseFloat(Objects.requireNonNull(salaryTable.get(0).get("stawka")));
+        return updateDataSQL("update "+TAB_SALARY+" set ilosc_godzin="+hours+", pensja="+salary+" where id_prac="+userId+" and data="+date.substring(0,7));
     }
 
     private long computeDifference(Calendar cal1, Calendar cal2){
@@ -523,7 +530,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return datetimeFormat.format(calendar.getTime());
     }
 
+    // ============================ Regular Updaters ==============================================================
 
+    public void updateDates(){
+        Calendar cal = Calendar.getInstance();
+        String date = makeDateYM(cal);
+        cal.add(Calendar.DATE, 7);
+        String date2 = makeDateYM(cal);
+        ArrayList<HashMap<String,String>> users = getDataSQL("select data from Pensje order by data Desc Limit 1");
+        if(users.size() > 0)
+        {
+            if(date.compareTo(users.get(0).get("data")) > 0)
+                monthlyUpdate(1);
+            else if(date2.compareTo(users.get(0).get("data")) > 0)
+                monthlyUpdate(2);
+        }
+
+    }
+
+
+    public void monthlyUpdate(int state){
+        Calendar cal = Calendar.getInstance();
+        String LastMonth = makeDateYM(cal);
+        String date = makeDateYM(cal);
+        if( state == 1){
+            date = makeDateYM(cal);
+            cal.add(Calendar.MONTH, -1);
+            LastMonth = makeDateYM(cal);
+        } else if (state == 2) {
+            LastMonth = makeDateYM(cal);
+            cal.add(Calendar.MONTH, +1);
+            date = makeDateYM(cal);
+        }
+
+
+        ArrayList<HashMap<String,String>> users = getDataSQL("select id from Konta");
+
+        for ( HashMap<String,String> user: users ) {
+            ContentValues cValues = new ContentValues();
+            ArrayList<HashMap<String,String>> money=getDataSQL("select stawka from Pensje where id_prac="+user.get("id")+" and data='"+LastMonth+"'");
+            if(money.size() > 0 ) {
+                cValues.put("stawka",money.get(0).get("stawka"));
+            }
+            else
+                cValues.put("stawka",0);
+            cValues.put("id_prac", user.get("id"));
+            cValues.put("data",date);
+            cValues.put("ilosc_godzin", 0);
+            cValues.put("pensja", 0);
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.insert(TAB_SALARY,null, cValues);
+            db.close();
+        }
+
+    }
 
     // ============================ Auxiliary functions ( Pomocnicze ) ============================================
 
@@ -554,8 +614,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return "";
     }
 
-    private String getPosition(String position)
-    {
+    private String getPosition(String position) {
         switch(position)
         {
             case "0":
