@@ -1,6 +1,8 @@
 package com.example.ParcelDelivery.ui.user;
 
 import android.app.Activity;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
@@ -49,8 +51,9 @@ public class UserScheduleActivity extends AppCompatActivity {
         db.insertSchedule(db.makeDateYMD(calendar), db.makeDateTime(calendar), db.makeDateTime(calendar), userId);
         String entry = db.makeDateTime(calendar);
         calendar.add(Calendar.HOUR, 5);
-        db.updateDataSQL("update Pensje set ilosc_godzin=5 where id_prac = 7");
-        db.updateDataSQL("update Pensje set ilosc_godzin=5 where id_prac = 1");
+//        db.updateDataSQL("update Pensje set ilosc_godzin=5 where id_prac = 7");
+//        db.updateDataSQL("update Pensje set ilosc_godzin=5 where id_prac = 1");
+
 //        SQLiteDatabase lol = db.getWritableDatabase();
 //        lol.delete("Pensje","Data=?",new String[]{db.makeDateYM(calendar)});
 //        lol.close();
@@ -59,16 +62,24 @@ public class UserScheduleActivity extends AppCompatActivity {
 
         buttonSchedule.setOnClickListener(v -> {
 
-            Toast.makeText(getApplicationContext(),entry+" id: "+userId, Toast.LENGTH_SHORT).show();
-            long test = db.updatePresence(db.makeDateYMD(calendar),entry,db.makeDateTime(calendar),userId);
-            list = db.getDataSQL("SELECT wejscie,wyjscie from Grafik where id_prac ="+userId+" and data like '"+db.makeDateYMD(calendar)+"'");
-            for(HashMap<String,String> a : list)
-            {
-                Toast.makeText(getApplicationContext(),a.get("wejscie")+" a wyszem "+a.get("wyjscie"), Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getApplicationContext(),a.get("pensja")+" a ilosc godzin "+a.get("ilosc_godzin")+" a stawka "+a.get("stawka"), Toast.LENGTH_SHORT).show();
-            }
+            db.monthlySchedule(2,getApplicationContext());
 
-            Toast.makeText(getApplicationContext(),test+"", Toast.LENGTH_SHORT).show();
+//            try {
+//                db.insertNewUser("Katarzyna", "Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
+//            }
+//            catch (SQLException e) {
+//                Toast.makeText(getApplicationContext(), "CATCHED second!", Toast.LENGTH_SHORT).show();
+//            }
+//            Toast.makeText(getApplicationContext(),entry+" id: "+userId, Toast.LENGTH_SHORT).show();
+//            long test = db.updatePresence(db.makeDateYMD(calendar),entry,db.makeDateTime(calendar),userId);
+//            list = db.getDataSQL("SELECT wejscie,wyjscie from Grafik where id_prac ="+userId+" and data like '"+db.makeDateYMD(calendar)+"'");
+//            for(HashMap<String,String> a : list)
+//            {
+//                Toast.makeText(getApplicationContext(),a.get("wejscie")+" a wyszem "+a.get("wyjscie"), Toast.LENGTH_SHORT).show();
+//                //Toast.makeText(getApplicationContext(),a.get("pensja")+" a ilosc godzin "+a.get("ilosc_godzin")+" a stawka "+a.get("stawka"), Toast.LENGTH_SHORT).show();
+//            }
+//
+//            Toast.makeText(getApplicationContext(),test+"", Toast.LENGTH_SHORT).show();
 
         });
 

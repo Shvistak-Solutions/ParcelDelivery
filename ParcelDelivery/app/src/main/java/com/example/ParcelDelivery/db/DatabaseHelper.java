@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -16,7 +17,7 @@ import java.util.Objects;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 4;
+    private static final int databaseVersion = 5;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
@@ -70,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public void dbSeed() {
-        SQLiteDatabase database = this.getWritableDatabase();
+        //SQLiteDatabase database = this.getWritableDatabase();
         insertNewUser("Katarzyna", "Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
         insertNewUser("Rafał", "Świstak", 0, "bober@email.com", "555555555555", "koza", "mielec", "11111");
         insertNewUser("Szczepan", "'Szlachta' Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
@@ -146,7 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cValues.put("adres", address);
         cValues.put("kod_pocztowy", postal);
         // Insert the new row, returning the primary key value of the new row
-        long newRowId = db.insert(TAB_WORKERS,null, cValues);
+        long newRowId = db.insertOrThrow(TAB_WORKERS,null, cValues);
         if(newRowId != -1) {
             cValues.clear();
             cValues.put("email", email);
@@ -154,7 +155,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int id = getUserId(email);
             if (id != 0) {
                 cValues.put("id", id);
-                newRowId = db.insert(TAB_ACCOUNT, null, cValues);
+                newRowId = db.insertOrThrow(TAB_ACCOUNT, null, cValues);
                 if(newRowId != -1)
                     autoFillOtherTables(id, db);
             }
@@ -511,6 +512,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cal;
     }
 
+
+
     public String makeDateYM(Calendar calendar){
         SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM");
         dateFormat.setTimeZone(calendar.getTimeZone());
@@ -530,26 +533,77 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return datetimeFormat.format(calendar.getTime());
     }
 
+    public String addDays(String date, int amount){
+        String[] date1 = date.split("-");
+        int day =  Integer.parseInt(date1[2]);
+        day += amount;
+        if( day >= 10)
+            date = date1[0]+"-"+date1[1]+"-"+day;
+        else
+            date = date1[0]+"-"+date1[1]+"-0"+day;
+        return date;
+    }
+
     // ============================ Regular Updaters ==============================================================
 
     public void updateDates(){
         Calendar cal = Calendar.getInstance();
         String date = makeDateYM(cal);
+        String dateYMD = makeDateYMD(cal);
         cal.add(Calendar.DATE, 7);
         String date2 = makeDateYM(cal);
         ArrayList<HashMap<String,String>> users = getDataSQL("select data from Pensje order by data Desc Limit 1");
         if(users.size() > 0)
         {
             if(date.compareTo(users.get(0).get("data")) > 0)
-                monthlyUpdate(1);
+                monthlySalary(1);
             else if(date2.compareTo(users.get(0).get("data")) > 0)
-                monthlyUpdate(2);
+                monthlySalary(2);
         }
+//        users = getDataSQL("select data from Grafik order by data Desc Limit 1");
+//        if(users.size() > 0)
+//        {
+//            if(dateYMD.compareTo(users.get(0).get("data")) > 0)
+//                monthlySchedule(1);
+//            else if(date2.compareTo(users.get(0).get("data")) > 0)
+//                monthlySchedule(2);
+//        }
 
     }
 
+    public void monthlySchedule(int state, Context k){
+        Calendar cal = Calendar.getInstance();
 
-    public void monthlyUpdate(int state){
+        if( state == 2) {
+            cal.add(Calendar.MONTH, 1);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        int monday = Calendar.MONDAY;
+        int day = cal.get(Calendar.DAY_OF_WEEK);
+
+        int i = cal.get(Calendar.DATE);
+        String date = makeDateYMD(cal);
+
+
+        while(i <= cal.getActualMaximum(Calendar.DATE))
+        {
+            Toast.makeText(k, date,Toast.LENGTH_SHORT).show();
+            if(day >= monday && day < monday + 4){
+                date = addDays(date,1);
+                i++;
+                day++;
+            }
+            else {
+                date = addDays(date,3);
+                i+=3;
+                day=monday;
+            }
+        }
+    }
+
+
+    public void monthlySalary(int state){
         Calendar cal = Calendar.getInstance();
         String LastMonth = makeDateYM(cal);
         String date = makeDateYM(cal);
