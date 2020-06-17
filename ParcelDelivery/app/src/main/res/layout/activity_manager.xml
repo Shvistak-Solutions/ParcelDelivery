@@ -8,9 +8,11 @@
 
     <Button
         android:id="@+id/buttonUserList"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        style="@style/buttonGreen"
+        android:layout_width="312dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="30dp"
         android:text="@string/user_list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,8 +20,11 @@
 
     <Button
         android:id="@+id/buttonScheduleView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        style="@style/buttonGreen"
+        android:layout_width="312dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/schedule"
         app:layout_constraintBottom_toTopOf="@+id/buttonUserList"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,8 +32,11 @@
 
     <Button
         android:id="@+id/buttonMyAccount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        style="@style/buttonGreen"
+        android:layout_width="312dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/my_account"
         app:layout_constraintBottom_toTopOf="@+id/buttonScheduleView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,14 +44,31 @@
 
     <Button
         android:id="@+id/buttonLogoutManag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/buttonGreen"
         android:layout_marginStart="164dp"
-        android:layout_marginTop="103dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="159dp"
         android:text="Wyloguj"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <TextView
+        android:id="@+id/textView7"
+        style="@style/headerBackgroundGreen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        style="@style/headerWhite"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginEnd="110dp"
+        android:text="Menadżer"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLogoutManag" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
