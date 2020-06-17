@@ -8,5 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="textUserEdit">
+        <item name ="android:gravity">center|fill_vertical</item>
+        <item name ="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name ="android:background">#F1EEEE</item>
+        <item name="android:fadingEdge">horizontal|vertical|none</item>
+        <item name="android:layout_height">32dp</item>
+    </style>
+
+    <style name="textUserText">
+        <item name ="android:gravity">center_vertical</item>
+        <item name ="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name ="android:textColor">#000000</item>
+        <item name="android:layout_height">32dp</item>
+    </style>
+
 
 </resources>

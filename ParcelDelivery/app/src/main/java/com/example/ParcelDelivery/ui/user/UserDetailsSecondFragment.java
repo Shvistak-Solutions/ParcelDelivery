@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 
 public class UserDetailsSecondFragment extends Fragment {
     private  int userId;
+    TextView text;
 
     ViewPager viewPager;
 
@@ -61,18 +63,14 @@ public class UserDetailsSecondFragment extends Fragment {
 
     private void fillTextViews(HashMap<String,String> details) {
 
-//        name.setText(details.get("imie"));
-//        surname.setText(details.get("nazwisko"));
-//        email.setText(details.get("email"));
-//        position.setText(details.get("stanowisko"));
-//        pesel.setText(details.get("pesel"));
-//        address.setText(details.get("adres"));
-//        idNum.setText(details.get("nr_dowodu"));
-//        postal.setText(details.get("kod_pocztowy"));
+
 
     }
 
     private void findLayoutItems(View view){
+        View monday = view.findViewById(R.id.includedLayoutMonday);
+        text = monday.findViewById(R.id.textScheduleDay);
+        text.setText("Poniedziałek");
 //        name = (TextView)view.findViewById(R.id.textDetailName);
 //        surname = (TextView)view.findViewById(R.id.textDetailSurname);
 //        email = (TextView)view.findViewById(R.id.textDetailEmail) ;

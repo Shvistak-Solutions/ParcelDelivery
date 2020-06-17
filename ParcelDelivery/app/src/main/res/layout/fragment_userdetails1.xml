@@ -179,7 +179,6 @@
         tools:visibility="visible" />
 
 
-
     <TextView
         android:id="@+id/textDetailNameText"
         android:layout_width="120dp"

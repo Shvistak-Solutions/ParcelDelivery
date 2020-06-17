@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+
+    <TextView
+        android:id="@+id/textScheduleDay"
+        style="@style/textUserText"
+        android:layout_width="80dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:text="Poniedziałek" />
+
+    <EditText
+        android:id="@+id/editText"
+        style="@style/textUserEdit"
+        android:layout_marginHorizontal="10dp"
+        android:layout_width="wrap_content"
+        android:layout_weight="2"
+        android:inputType="textPersonName"
+        android:text="Name" />
+
+    <EditText
+        android:id="@+id/editText2"
+        style="@style/textUserEdit"
+        android:layout_width="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_weight="2"
+        android:inputType="textPersonName"
+        android:text="Name" />
+
+</LinearLayout>

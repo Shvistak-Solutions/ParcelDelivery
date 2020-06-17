@@ -62,18 +62,38 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
         android:orientation="vertical"
+        android:gravity="center_vertical"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerScheduleWeek">
+        app:layout_constraintTop_toBottomOf="@+id/spinnerScheduleWeek"
+        app:layout_constraintVertical_bias="1.0">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+        <include
+            android:id="@+id/includedLayoutMonday"
+            layout="@layout/row_schedule"
+            android:visibility="visible" />
 
+        <include
+            android:id="@+id/includedLayoutTuesday"
+            layout="@layout/row_schedule"
+            android:visibility="visible" />
 
-        </LinearLayout>
+        <include
+            android:id="@+id/includedLayoutWednesday"
+            layout="@layout/row_schedule"
+            android:visibility="visible" />
+
+        <include
+            android:id="@+id/includedLayoutThursday"
+            layout="@layout/row_schedule"
+            android:visibility="visible" />
+
+        <include
+            android:id="@+id/includedLayoutFriday"
+            layout="@layout/row_schedule"
+            android:visibility="visible" />
     </LinearLayout>
 
 
