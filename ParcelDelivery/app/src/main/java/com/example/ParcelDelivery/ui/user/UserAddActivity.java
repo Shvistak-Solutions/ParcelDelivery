@@ -25,7 +25,7 @@ public class UserAddActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_userdetails);
+        setContentView(R.layout.fragment_userdetails1);
         findLayoutItems();
 
         // back button

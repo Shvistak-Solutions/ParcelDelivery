@@ -3,6 +3,7 @@ package com.example.ParcelDelivery.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
@@ -17,7 +18,7 @@ import java.util.Objects;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 5;
+    private static final int databaseVersion = 12;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
@@ -559,19 +560,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 monthlySalary(1);
             else if(date2.compareTo(users.get(0).get("data")) > 0)
                 monthlySalary(2);
+            users = getDataSQL("select data from Grafik order by data Desc Limit 1");
+            if(users.size() > 0)
+            {
+                if(dateYMD.compareTo(users.get(0).get("data")) > 0)
+                    monthlySchedule(1);
+                else if(date2.compareTo(users.get(0).get("data").substring(0,7)) > 0)
+                    monthlySchedule(2);
+            }
+            else{
+                monthlySchedule(1);
+            }
+
         }
-//        users = getDataSQL("select data from Grafik order by data Desc Limit 1");
-//        if(users.size() > 0)
-//        {
-//            if(dateYMD.compareTo(users.get(0).get("data")) > 0)
-//                monthlySchedule(1);
-//            else if(date2.compareTo(users.get(0).get("data")) > 0)
-//                monthlySchedule(2);
-//        }
+
 
     }
 
-    public void monthlySchedule(int state, Context k){
+    public int monthlySchedule(int state){
         Calendar cal = Calendar.getInstance();
 
         if( state == 2) {
@@ -584,22 +590,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         int i = cal.get(Calendar.DATE);
         String date = makeDateYMD(cal);
+        int exep = 1;
 
+        ArrayList<HashMap<String,String>> users = getDataSQL("select id from Konta");
 
-        while(i <= cal.getActualMaximum(Calendar.DATE))
-        {
-            Toast.makeText(k, date,Toast.LENGTH_SHORT).show();
-            if(day >= monday && day < monday + 4){
-                date = addDays(date,1);
-                i++;
-                day++;
-            }
-            else {
-                date = addDays(date,3);
-                i+=3;
-                day=monday;
+        if(users.size() > 0) {
+            while (i <= cal.getActualMaximum(Calendar.DATE)) {
+
+                for(HashMap<String,String> user : users){
+                    ContentValues cValues = new ContentValues();
+                    cValues.put("id_prac", user.get("id"));
+                    cValues.put("data", date);
+                    cValues.put("godzina_rozpoczecia", 0);
+                    cValues.put("godzina_zakonczenia", 0);
+                    SQLiteDatabase db = this.getWritableDatabase();
+                    try {
+                        db.insertOrThrow(TAB_AVAILABILITY, null, cValues);
+                    }catch(SQLiteConstraintException e){
+                        exep = -1;
+                    }
+                    cValues.put("wejscie", 0);
+                    cValues.put("wyjscie", 0);
+                    try {
+                        db.insertOrThrow(TAB_SCHEDULE, null, cValues);
+                    } catch (SQLiteConstraintException e){
+                        exep = -1;
+                    }
+                    db.close();
+
+                }
+                if (day >= monday && day < monday + 4) {
+                    date = addDays(date, 1);
+                    i++;
+                    day++;
+                } else {
+                    date = addDays(date, 3);
+                    i += 3;
+                    day = monday;
+                }
+
             }
         }
+        return exep;
     }
 
 

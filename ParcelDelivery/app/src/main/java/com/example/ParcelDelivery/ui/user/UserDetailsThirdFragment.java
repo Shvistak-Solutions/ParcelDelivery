@@ -1,13 +1,11 @@
 package com.example.ParcelDelivery.ui.user;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
@@ -61,7 +58,7 @@ public class UserDetailsThirdFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(
-                R.layout.fragment_userdetails2, container, false);
+                R.layout.fragment_userdetails3, container, false);
         db = new DatabaseHelper(getContext());
         details = db.getData("Pensje", userId);
         findLayoutItems(view);
