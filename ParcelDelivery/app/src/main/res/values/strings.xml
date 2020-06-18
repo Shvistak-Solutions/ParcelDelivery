@@ -47,4 +47,7 @@
 
     <string name="hintEmail"><b>EMAIL</b></string>
     <string name="hintPass"><b>HASŁO</b></string>
+    <string name="day_name">Dzień Tygodnia</string>
+    <string name="no_data">Brak Danych</string>
+    <string name="week">Tydzień</string>
 </resources>

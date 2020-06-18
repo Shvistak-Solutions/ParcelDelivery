@@ -14,6 +14,7 @@
         <item name ="android:background">#F1EEEE</item>
         <item name="android:fadingEdge">horizontal|vertical|none</item>
         <item name="android:layout_height">32dp</item>
+        <item name="android:hint"> </item>
     </style>
 
     <style name="textUserText">

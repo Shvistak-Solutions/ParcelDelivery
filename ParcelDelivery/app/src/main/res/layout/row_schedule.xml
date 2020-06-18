@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:orientation="horizontal"
@@ -11,25 +12,29 @@
         style="@style/textUserText"
         android:layout_width="80dp"
         android:layout_weight="1"
-        android:layout_marginLeft="10dp"
-        android:text="Poniedziałek" />
+        android:layout_marginStart="10dp"
+        android:text="@string/day_name" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/editTextScheduleStart"
         style="@style/textUserEdit"
+        android:layout_width="20dp"
         android:layout_marginHorizontal="10dp"
-        android:layout_width="wrap_content"
         android:layout_weight="2"
-        android:inputType="textPersonName"
-        android:text="Name" />
+        android:autofillHints=""
+        android:inputType="time"
+        android:text=""
+        tools:ignore="LabelFor" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/editTextScheduleEnd"
         style="@style/textUserEdit"
-        android:layout_width="wrap_content"
-        android:layout_marginRight="10dp"
+        android:layout_width="20dp"
+        android:layout_marginEnd="10dp"
         android:layout_weight="2"
-        android:inputType="textPersonName"
-        android:text="Name" />
+        android:autofillHints=""
+        android:inputType="time"
+        android:text=""
+        tools:ignore="LabelFor" />
 
 </LinearLayout>

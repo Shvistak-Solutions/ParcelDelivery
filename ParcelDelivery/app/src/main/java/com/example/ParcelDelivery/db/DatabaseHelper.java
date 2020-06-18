@@ -505,7 +505,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return millis/(60f*60f*1000f);
     }
 
-    private Calendar dateTimeConvert(String data){
+    public Calendar dateTimeConvert(String data){
         String[] date = data.split(" ")[0].split("-");
         String[] time = data.split(" ")[1].split(":");
         Calendar cal = Calendar.getInstance();

@@ -44,14 +44,7 @@ public class UserDetailsActivity extends FragmentActivity {
                 (tab, position) -> tab.setText(description[position])
         ).attach();
 
-        // back button
-//        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
-//            @Override
-//            public void handleOnBackPressed() {
-//                startActivity(new Intent(UserDetailsActivity.this, UserListActivity.class));
-//            }
-//        };
-//        getOnBackPressedDispatcher().addCallback(this, callback);
+
     }
 
     @Override
@@ -81,10 +74,10 @@ public class UserDetailsActivity extends FragmentActivity {
             Fragment fragment = null;
             if (position == 0) {
                 new UserDetailsFirstFragment();
-                fragment = UserDetailsFirstFragment.newInstance(thisUserId,userId);
+                fragment = UserDetailsFirstFragment.newInstance(thisUserId, userId);
             } else if (position == 1) {
                 new UserDetailsSecondFragment();
-                fragment = UserDetailsSecondFragment.newInstance(thisUserId);
+                fragment = UserDetailsSecondFragment.newInstance(thisUserId, userId);
             }
             else if (position == 2){
                 new UserDetailsThirdFragment();

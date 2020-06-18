@@ -33,7 +33,7 @@ public class UserDetailsThirdFragment extends Fragment {
 
 
 
-    public static UserDetailsThirdFragment newInstance(int userId, int thisUserId) {
+    public static UserDetailsThirdFragment newInstance(int thisUserId, int userId) {
         UserDetailsThirdFragment fragment = new UserDetailsThirdFragment();
 
         //this.userId = userId;
@@ -60,7 +60,7 @@ public class UserDetailsThirdFragment extends Fragment {
         View view = inflater.inflate(
                 R.layout.fragment_userdetails3, container, false);
         db = new DatabaseHelper(getContext());
-        details = db.getData("Pensje", userId);
+        details = db.getData("Pensje", thisUserId);
         findLayoutItems(view);
         fillTextViews(details);
         if(userId == thisUserId)
@@ -95,13 +95,13 @@ public class UserDetailsThirdFragment extends Fragment {
                 Toast.makeText(getContext(), "Należy ustawić wartość", Toast.LENGTH_SHORT).show();
             } else {
                 rate = Float.parseFloat(textRate.getText().toString());
-                db.updateDataSQL("Update Pensje set stawka="+rate+" where id="+userId);
+                db.updateDataSQL("Update Pensje set stawka="+rate+" where id="+thisUserId);
                 salary = rate * hours;
                 String newSalary = "";
                 newSalary+=salary;
-                db.updateDataSQL("Update Pensje set pensja="+newSalary+" where id="+userId);
+                db.updateDataSQL("Update Pensje set pensja="+newSalary+" where id="+thisUserId);
                 buttonEdit.setText(R.string.edit_rate);
-                details = db.getData("Pensje", userId);
+                details = db.getData("Pensje", thisUserId);
                 fillTextViews(details);
                 textRate.setInputType(InputType.TYPE_NULL);
                 View view1 = Objects.requireNonNull(getActivity()).getCurrentFocus();

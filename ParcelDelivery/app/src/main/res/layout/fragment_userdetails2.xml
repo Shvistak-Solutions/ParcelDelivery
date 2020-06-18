@@ -5,29 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Spinner
-        android:id="@+id/spinnerScheduleMonth"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:entries="@array/months"
-        android:spinnerMode="dropdown"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Spinner
-        android:id="@+id/spinnerScheduleWeek"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:entries="@array/months"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/spinnerScheduleMonth"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/button"
         android:layout_width="0dp"
@@ -58,17 +35,15 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
-        android:orientation="vertical"
         android:gravity="center_vertical"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerScheduleWeek"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <include
             android:id="@+id/includedLayoutMonday"
@@ -94,6 +69,60 @@
             android:id="@+id/includedLayoutFriday"
             layout="@layout/row_schedule"
             android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/spinnerScheduleMonth"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="3"
+            android:gravity="center"
+            style="@style/textUserText"
+            android:text="@string/week"/>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/buttonPreviousWeek"
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            app:srcCompat="@drawable/vector" />
+
+        <TextView
+            android:id="@+id/textScheduleWeek"
+            style="@style/textUserText"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="2020-06-02 - 2020-06-03"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/buttonNextWeek"
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:rotation="180"
+            app:srcCompat="@drawable/vector" />
+
     </LinearLayout>
 
 
