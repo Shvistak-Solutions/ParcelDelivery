@@ -29,15 +29,15 @@ public class UserDetailsSecondFragment extends Fragment {
     private  int userId, thisUserId;
     private View monday, tuesday, wednesday, thursday, friday;
     private EditText startMonday, startTuesday,startWednesday,startThursday,startFriday, endMonday, endTuesday,endWednesday,endThursday,endFriday;
+    private EditText[] EditHolder = new EditText[10];
     private TextView week;
-    Button firstButton;
-    AppCompatImageButton btnNextWeek, btnPreviousWeek;
-    String firstDayOfWeek, lastDayOfWeek;
-    ArrayList<HashMap<String, String>> details;
-    DatabaseHelper db;
-    Calendar cal;
-
-    ViewPager viewPager;
+    private Button firstButton;
+    private AppCompatImageButton btnNextWeek, btnPreviousWeek;
+    private String firstDayOfWeek, lastDayOfWeek;
+    private ArrayList<HashMap<String, String>> details;
+    private DatabaseHelper db;
+    private Calendar cal;
+    boolean edit = false;
 
 
     public static UserDetailsSecondFragment newInstance(int userId,int thisUserId) {
@@ -82,29 +82,40 @@ public class UserDetailsSecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+
         firstButton.setOnClickListener(v->{
-            Toast.makeText(getContext(),"start",Toast.LENGTH_SHORT).show();
+            if(!edit) {
+                makeAllInputs();
+                edit = true;
+            }
+            else {
+                makeAllNoInput();
+                edit = false;
+            }
         });
 
         btnNextWeek.setOnClickListener(v->{
-            cal.add(Calendar.WEEK_OF_YEAR, +1);
-            cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            firstDayOfWeek = db.makeDateYMD(cal);
-            cal.add(Calendar.DATE, 4);
-            lastDayOfWeek = db.makeDateYMD(cal);
-            details = db.getDataSQL("select godzina_rozpoczecia,godzina_zakonczenia,data from Grafik where data between '"+firstDayOfWeek+"' and '"+lastDayOfWeek+"' and id_prac="+thisUserId+" order by data");
-            fillTextViews(details);
+            showAnotherWeek(1);
         });
 
         btnPreviousWeek.setOnClickListener(v->{
-            cal.add(Calendar.WEEK_OF_YEAR, -1);
-            cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            firstDayOfWeek = db.makeDateYMD(cal);
-            cal.add(Calendar.DATE, 4);
-            lastDayOfWeek = db.makeDateYMD(cal);
-            details = db.getDataSQL("select godzina_rozpoczecia,godzina_zakonczenia,data from Grafik where data between '"+firstDayOfWeek+"' and '"+lastDayOfWeek+"' and id_prac="+thisUserId+" order by data");
-            fillTextViews(details);
+            showAnotherWeek(0);
         });
+    }
+
+
+    private void showAnotherWeek(int state){
+        if( state == 1)
+            cal.add(Calendar.WEEK_OF_YEAR, +1);
+        else
+            cal.add(Calendar.WEEK_OF_YEAR, -1);
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        firstDayOfWeek = db.makeDateYMD(cal);
+        cal.add(Calendar.DATE, 4);
+        lastDayOfWeek = db.makeDateYMD(cal);
+        details = db.getDataSQL("select godzina_rozpoczecia,godzina_zakonczenia,data from Grafik where data between '"+firstDayOfWeek+"' and '"+lastDayOfWeek+"' and id_prac="+thisUserId+" order by data");
+        fillTextViews(details);
     }
 
 
@@ -148,12 +159,14 @@ public class UserDetailsSecondFragment extends Fragment {
                     j++;
                 }
             }
-            makeNoData(i);
+            makeNoData(i,0);
+            if(i + details.size() < 5) {
+                i = details.size();
+                makeNoData(5 - i, 1);
+            }
         }else{
-            makeNoData(5);
+            makeNoData(5,0);
         }
-
-
     }
 
     private void findLayoutItems(View view){
@@ -188,6 +201,7 @@ public class UserDetailsSecondFragment extends Fragment {
         btnPreviousWeek = view.findViewById(R.id.buttonPreviousWeek);
 
         makeAllNoInput();
+        assignEditTextToArray();
 
     }
 
@@ -208,28 +222,79 @@ public class UserDetailsSecondFragment extends Fragment {
         setNoInput(endTuesday);
         setNoInput(endWednesday);
     }
+    
+    private void setInput(EditText edit) {edit.setInputType(InputType.TYPE_CLASS_NUMBER);}
 
-    private void makeNoData(int i){
-        if( i > 0 ) {
-            startMonday.setText(R.string.no_data);
-            endMonday.setText(R.string.no_data);
-            if( i > 1) {
-                startTuesday.setText(R.string.no_data);
-                endTuesday.setText(R.string.no_data);
-                if(i > 2) {
-                    startWednesday.setText(R.string.no_data);
-                    endWednesday.setText(R.string.no_data);
-                    if(i > 3) {
-                        startThursday.setText(R.string.no_data);
-                        endThursday.setText(R.string.no_data);
-                        if( i > 4) {
-                            startFriday.setText(R.string.no_data);
-                            endFriday.setText(R.string.no_data);
+    private void makeAllInputs(){
+        setInput(startMonday);
+        setInput(startThursday);
+        setInput(startTuesday);
+        setInput(startWednesday);
+        setInput(startFriday);
+
+        setInput(endFriday);
+        setInput(endMonday);
+        setInput(endThursday);
+        setInput(endTuesday);
+        setInput(endWednesday);
+    }
+
+    private void assignEditTextToArray(){
+        EditHolder[0] = startMonday;
+        EditHolder[1] = endMonday;
+        EditHolder[2] = startTuesday;
+        EditHolder[3] = endTuesday;
+        EditHolder[4] = startWednesday;
+        EditHolder[5] = endWednesday;
+        EditHolder[6] = startThursday;
+        EditHolder[7] = endThursday;
+        EditHolder[8] = startFriday;
+        EditHolder[9] = endFriday;
+    }
+
+    private void makeNoData(int i, int state) {
+        if (state == 0) {
+            if (i > 0) {
+                startMonday.setText(R.string.no_data);
+                endMonday.setText(R.string.no_data);
+                if (i > 1) {
+                    startTuesday.setText(R.string.no_data);
+                    endTuesday.setText(R.string.no_data);
+                    if (i > 2) {
+                        startWednesday.setText(R.string.no_data);
+                        endWednesday.setText(R.string.no_data);
+                        if (i > 3) {
+                            startThursday.setText(R.string.no_data);
+                            endThursday.setText(R.string.no_data);
+                            if (i > 4) {
+                                startFriday.setText(R.string.no_data);
+                                endFriday.setText(R.string.no_data);
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            if (i > 0) {
+                startFriday.setText(R.string.no_data);
+                endFriday.setText(R.string.no_data);
+                if (i > 1) {
+                    startThursday.setText(R.string.no_data);
+                    endThursday.setText(R.string.no_data);
+                    if (i > 2) {
+                        startWednesday.setText(R.string.no_data);
+                        endWednesday.setText(R.string.no_data);
+                        if (i > 3) {
+                            startTuesday.setText(R.string.no_data);
+                            endTuesday.setText(R.string.no_data);
+                            if (i > 4) {
+                                startMonday.setText(R.string.no_data);
+                                endMonday.setText(R.string.no_data);
+                            }
                         }
                     }
                 }
             }
         }
     }
-
 }

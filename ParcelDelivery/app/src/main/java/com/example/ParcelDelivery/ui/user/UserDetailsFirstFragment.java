@@ -8,6 +8,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,12 +28,13 @@ public class UserDetailsFirstFragment extends Fragment {
     private  int userId;
 
     private TextView name, surname, pesel, email, idNum, address, postal, position;
-    private Button buttonRmv, buttonResetPassword;
+    private Button buttonRmv, buttonResetPassword, buttonEditData;
     private Spinner spinner;
     private DatabaseHelper db;
     private HashMap<String, String> details;
     private AlertDialog dialogRemove;
     private AlertDialog dialogReset;
+    boolean edit = false;
 
     public static UserDetailsFirstFragment newInstance(int thisUserId, int userId) {
         UserDetailsFirstFragment fragment = new UserDetailsFirstFragment();
@@ -70,6 +72,7 @@ public class UserDetailsFirstFragment extends Fragment {
         details = db.getData("Pracownicy", thisUserId);
         findLayoutItems(view);
         fillTextViews(details);
+//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         if( userId == thisUserId){
             buttonRmv.setVisibility(View.GONE);
             buttonResetPassword.setVisibility(View.GONE);
@@ -81,6 +84,17 @@ public class UserDetailsFirstFragment extends Fragment {
         buttonRmv.setOnClickListener(v -> dialogRemove.show());
 
         buttonResetPassword.setOnClickListener(v -> dialogReset.show());
+
+        buttonEditData.setOnClickListener(v->{
+            if(!edit) {
+                editData();
+                edit = true;
+            }
+            else {
+                updateData();
+                edit = false;
+            }
+        } );
     }
 
     private AlertDialog resetAlert(final String email) {
@@ -120,6 +134,37 @@ public class UserDetailsFirstFragment extends Fragment {
         return builder.create();
     }
 
+    private void editData(){
+        name.setInputType(InputType.TYPE_CLASS_TEXT);
+        surname.setInputType(InputType.TYPE_CLASS_TEXT);
+        email.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        position.setInputType(InputType.TYPE_NULL);
+        pesel.setInputType(InputType.TYPE_CLASS_NUMBER);
+        idNum.setInputType(InputType.TYPE_CLASS_TEXT);
+        address.setInputType(InputType.TYPE_CLASS_TEXT);
+        postal.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        spinner.setVisibility(View.VISIBLE);
+        position.setVisibility(View.INVISIBLE);
+
+
+        spinner.setSelection(db.positionStringToInt(details.get("stanowisko")));
+    }
+
+    private void updateData(){
+        name.setInputType(InputType.TYPE_NULL);
+        surname.setInputType(InputType.TYPE_NULL);
+        email.setInputType(InputType.TYPE_NULL);
+        position.setInputType(InputType.TYPE_NULL);
+        pesel.setInputType(InputType.TYPE_NULL);
+        idNum.setInputType(InputType.TYPE_NULL);
+        address.setInputType(InputType.TYPE_NULL);
+        postal.setInputType(InputType.TYPE_NULL);
+
+        spinner.setVisibility(View.GONE);
+        position.setVisibility(View.VISIBLE);
+    }
+
     private void fillTextViews(HashMap<String,String> details) {
 
         name.setText(details.get("imie"));
@@ -146,6 +191,7 @@ public class UserDetailsFirstFragment extends Fragment {
 
         buttonRmv = (Button)view.findViewById(R.id.buttonRemoveAccount);
         buttonResetPassword = (Button)view.findViewById(R.id.buttonResetPasswd);
+        buttonEditData = view.findViewById(R.id.buttonEditDetails);
 
         name.setInputType(InputType.TYPE_NULL);
         surname.setInputType(InputType.TYPE_NULL);

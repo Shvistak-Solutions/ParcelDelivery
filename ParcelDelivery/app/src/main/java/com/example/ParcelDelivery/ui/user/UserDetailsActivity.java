@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.ParcelDelivery.ui.manager.ManagerActivity;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import com.google.android.material.tabs.TabLayout;
@@ -50,9 +51,10 @@ public class UserDetailsActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         if (viewPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
+//            super.onBackPressed();
+            Intent intent = new Intent(UserDetailsActivity.this, ManagerActivity.class);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
         } else {
             // Otherwise, select the previous step.
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);

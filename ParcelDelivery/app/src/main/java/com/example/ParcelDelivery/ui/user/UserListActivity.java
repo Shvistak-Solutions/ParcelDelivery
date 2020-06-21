@@ -89,6 +89,7 @@ public class UserListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 intent = new Intent(UserListActivity.this, UserAddActivity.class);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         });

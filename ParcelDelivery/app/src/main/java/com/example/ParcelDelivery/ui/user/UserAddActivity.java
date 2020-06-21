@@ -20,6 +20,8 @@ public class UserAddActivity extends AppCompatActivity {
     Spinner positionSpinner;
     Button saveBtn, buttonGone1, buttonGone2;
     Intent intent;
+    DatabaseHelper dbHandler;
+    int userId;
 
 
     @Override
@@ -27,12 +29,16 @@ public class UserAddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_userdetails1);
         findLayoutItems();
+        userId = getIntent().getIntExtra("userId", 0);
 
         // back button
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
-                startActivity(new Intent(UserAddActivity.this, UserListActivity.class));
+                intent = new Intent(UserAddActivity.this, UserListActivity.class);
+                intent.putExtra("userId", userId);
+                startActivity(intent);
+
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
@@ -47,14 +53,16 @@ public class UserAddActivity extends AppCompatActivity {
                 String userId = idNum.getText().toString();
                 String userAddress = surname.getText().toString();
                 String userPostal = postal.getText().toString();
+                dbHandler = new DatabaseHelper(UserAddActivity.this);
 
                 String SpinnerValue = positionSpinner.getSelectedItem().toString();
-                int userPosition = positionStringToint(SpinnerValue);
-                DatabaseHelper dbHandler = new DatabaseHelper(UserAddActivity.this);
+                int userPosition = dbHandler.positionStringToInt(SpinnerValue);
+
                 long res = dbHandler.insertNewUser(userName,userSurname,userPosition,userEmail,userPesel,userId,userAddress,userPostal);
                 if(res > 0)
                 {
                     intent = new Intent(UserAddActivity.this, com.example.ParcelDelivery.ui.user.UserListActivity.class);
+                    intent.putExtra("userId", userId);
                     startActivity(intent);
                     Toast.makeText(getApplicationContext(), "Dodano sukcesywnie",Toast.LENGTH_SHORT).show();
                 }
@@ -69,29 +77,29 @@ public class UserAddActivity extends AppCompatActivity {
         });
     }
 
-    private int positionStringToint(String position)
-    {
-        int userPosition;
-        switch(position)
-        {
-            case "Kurier":
-                userPosition = 0;
-                break;
-            case "Magazynier":
-                userPosition = 1;
-                break;
-            case "Koordynator":
-                userPosition = 2;
-                break;
-            case "Manager":
-                userPosition = 3;
-                break;
-            default:
-                userPosition = 0;
-                break;
-        }
-        return userPosition;
-    }
+//    private int positionStringToint(String position)
+//    {
+//        int userPosition;
+//        switch(position)
+//        {
+//            case "Kurier":
+//                userPosition = 0;
+//                break;
+//            case "Magazynier":
+//                userPosition = 1;
+//                break;
+//            case "Koordynator":
+//                userPosition = 2;
+//                break;
+//            case "Manager":
+//                userPosition = 3;
+//                break;
+//            default:
+//                userPosition = 0;
+//                break;
+//        }
+//        return userPosition;
+//    }
 
     private void findLayoutItems()
     {

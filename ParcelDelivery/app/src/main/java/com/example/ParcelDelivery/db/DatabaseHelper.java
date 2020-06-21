@@ -722,6 +722,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return position;
     }
 
+    public int positionStringToInt(String position)
+    {
+        int userPosition;
+        switch(position)
+        {
+            case "Kurier":
+                userPosition = 0;
+                break;
+            case "Magazynier":
+                userPosition = 1;
+                break;
+            case "Koordynator":
+                userPosition = 2;
+                break;
+            case "Manager":
+                userPosition = 3;
+                break;
+            default:
+                userPosition = 0;
+                break;
+        }
+        return userPosition;
+    }
+
     private HashMap<String,String> databaseContentToHashMap(String table, Cursor cursor)
     {
         HashMap<String, String> user = new HashMap<>();
