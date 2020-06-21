@@ -36,4 +36,5 @@
     <string name="hintNewPass"><b>NOWE HASŁO</b></string>
     <string name="hintOldPass"><b>STARE HASŁO</b></string>
     <string name="hintConfPass"><b>POTWIERDŹ HASŁO</b></string>
+    <string name="buttonChangeStatus"><b>Ustaw Status</b></string>
 </resources>

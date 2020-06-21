@@ -6,15 +6,16 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/ID_CHANGE_PACK_STATUS"
+        android:id="@+id/buttonChangeStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginEnd="100dp"
-        android:layout_marginBottom="300dp"
-        android:text="PRZEKAŻ DO DOSTARCZENIA"
+        android:layout_marginBottom="176dp"
+        android:text="@string/buttonChangeStatus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -24,6 +25,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="120dp"
         android:layout_marginEnd="50dp"
+        android:text="id paczki"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,6 +37,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="50dp"
+        android:text="adres odbiorcy?"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ID_PACKID_VIEW" />
@@ -46,8 +49,30 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="50dp"
+        android:text="status?"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ID_STATUS_VIEW" />
+
+    <Spinner
+        android:id="@+id/spinnerStatusSelect"
+        android:layout_width="354dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonChangeStatus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="jakies inne info ogolnie "
+        app:layout_constraintBottom_toTopOf="@+id/spinnerStatusSelect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ID_COURIER_INFO_VIEW" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
