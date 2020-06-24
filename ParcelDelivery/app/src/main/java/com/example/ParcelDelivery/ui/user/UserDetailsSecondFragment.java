@@ -104,13 +104,9 @@ public class UserDetailsSecondFragment extends Fragment {
                         }else{
                             String dateTime = MakeDateTimeFromDateAndTime(weekDays[index/2],edit.getText().toString());
                             if( index % 2 == 0) {
-                                long test;
-                                test = db.updateSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId);
-                                if(test == 0)
+                                if(db.updateSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId) == 0)
                                     db.insertSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId);
-                                Toast.makeText(getContext(), "Wartosc: "+test, Toast.LENGTH_SHORT).show();
-                            }
-                            else {
+                            } else {
                                 if(db.updateSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId) == 0)
                                     db.insertSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId);
                             }
