@@ -1,10 +1,12 @@
 package com.example.ParcelDelivery.ui.user;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,7 +24,7 @@ import com.example.ParcelDelivery.db.DatabaseHelper;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-
+import java.util.Objects;
 
 
 public class UserDetailsSecondFragment extends Fragment {
@@ -33,7 +35,7 @@ public class UserDetailsSecondFragment extends Fragment {
     private TextView week;
     private Button firstButton;
     private AppCompatImageButton btnNextWeek, btnPreviousWeek;
-    private String firstDayOfWeek, lastDayOfWeek;
+    private String[] weekDays;
     private ArrayList<HashMap<String, String>> details;
     private DatabaseHelper db;
     private Calendar cal;
@@ -66,12 +68,14 @@ public class UserDetailsSecondFragment extends Fragment {
         View view = inflater.inflate(
                 R.layout.fragment_userdetails2, container, false);
         db = new DatabaseHelper(getContext());
+        weekDays = new String[5];
         cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        firstDayOfWeek = db.makeDateYMD(cal);
-        cal.add(Calendar.DATE, 4);
-        lastDayOfWeek = db.makeDateYMD(cal);
-        details = db.getDataSQL("select godzina_rozpoczecia,godzina_zakonczenia,data from Grafik where data between '"+firstDayOfWeek+"' and '"+lastDayOfWeek+"' and id_prac="+thisUserId+" order by data");
+        for(int i = 0; i < 5; i++){
+            weekDays[i] = db.makeDateYMD(cal);
+            cal.add(Calendar.DATE, 1);
+        }
+        details = db.getDataSQL("select godzina_rozpoczecia,godzina_zakonczenia,data from Grafik where data between '"+weekDays[0]+"' and '"+weekDays[4]+"' and id_prac="+thisUserId+" order by data");
         findLayoutItems(view);
         fillTextViews(details);
 
@@ -82,8 +86,6 @@ public class UserDetailsSecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-
         firstButton.setOnClickListener(v->{
             if(!edit) {
                 makeAllInputs();
@@ -91,15 +93,44 @@ public class UserDetailsSecondFragment extends Fragment {
             }
             else {
                 boolean allTrue = true;
+                int index = 0;
+                int firstFalseIndex = -1;
                 for(EditText edit : EditHolder){
-                    if(!checkRegex(edit.getText().toString())){
-                        allTrue = false;
+                    if(!edit.getText().toString().equals("Brak Danych")){
+                        if(!checkRegex(edit.getText().toString())){
+                            allTrue = false;
+                            if(firstFalseIndex < 0 )
+                                firstFalseIndex = index;
+                        }else{
+                            String dateTime = MakeDateTimeFromDateAndTime(weekDays[index/2],edit.getText().toString());
+                            if( index % 2 == 0) {
+                                long test;
+                                test = db.updateSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId);
+                                if(test == 0)
+                                    db.insertSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId);
+                                Toast.makeText(getContext(), "Wartosc: "+test, Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                if(db.updateSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId) == 0)
+                                    db.insertSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId);
+                            }
+                        }
                     }
+                    index++;
                 }
                 if(allTrue) {
                     makeAllNoInput();
                     edit = false;
+                }else{
+                    EditHolder[firstFalseIndex].requestFocus();
+                    View view1 = Objects.requireNonNull(getActivity()).getCurrentFocus();
+                    if (view1 != null) {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        assert imm != null;
+                        imm.showSoftInput(view1, 0);
+                    }
                 }
+
             }
         });
 
@@ -119,24 +150,36 @@ public class UserDetailsSecondFragment extends Fragment {
         else
             cal.add(Calendar.WEEK_OF_YEAR, -1);
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        firstDayOfWeek = db.makeDateYMD(cal);
-        cal.add(Calendar.DATE, 4);
-        lastDayOfWeek = db.makeDateYMD(cal);
-        details = db.getDataSQL("select godzina_rozpoczecia,godzina_zakonczenia,data from Grafik where data between '"+firstDayOfWeek+"' and '"+lastDayOfWeek+"' and id_prac="+thisUserId+" order by data");
+        for(int i = 0; i < 5; i++){
+            weekDays[i] = db.makeDateYMD(cal);
+            cal.add(Calendar.DATE, 1);
+        }
+        details = db.getDataSQL("select godzina_rozpoczecia,godzina_zakonczenia,data from Grafik where data between '"+weekDays[0]+"' and '"+weekDays[4]+"' and id_prac="+thisUserId+" order by data");
         fillTextViews(details);
     }
 
 
     private boolean checkRegex(String text){
-        return text.matches("^([0-2]?[0-9]:[0-5][0-9])$");
+        boolean isIt = text.matches("^([0-2]?[0-9]:[0-5][0-9])$");
+        if(!isIt)
+            return false;
+        String[] help = text.split(":");
+        if(help[0].matches("^(2[0-9])$")){
+            return help[0].matches("^(2[0-3])$");
+        }else
+            return true;
+    }
+
+    private String MakeDateTimeFromDateAndTime(String date, String Time){
+        return date.replace(" ","")+" "+Time.replace(" ","");
     }
 
 
     private void fillTextViews(ArrayList<HashMap<String,String>> details) {
-        week.setText(firstDayOfWeek+" : "+lastDayOfWeek);
+        week.setText(weekDays[0]+" : "+weekDays[4]);
 
         int i = 0;
-        String firstDay = firstDayOfWeek;
+        String firstDay = weekDays[0];
         if(details.size() > 0) {
             cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
             while (!firstDay.equals(details.get(0).get("data")) && i < 5) {
@@ -149,24 +192,24 @@ public class UserDetailsSecondFragment extends Fragment {
                 while (j < details.size() + i) {
                     switch (j) {
                         case 0:
-                            startMonday.setText(details.get(j - i).get("godzina_rozpoczecia"));
-                            endMonday.setText(details.get(j - i).get("godzina_zakonczenia"));
+                            startMonday.setText(db.cutTimeFromDateTime(details.get(j - i).get("godzina_rozpoczecia")));
+                            endMonday.setText(db.cutTimeFromDateTime(details.get(j - i).get("godzina_zakonczenia")));
                             break;
                         case 1:
-                            startTuesday.setText(details.get(j - i).get("godzina_rozpoczecia"));
-                            endTuesday.setText(details.get(j - i).get("godzina_zakonczenia"));
+                            startTuesday.setText(db.cutTimeFromDateTime(details.get(j - i).get("godzina_rozpoczecia")));
+                            endTuesday.setText(db.cutTimeFromDateTime(details.get(j - i).get("godzina_zakonczenia")));
                             break;
                         case 2:
-                            startWednesday.setText(details.get(j - i).get("godzina_rozpoczecia"));
-                            endWednesday.setText(details.get(j - i).get("godzina_zakonczenia"));
+                            startWednesday.setText(db.cutTimeFromDateTime(details.get(j - i).get("godzina_rozpoczecia")));
+                            endWednesday.setText(db.cutTimeFromDateTime(details.get(j - i).get("godzina_zakonczenia")));
                             break;
                         case 3:
-                            startThursday.setText(details.get(j - i).get("godzina_rozpoczecia"));
-                            endThursday.setText(details.get(j - i).get("godzina_zakonczenia"));
+                            startThursday.setText(db.cutTimeFromDateTime(details.get(j - i).get("godzina_rozpoczecia")));
+                            endThursday.setText(db.cutTimeFromDateTime(details.get(j - i).get("godzina_zakonczenia")));
                             break;
                         case 4:
-                            startFriday.setText(details.get(j - i).get("godzina_rozpoczecia"));
-                            endFriday.setText(details.get(j - i).get("godzina_zakonczenia"));
+                            startFriday.setText(db.cutTimeFromDateTime(details.get(j - i).get("godzina_rozpoczecia")));
+                            endFriday.setText(db.cutTimeFromDateTime(details.get(j - i).get("godzina_zakonczenia")));
                             break;
                     }
                     j++;
@@ -236,7 +279,7 @@ public class UserDetailsSecondFragment extends Fragment {
         setNoInput(endWednesday);
     }
     
-    private void setInput(EditText edit) {edit.setInputType(InputType.TYPE_CLASS_NUMBER);}
+    private void setInput(EditText edit) {edit.setInputType(InputType.TYPE_DATETIME_VARIATION_TIME);}
 
     private void makeAllInputs(){
         setInput(startMonday);

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Objects;
+import com.example.ParcelDelivery.R;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
@@ -447,15 +448,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // =========================================== Schedule/avability Helpers ========================================================
 
-    public long insertSchedule(String date,String startHour,String endHour, int userId) {
+    public long insertSchedule(String date,String startHour,String endHour,int schedule_1_avability_0, int userId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cValues = new ContentValues();
-        cValues.put("id_prac", userId);
+        if(startHour!=null)
+            cValues.put("godzina_rozpoczecia",startHour);
+        else
+            cValues.put("godzina_rozpoczecia",0);
+        if(endHour!=null)
+            cValues.put("godzina_zakonczenia",endHour);
+        else
+            cValues.put("godzina_zakonczenia",0);
+        if(endHour == null && startHour == null)
+            return -1;
         cValues.put("data",date);
-        cValues.put("godzina_rozpoczecia",startHour);
-        cValues.put("godzina_zakonczenia",endHour);
-        long newRowId = db.insert(TAB_SCHEDULE,null, cValues);
-        if (newRowId != -1)
+        cValues.put("id_prac",userId);
+        long newRowId = -1;
+        if(schedule_1_avability_0 == 1)
+            newRowId = db.insert(TAB_SCHEDULE,null, cValues);
+        if(schedule_1_avability_0 == 0)
             newRowId = db.insert(TAB_AVAILABILITY,null, cValues);
         db.close();
         return newRowId;
@@ -465,8 +476,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cValues = new ContentValues();
-        cValues.put("godzina_rozpoczecia",startHour);
-        cValues.put("godzina_zakonczenia",endHour);
+        if(startHour!=null)
+            cValues.put("godzina_rozpoczecia",startHour);
+        if(endHour!=null)
+            cValues.put("godzina_zakonczenia",endHour);
+        if(endHour == null && startHour == null)
+            return -1;
         cValues.put("data",date);
         long newRowId = -1;
         if( schedule_1_avability_0 == 1)
@@ -511,11 +526,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return millis/(60f*60f*1000f);
     }
 
+    public String cutTimeFromDateTime(String text){
+        if( text == null)
+            return "Brak Danych";
+        String[] help = text.split(" ");
+        if(help.length > 1)
+            text = help[1];
+        else
+            text = "Brak Danych";
+        return text;
+    }
+
     public Calendar dateTimeConvert(String data){
         String[] date = data.split(" ")[0].split("-");
         String[] time = data.split(" ")[1].split(":");
         Calendar cal = Calendar.getInstance();
-        cal.set(Integer.parseInt(date[0]), Integer.parseInt(date[1]),Integer.parseInt(date[2]),Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2]));
+        cal.set(Integer.parseInt(date[0]), Integer.parseInt(date[1]),Integer.parseInt(date[2]),Integer.parseInt(time[0]),Integer.parseInt(time[1]));
         return cal;
     }
 
@@ -535,7 +561,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public String makeDateTime(Calendar calendar){
-        SimpleDateFormat datetimeFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        SimpleDateFormat datetimeFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm");
         datetimeFormat.setTimeZone(calendar.getTimeZone());
         return datetimeFormat.format(calendar.getTime());
     }
