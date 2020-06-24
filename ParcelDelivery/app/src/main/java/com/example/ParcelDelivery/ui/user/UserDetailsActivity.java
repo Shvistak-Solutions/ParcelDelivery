@@ -51,10 +51,10 @@ public class UserDetailsActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         if (viewPager.getCurrentItem() == 0) {
-//            super.onBackPressed();
-            Intent intent = new Intent(UserDetailsActivity.this, ManagerActivity.class);
-            intent.putExtra("userId", userId);
-            startActivity(intent);
+            super.onBackPressed();
+//            Intent intent = new Intent(UserDetailsActivity.this, ManagerActivity.class);
+//            intent.putExtra("userId", userId);
+//            startActivity(intent);
         } else {
             // Otherwise, select the previous step.
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
