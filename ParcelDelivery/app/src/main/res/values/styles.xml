@@ -8,6 +8,47 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="buttonGreen">
+        <item name="android:layout_width">179dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="textFieldGreen">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="headerWhite">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="headerBackgroundGreen">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">415dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="editTextField">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">279dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
     <style name="textUserEdit">
         <item name ="android:gravity">center|fill_vertical</item>
         <item name ="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>

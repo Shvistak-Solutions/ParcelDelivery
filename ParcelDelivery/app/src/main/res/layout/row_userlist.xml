@@ -9,9 +9,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
         android:textSize="17dp" />
     <TextView
         android:id="@+id/textListSurname"
+        android:textColor="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/textListName"
@@ -21,11 +23,11 @@
         android:layout_toEndOf="@id/textListName" />
     <TextView
         android:id="@+id/textListEmail"
+        android:textColor="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textListName"
         android:layout_marginTop="7dp"
-        android:textColor="#343434"
         android:textSize="14dp" />
     <TextView
         android:id="@+id/textListPosition"
@@ -33,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textListName"
         android:layout_alignParentRight="true"
-        android:textColor="#343434"
+        android:textColor="@color/colorPrimary"
         android:textSize="14dp" />
 
 

@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -28,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String TAB_SCHEDULE = "Grafik";
     private String TAB_CLIENTS = "Klienci";
     private String TAB_PACKAGES = "Paczki";
+    private String TAB_AVATAR = "Avatar";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, databaseVersion);
@@ -43,6 +46,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("CREATE TABLE "+TAB_AVAILABILITY+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id), UNIQUE(id_prac, data));");
         database.execSQL("CREATE TABLE "+TAB_CLIENTS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
         database.execSQL("CREATE TABLE "+TAB_PACKAGES+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_kuriera INTEGER, status INTEGER, id_nadawcy INTEGER, id_odbiorcy INTEGER, FOREIGN KEY(id_kuriera) REFERENCES Pracownicy(id), FOREIGN KEY(id_odbiorcy) REFERENCES Klienci(id), FOREIGN KEY(id_nadawcy) REFERENCES Klienci(id));");
+        database.execSQL("CREATE TABLE "+TAB_AVATAR+"(id INTEGER PRIMARY KEY, image VARCHAR);");
+        update = true;
     }
 
     @Override
@@ -54,6 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("DROP TABLE IF EXISTS "+TAB_ACCOUNT);
         database.execSQL("DROP TABLE IF EXISTS "+TAB_WORKERS);
         database.execSQL("DROP TABLE IF EXISTS "+TAB_CLIENTS);
+        database.execSQL("DROP TABLE IF EXISTS "+TAB_AVATAR);
         onCreate(database);
         update = true;
     }
@@ -75,7 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //SQLiteDatabase database = this.getWritableDatabase();
         insertNewUser("Katarzyna", "Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
         insertNewUser("Rafał", "Świstak", 0, "bober@email.com", "555555555555", "koza", "mielec", "11111");
-        insertNewUser("Szczepan", "'Szlachta' Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
+        insertNewUser("Szczepan", "Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
         insertNewUser("Krzysztof", "Dżachym", 1, "dżadża@email.com", "333333333333333", "jachym", "krakow", "11111");
         insertNewUser("Patryk", "Frasio", 2, "frasio@email.com", "222222222222", "frasio", "konkurencyjnaKopalniaSiarki", "11111");
         insertNewUser("Łukasz", "Scared", 1, "scared@email.com", "1111111111111", "difrent", "myślenice", "11111");
@@ -845,6 +851,94 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.append(a);
         return res.toString();
     }
+
+    //------------------------- AVATAR -----------------------------
+    public int doesUserHasAvatar( int userId)
+    {
+        SQLiteDatabase  db = this.getReadableDatabase();
+        String query = "SELECT id from Avatar where id = "+userId;
+        Cursor cursor = db.rawQuery(query, null);
+        int result = cursor.getCount();
+        return result;
+    }
+
+    private static Bitmap stringToBitmap(String encodedString) {
+
+        byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+    }
+
+    public void updateAvatar(int usrID, String image){
+        String userIDstring = String.valueOf(usrID);
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT id from Avatar where id = "+usrID;
+        Cursor cursor = db.rawQuery(query,null);
+        ContentValues values = new ContentValues();
+        int tmp = cursor.getCount();
+        long tmp2 =0 ;
+
+
+        if( tmp == 0 )
+        {
+            values.put("id",usrID);
+            values.put("image",image);
+            tmp2 = db.insert(TAB_AVATAR,null,values);
+        }
+
+
+
+        else {
+            cursor.moveToFirst();
+            do{
+
+                tmp = cursor.getInt(0);
+                if (tmp == usrID){
+                    values.put("image",image);
+                    db.update(TAB_AVATAR,values,"id = ?",new String[] {userIDstring});
+                    db.close();
+                    return;
+                }
+            }while (cursor.moveToNext());
+
+            values.put("id",usrID);
+            values.put("image",image);
+            db.insert(TAB_AVATAR,null,values);
+
+        }
+
+
+
+        cursor.close();
+        db.close();
+    }
+
+
+    public Bitmap getAvatarAsBitmap(int userId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Bitmap bitmap;
+        String avatarString;
+        String query = "SELECT image from Avatar where id = "+userId;
+        Cursor cursor = db.rawQuery(query,null);
+        int isPicture = cursor.getCount();
+        if( isPicture == 0){
+            avatarString = "404";
+            int i = 0 ;
+        }
+        else{
+            cursor.moveToFirst();
+            avatarString = cursor.getString(0);
+        }
+        bitmap = stringToBitmap(avatarString);
+        return bitmap;
+    }
+
+    public void deleteProfilePicture( int userId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TAB_AVATAR+ " WHERE id ="+userId);
+        db.close();
+    }
+
+
 
 
 }

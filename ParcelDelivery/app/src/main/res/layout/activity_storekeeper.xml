@@ -7,40 +7,64 @@
     tools:context=".ui.storekeeper.StorekeeperActivity">
 
     <TextView
-        android:id="@+id/textSakaryHoursText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="500dp"
+        style="@style/headerWhite"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="185dp"
+        android:layout_marginEnd="110dp"
         android:text="Magazynier"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonLogoutStore" />
 
     <Button
         android:id="@+id/ID_VIEW_STOREHOUSE"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="100dp"
+        style="@style/buttonGreen"
+        android:layout_width="312dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="30dp"
         android:text="MAGAZYN"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textSakaryHoursText" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonLogoutStore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
+        style="@style/buttonGreen"
+        android:layout_marginStart="116dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="161dp"
-        android:layout_marginBottom="29dp"
+        android:layout_marginEnd="116dp"
         android:text="Wyloguj"
-        app:layout_constraintBottom_toTopOf="@+id/textSakaryHoursText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <TextView
+        style="@style/headerBackgroundGreen"
+        android:id="@+id/textView5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ID_MAIN_AVATAR_VIEW"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLogoutStore"
+        app:srcCompat="@android:drawable/btn_dialog" />
+
+    <Button
+        android:id="@+id/ID_GO_TO_AVATAR"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="ZMIANA ZDJECIA"
+        app:layout_constraintBottom_toTopOf="@+id/ID_VIEW_STOREHOUSE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

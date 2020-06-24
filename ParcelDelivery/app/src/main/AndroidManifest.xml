@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.password_reset.ChangePasswordActivity"></activity>
+        <activity android:name=".ui.avatar.AvatarActivity"></activity>
         <activity android:name=".ui.courier.CourierParcelListActivity" />
         <activity android:name=".ui.parcel.ParcelAddActivity" />
         <activity android:name=".ui.parcel.ParcelListActivity" />
