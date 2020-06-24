@@ -20,7 +20,7 @@ import java.util.Objects;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 12;
+    private static final int databaseVersion = 1;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
