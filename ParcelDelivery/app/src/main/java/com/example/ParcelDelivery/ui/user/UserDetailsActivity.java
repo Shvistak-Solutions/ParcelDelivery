@@ -25,7 +25,7 @@ public class UserDetailsActivity extends FragmentActivity {
     int userId;
     ViewPager2 viewPager;
 
-    private static final int NUM_PAGES = 3;
+    private static final int NUM_PAGES = 4;
     FragmentStateAdapter adapterViewPager;
 
     @Override
@@ -38,7 +38,7 @@ public class UserDetailsActivity extends FragmentActivity {
         adapterViewPager = new ScreenPagerAdapter(this);
         viewPager.setAdapter(adapterViewPager);
         
-        String[] description = new String[]{"Detale","Grafik","Pensja"};
+        String[] description = new String[]{"Ogólne","Detale","Grafik","Pensja"};
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         new TabLayoutMediator(tabLayout, viewPager,
@@ -75,16 +75,20 @@ public class UserDetailsActivity extends FragmentActivity {
         public Fragment createFragment(int position) {
             Fragment fragment = null;
             if (position == 0) {
+                new UserDetailsZeroFragment();
+                fragment = UserDetailsZeroFragment.newInstance(thisUserId, userId);
+            } else if (position == 1) {
                 new UserDetailsFirstFragment();
                 fragment = UserDetailsFirstFragment.newInstance(thisUserId, userId);
-            } else if (position == 1) {
+            } else if (position == 2) {
                 new UserDetailsSecondFragment();
                 fragment = UserDetailsSecondFragment.newInstance(thisUserId, userId);
             }
-            else if (position == 2){
+            else if (position == 3){
                 new UserDetailsThirdFragment();
                 fragment = UserDetailsThirdFragment.newInstance(thisUserId, userId);
             }
+
             assert fragment != null;
             return fragment;
         }

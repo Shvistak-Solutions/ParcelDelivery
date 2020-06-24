@@ -72,7 +72,6 @@ public class UserDetailsFirstFragment extends Fragment {
         details = db.getData("Pracownicy", thisUserId);
         findLayoutItems(view);
         fillTextViews(details);
-//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         if( userId == thisUserId){
             buttonRmv.setVisibility(View.GONE);
             buttonResetPassword.setVisibility(View.GONE);
