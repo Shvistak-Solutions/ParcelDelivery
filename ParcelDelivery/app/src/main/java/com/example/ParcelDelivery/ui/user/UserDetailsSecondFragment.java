@@ -90,8 +90,16 @@ public class UserDetailsSecondFragment extends Fragment {
                 edit = true;
             }
             else {
-                makeAllNoInput();
-                edit = false;
+                boolean allTrue = true;
+                for(EditText edit : EditHolder){
+                    if(!checkRegex(edit.getText().toString())){
+                        allTrue = false;
+                    }
+                }
+                if(allTrue) {
+                    makeAllNoInput();
+                    edit = false;
+                }
             }
         });
 
@@ -116,6 +124,11 @@ public class UserDetailsSecondFragment extends Fragment {
         lastDayOfWeek = db.makeDateYMD(cal);
         details = db.getDataSQL("select godzina_rozpoczecia,godzina_zakonczenia,data from Grafik where data between '"+firstDayOfWeek+"' and '"+lastDayOfWeek+"' and id_prac="+thisUserId+" order by data");
         fillTextViews(details);
+    }
+
+
+    private boolean checkRegex(String text){
+        return text.matches("^([0-2]?[0-9]:[0-5][0-9])$");
     }
 
 
