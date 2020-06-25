@@ -31,7 +31,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonMyAccount"
+        android:id="@+id/buttonManagerAccount"
         style="@style/buttonGreen"
         android:layout_width="312dp"
         android:layout_marginStart="50dp"
@@ -88,7 +88,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="ZMAINA ZDJĘCIA "
-        app:layout_constraintBottom_toTopOf="@+id/buttonMyAccount"
+        app:layout_constraintBottom_toTopOf="@+id/buttonManagerAccount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

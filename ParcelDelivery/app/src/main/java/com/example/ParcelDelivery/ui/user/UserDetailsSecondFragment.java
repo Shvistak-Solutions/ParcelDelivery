@@ -10,13 +10,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
@@ -33,16 +31,18 @@ public class UserDetailsSecondFragment extends Fragment {
     private EditText startMonday, startTuesday,startWednesday,startThursday,startFriday, endMonday, endTuesday,endWednesday,endThursday,endFriday;
     private EditText[] EditHolder = new EditText[10];
     private TextView week;
-    private Button firstButton;
+    private Button buttonSchedule, buttonAvailability;
     private AppCompatImageButton btnNextWeek, btnPreviousWeek;
     private String[] weekDays;
     private ArrayList<HashMap<String, String>> details;
     private DatabaseHelper db;
     private Calendar cal;
     boolean edit = false;
+    boolean sameUser = false;
+    boolean scheduleTrue = true;
 
 
-    public static UserDetailsSecondFragment newInstance(int userId,int thisUserId) {
+    public static UserDetailsSecondFragment newInstance(int thisUserId,int userId) {
         UserDetailsSecondFragment fragment = new UserDetailsSecondFragment();
 
         //this.userId = userId;
@@ -68,6 +68,8 @@ public class UserDetailsSecondFragment extends Fragment {
         View view = inflater.inflate(
                 R.layout.fragment_userdetails2, container, false);
         db = new DatabaseHelper(getContext());
+        if(userId == thisUserId)
+            sameUser = true;
         weekDays = new String[5];
         cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
@@ -86,61 +88,41 @@ public class UserDetailsSecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        firstButton.setOnClickListener(v->{
-            if(!edit) {
-                makeAllInputs();
-                edit = true;
-            }
-            else {
-                boolean allTrue = true;
-                int index = 0;
-                int firstFalseIndex = -1;
-                for(EditText edit : EditHolder){
-                    if(!edit.getText().toString().equals("Brak Danych")){
-                        if(!checkRegex(edit.getText().toString())){
-                            allTrue = false;
-                            if(firstFalseIndex < 0 )
-                                firstFalseIndex = index;
-                        }else{
-                            String dateTime = MakeDateTimeFromDateAndTime(weekDays[index/2],edit.getText().toString());
-                            if( index % 2 == 0) {
-                                if(db.updateSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId) == 0)
-                                    db.insertSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId);
-                            } else {
-                                if(db.updateSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId) == 0)
-                                    db.insertSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId);
-                            }
-                        }
-                    }
-                    index++;
-                }
-                if(allTrue) {
-                    makeAllNoInput();
-                    edit = false;
-                }else{
-                    EditHolder[firstFalseIndex].requestFocus();
-                    View view1 = Objects.requireNonNull(getActivity()).getCurrentFocus();
-                    if (view1 != null) {
-                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        assert imm != null;
-                        imm.showSoftInput(view1, 0);
-                    }
-                }
 
-            }
-        });
+        if(!sameUser){
+            buttonSchedule.setOnClickListener(v->{
+                if(!edit) {
+                    makeAllInputs();
+                    edit = true;
+                }
+                else {
+                    saveHourData(1);
+                }
+            });
+        }else{
+            buttonSchedule.setOnClickListener(v->{
+
+            });
+        }
+
 
         btnNextWeek.setOnClickListener(v->{
-            showAnotherWeek(1);
+            if(scheduleTrue)
+                showAnotherWeek(1,1);
+            else
+                showAnotherWeek(1,0);
         });
 
         btnPreviousWeek.setOnClickListener(v->{
-            showAnotherWeek(0);
+            if(scheduleTrue)
+                showAnotherWeek(0,1);
+            else
+                showAnotherWeek(0,0);
         });
     }
 
 
-    private void showAnotherWeek(int state){
+    private void showAnotherWeek(int state, int schedule_1_avability_0){
         if( state == 1)
             cal.add(Calendar.WEEK_OF_YEAR, +1);
         else
@@ -150,7 +132,11 @@ public class UserDetailsSecondFragment extends Fragment {
             weekDays[i] = db.makeDateYMD(cal);
             cal.add(Calendar.DATE, 1);
         }
-        details = db.getDataSQL("select godzina_rozpoczecia,godzina_zakonczenia,data from Grafik where data between '"+weekDays[0]+"' and '"+weekDays[4]+"' and id_prac="+thisUserId+" order by data");
+        if(schedule_1_avability_0 == 1)
+            details = db.getDataSQL("select godzina_rozpoczecia,godzina_zakonczenia,data from Grafik where data between '"+weekDays[0]+"' and '"+weekDays[4]+"' and id_prac="+thisUserId+" order by data");
+        else if (schedule_1_avability_0 == 0)
+            details = db.getDataSQL("select godzina_rozpoczecia,godzina_zakonczenia,data from Dyspozycje where data between '"+weekDays[0]+"' and '"+weekDays[4]+"' and id_prac="+thisUserId+" order by data");
+
         fillTextViews(details);
     }
 
@@ -168,6 +154,56 @@ public class UserDetailsSecondFragment extends Fragment {
 
     private String MakeDateTimeFromDateAndTime(String date, String Time){
         return date.replace(" ","")+" "+Time.replace(" ","");
+    }
+
+    private void saveHourData(int state){
+        boolean allTrue = true;
+        int index = 0;
+        int firstFalseIndex = -1;
+        for(EditText edit : EditHolder){
+            if(!edit.getText().toString().equals("Brak Danych")){
+                if(!checkRegex(edit.getText().toString())){
+                    allTrue = false;
+                    if(firstFalseIndex < 0 )
+                        firstFalseIndex = index;
+                }else{
+                    String dateTime = MakeDateTimeFromDateAndTime(weekDays[index/2],edit.getText().toString());
+                    if( index % 2 == 0) {
+                        if(state == 1){
+                            if(db.updateSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId) == 0)
+                                db.insertSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId);
+                        }else{
+                            if(db.updateSchedule(weekDays[index / 2], dateTime, null, 0, thisUserId) == 0)
+                                db.insertSchedule(weekDays[index / 2], dateTime, null, 0, thisUserId);
+                        }
+
+                    } else {
+                        if(state == 1){
+                            if(db.updateSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId) == 0)
+                                db.insertSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId);
+                        }else{
+                            if(db.updateSchedule(weekDays[index / 2], null, dateTime, 0, thisUserId) == 0)
+                                db.insertSchedule(weekDays[index / 2], null, dateTime, 0, thisUserId);
+                        }
+
+                    }
+                }
+            }
+            index++;
+        }
+        if(allTrue) {
+            makeAllNoInput();
+            edit = false;
+        }else{
+            EditHolder[firstFalseIndex].requestFocus();
+            View view1 = Objects.requireNonNull(getActivity()).getCurrentFocus();
+            if (view1 != null) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert imm != null;
+                imm.showSoftInput(view1, 0);
+            }
+        }
+
     }
 
 
@@ -247,10 +283,16 @@ public class UserDetailsSecondFragment extends Fragment {
         endThursday = thursday.findViewById(R.id.editTextScheduleEnd);
         startFriday = friday.findViewById(R.id.editTextScheduleStart);
         endFriday = friday.findViewById(R.id.editTextScheduleEnd);
-        firstButton = view.findViewById(R.id.button2);
+        buttonSchedule = view.findViewById(R.id.buttonSchedule);
+        buttonAvailability = view.findViewById(R.id.buttonAvailability);
         week = view.findViewById(R.id.textScheduleWeek);
         btnNextWeek = view.findViewById(R.id.buttonNextWeek);
         btnPreviousWeek = view.findViewById(R.id.buttonPreviousWeek);
+
+        if(sameUser){
+            buttonAvailability.setVisibility(View.INVISIBLE);
+            buttonSchedule.setText(R.string.check_availability);
+        }
 
         makeAllNoInput();
         assignEditTextToArray();

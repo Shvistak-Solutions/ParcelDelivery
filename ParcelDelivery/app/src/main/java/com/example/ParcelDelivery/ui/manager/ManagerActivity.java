@@ -34,7 +34,7 @@ public class ManagerActivity extends AppCompatActivity {
 
         Button buttonUserList = (Button) findViewById(R.id.buttonUserList);
         Button buttonSchedule = (Button) findViewById(R.id.buttonScheduleView);
-        Button buttonMyAccount = (Button) findViewById(R.id.buttonMyAccount);
+        Button buttonMyAccount = (Button) findViewById(R.id.buttonManagerAccount);
 
         // logout
         Button buttonLogout = findViewById(R.id.buttonLogoutManag);

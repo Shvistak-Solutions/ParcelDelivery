@@ -39,4 +39,6 @@
     <string name="day_name">Dzień Tygodnia</string>
     <string name="no_data">Brak Danych</string>
     <string name="week">Tydzień</string>
+    <string name="edit_schedule">Edytuj grafik</string>
+    <string name="check_availability">Sprawdź dostępność</string>
 </resources>

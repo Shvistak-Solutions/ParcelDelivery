@@ -528,12 +528,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String cutTimeFromDateTime(String text){
         if( text == null)
-            return "Brak Danych";
+            return "0";
         String[] help = text.split(" ");
         if(help.length > 1)
             text = help[1];
         else
-            text = "Brak Danych";
+            text = "0";
         return text;
     }
 
