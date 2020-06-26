@@ -14,8 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
 import com.example.ParcelDelivery.ui.avatar.AvatarActivity;
+import com.example.ParcelDelivery.ui.coordinator.CoordinatorActivity;
 import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
 import com.example.ParcelDelivery.ui.login.LoginActivity;
+import com.example.ParcelDelivery.ui.user.UserDetailsActivity;
 
 public class StorekeeperActivity extends AppCompatActivity {
 
@@ -51,6 +53,15 @@ public class StorekeeperActivity extends AppCompatActivity {
                 Toast.makeText(StorekeeperActivity.this, "Wylogowano", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(StorekeeperActivity.this, LoginActivity.class));
             }
+        });
+
+        Button buttonMyAccount = (Button) findViewById(R.id.buttonStoreKeeperAccount);
+
+        buttonMyAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(StorekeeperActivity.this, UserDetailsActivity.class);
+            intent.putExtra("userId", userId);
+            intent.putExtra("id", userId);
+            startActivity(intent);
         });
 
         viewStorehouse = (Button)findViewById(R.id.ID_VIEW_STOREHOUSE);

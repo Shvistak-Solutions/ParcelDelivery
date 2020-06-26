@@ -16,6 +16,7 @@ import com.example.ParcelDelivery.db.DatabaseHelper;
 import com.example.ParcelDelivery.ui.avatar.AvatarActivity;
 import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
 import com.example.ParcelDelivery.ui.login.LoginActivity;
+import com.example.ParcelDelivery.ui.user.UserDetailsActivity;
 
 public class CourierActivity extends AppCompatActivity {
 
@@ -30,6 +31,16 @@ public class CourierActivity extends AppCompatActivity {
 
         // logout
         Button buttonLogout = findViewById(R.id.buttonLogoutCou);
+
+        Button buttonMyAccount = (Button) findViewById(R.id.buttonCourierAccount);
+
+        buttonMyAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(CourierActivity.this, UserDetailsActivity.class);
+            intent.putExtra("userId", userId);
+            intent.putExtra("id", userId);
+            startActivity(intent);
+        });
+
         buttonLogout.setOnClickListener( v -> {
             Toast.makeText(CourierActivity.this, "Wylogowano", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(CourierActivity.this, LoginActivity.class));

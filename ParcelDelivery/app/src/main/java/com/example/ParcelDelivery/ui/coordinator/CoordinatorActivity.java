@@ -15,12 +15,15 @@ import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
 import com.example.ParcelDelivery.ui.avatar.AvatarActivity;
 import com.example.ParcelDelivery.ui.login.LoginActivity;
+import com.example.ParcelDelivery.ui.manager.ManagerActivity;
 import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
 import com.example.ParcelDelivery.ui.password_reset.ChangePasswordActivity;
+import com.example.ParcelDelivery.ui.user.UserDetailsActivity;
 
 public class CoordinatorActivity extends AppCompatActivity {
 
     int userId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,15 @@ public class CoordinatorActivity extends AppCompatActivity {
 
         // logout
         Button buttonLogout = findViewById(R.id.buttonLogoutCoord);
+        Button buttonMyAccount = (Button) findViewById(R.id.buttonCoordinatorAccount);
+
+        buttonMyAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(CoordinatorActivity.this, UserDetailsActivity.class);
+            intent.putExtra("userId", userId);
+            intent.putExtra("id", userId);
+            startActivity(intent);
+        });
+
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
