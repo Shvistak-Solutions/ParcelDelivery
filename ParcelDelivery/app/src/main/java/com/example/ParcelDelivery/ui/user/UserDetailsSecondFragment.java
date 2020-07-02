@@ -82,19 +82,29 @@ public class UserDetailsSecondFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        if(!sameUser) {
-            buttonSaveChanges.setOnClickListener(v -> {
-                if (!edit) {
-                    makeAllInputs();
-                    edit = true;
-                } else {
-                    if (scheduleTrue)
-                        saveHourData(1);
-                    else
-                        saveHourData(0);
+        buttonSaveChanges.setOnClickListener(v -> {
+            if(sameUser){
+                if(!scheduleTrue){
+                    if (!edit) {
+                        makeAllInputs();
+                        edit = true;
+                    } else {
+                            saveHourData(0);
+                    }
                 }
-            });
-        }
+            }else{
+                if(scheduleTrue){
+                    if (!edit) {
+                        makeAllInputs();
+                        edit = true;
+                    } else {
+                            saveHourData(1);
+
+                    }
+                }
+            }
+        });
+
 
         buttonAvailability.setOnClickListener(v->{
             if(scheduleTrue){
@@ -102,7 +112,6 @@ public class UserDetailsSecondFragment extends Fragment {
             }else{
                 switchToSchedule();
             }
-
         });
 
 
