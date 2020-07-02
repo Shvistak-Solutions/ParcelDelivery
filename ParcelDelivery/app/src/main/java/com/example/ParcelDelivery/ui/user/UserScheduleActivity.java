@@ -1,9 +1,5 @@
 package com.example.ParcelDelivery.ui.user;
 
-import android.app.Activity;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteConstraintException;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,10 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class UserScheduleActivity extends AppCompatActivity {
@@ -43,7 +37,7 @@ public class UserScheduleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_schedule);
         userId = getIntent().getIntExtra("userId", 0);
 
-        buttonSchedule = findViewById(R.id.buttonSchedule);
+        buttonSchedule = findViewById(R.id.buttonAvailability);
         textSchedule = findViewById(R.id.textSchedule);
 
         calendar = Calendar.getInstance();

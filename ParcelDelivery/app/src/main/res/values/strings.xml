@@ -41,4 +41,6 @@
     <string name="week">Tydzień</string>
     <string name="edit_schedule">Edytuj grafik</string>
     <string name="check_availability">Sprawdź dostępność</string>
+    <string name="availability">Dostępność</string>
+    <string name="check_schedule">Sprawdź grafik</string>
 </resources>

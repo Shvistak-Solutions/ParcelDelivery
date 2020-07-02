@@ -30,8 +30,8 @@ public class UserDetailsSecondFragment extends Fragment {
     private View monday, tuesday, wednesday, thursday, friday;
     private EditText startMonday, startTuesday,startWednesday,startThursday,startFriday, endMonday, endTuesday,endWednesday,endThursday,endFriday;
     private EditText[] EditHolder = new EditText[10];
-    private TextView week;
-    private Button buttonSchedule, buttonAvailability;
+    private TextView textWeek, textScheduleOrAvailability;
+    private Button buttonAvailability, buttonSaveChanges;
     private AppCompatImageButton btnNextWeek, btnPreviousWeek;
     private String[] weekDays;
     private ArrayList<HashMap<String, String>> details;
@@ -71,16 +71,9 @@ public class UserDetailsSecondFragment extends Fragment {
         if(userId == thisUserId)
             sameUser = true;
         weekDays = new String[5];
-        cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        for(int i = 0; i < 5; i++){
-            weekDays[i] = db.makeDateYMD(cal);
-            cal.add(Calendar.DATE, 1);
-        }
-        details = db.getDataSQL("select godzina_rozpoczecia,godzina_zakonczenia,data from Grafik where data between '"+weekDays[0]+"' and '"+weekDays[4]+"' and id_prac="+thisUserId+" order by data");
         findLayoutItems(view);
-        fillTextViews(details);
-
+        cal = Calendar.getInstance();
+        showWeek(0,1);
         return view;
     }
 
@@ -89,43 +82,72 @@ public class UserDetailsSecondFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        if(!sameUser){
-            buttonSchedule.setOnClickListener(v->{
-                if(!edit) {
+        if(!sameUser) {
+            buttonSaveChanges.setOnClickListener(v -> {
+                if (!edit) {
                     makeAllInputs();
                     edit = true;
+                } else {
+                    if (scheduleTrue)
+                        saveHourData(1);
+                    else
+                        saveHourData(0);
                 }
-                else {
-                    saveHourData(1);
-                }
-            });
-        }else{
-            buttonSchedule.setOnClickListener(v->{
-
             });
         }
+
+        buttonAvailability.setOnClickListener(v->{
+            if(scheduleTrue){
+                switchToAvailability();
+            }else{
+                switchToSchedule();
+            }
+
+        });
 
 
         btnNextWeek.setOnClickListener(v->{
             if(scheduleTrue)
-                showAnotherWeek(1,1);
+                showWeek(1,1);
             else
-                showAnotherWeek(1,0);
+                showWeek(1,0);
         });
 
         btnPreviousWeek.setOnClickListener(v->{
             if(scheduleTrue)
-                showAnotherWeek(0,1);
+                showWeek(-1,1);
             else
-                showAnotherWeek(0,0);
+                showWeek(-1,0);
         });
     }
 
+    private void switchToAvailability(){
+        textScheduleOrAvailability.setText(R.string.availability);
+        if(sameUser)
+            buttonSaveChanges.setVisibility(View.VISIBLE);
+        else
+            buttonSaveChanges.setVisibility(View.INVISIBLE);
+        showWeek(0,0);
+        buttonAvailability.setText(R.string.check_schedule);
+        scheduleTrue = false;
+    }
 
-    private void showAnotherWeek(int state, int schedule_1_avability_0){
+    private void switchToSchedule(){
+        textScheduleOrAvailability.setText(R.string.schedule);
+        if(sameUser)
+            buttonSaveChanges.setVisibility(View.INVISIBLE);
+        else
+            buttonSaveChanges.setVisibility(View.VISIBLE);
+        showWeek(0,1);
+        buttonAvailability.setText(R.string.check_availability);
+        scheduleTrue = true;
+    }
+
+
+    private void showWeek(int state, int schedule_1_avability_0){
         if( state == 1)
             cal.add(Calendar.WEEK_OF_YEAR, +1);
-        else
+        else if(state == -1)
             cal.add(Calendar.WEEK_OF_YEAR, -1);
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         for(int i = 0; i < 5; i++){
@@ -208,7 +230,7 @@ public class UserDetailsSecondFragment extends Fragment {
 
 
     private void fillTextViews(ArrayList<HashMap<String,String>> details) {
-        week.setText(weekDays[0]+" : "+weekDays[4]);
+        textWeek.setText(weekDays[0]+" : "+weekDays[4]);
 
         int i = 0;
         String firstDay = weekDays[0];
@@ -283,15 +305,18 @@ public class UserDetailsSecondFragment extends Fragment {
         endThursday = thursday.findViewById(R.id.editTextScheduleEnd);
         startFriday = friday.findViewById(R.id.editTextScheduleStart);
         endFriday = friday.findViewById(R.id.editTextScheduleEnd);
-        buttonSchedule = view.findViewById(R.id.buttonSchedule);
         buttonAvailability = view.findViewById(R.id.buttonAvailability);
-        week = view.findViewById(R.id.textScheduleWeek);
+        buttonSaveChanges = view.findViewById(R.id.buttonSaveSchedule);
+        textWeek = view.findViewById(R.id.textScheduleWeek);
         btnNextWeek = view.findViewById(R.id.buttonNextWeek);
         btnPreviousWeek = view.findViewById(R.id.buttonPreviousWeek);
+        textScheduleOrAvailability = view.findViewById(R.id.textScheduleAvability);
+        
+        textScheduleOrAvailability.setText(R.string.schedule);
 
         if(sameUser){
-            buttonAvailability.setVisibility(View.INVISIBLE);
-            buttonSchedule.setText(R.string.check_availability);
+            buttonSaveChanges.setVisibility(View.INVISIBLE);
+            buttonAvailability.setText(R.string.check_availability);
         }
 
         makeAllNoInput();
