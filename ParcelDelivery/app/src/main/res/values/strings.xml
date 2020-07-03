@@ -36,6 +36,7 @@
     <string name="hintNewPass"><b>NOWE HASŁO</b></string>
     <string name="hintOldPass"><b>STARE HASŁO</b></string>
     <string name="hintConfPass"><b>POTWIERDŹ HASŁO</b></string>
+    <string name="buttonChangeStatus"><b>Ustaw Status</b></string>
     <string name="day_name">Dzień Tygodnia</string>
     <string name="no_data">Brak Danych</string>
     <string name="week">Tydzień</string>

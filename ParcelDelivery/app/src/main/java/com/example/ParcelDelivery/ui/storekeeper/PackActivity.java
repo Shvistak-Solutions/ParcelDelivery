@@ -5,7 +5,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +23,7 @@ import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
 
 public class PackActivity extends AppCompatActivity {
 
-    Button changeStatus;
+    Button buttonChangeStatus;
     private DatabaseHelper dbH;
     String idMessage;
     private int userId;
@@ -27,9 +31,13 @@ public class PackActivity extends AppCompatActivity {
     TextView statusPrint;
     TextView courierPrint;
     TextView idPrint;
+
+    Spinner spinnerStatusSelect;
+
     Intent intent;
 
     private static final String TAG = "PackActivity";
+    private static final String[] stats = {"Przyjęte do realizacji","Odebrane od Nadawcy", "W magazynie", "W drodze do odbiorcy", "Dostarczone", "Anulowane"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +46,9 @@ public class PackActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate: started");
         intent = getIntent();
-        userId = intent.getIntExtra("userId",0);
+        userId = intent.getIntExtra("userId",1);
         parcelId = intent.getIntExtra("parcelId",1);
+
         idMessage = Integer.toString(parcelId);
         // back button
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
@@ -52,7 +61,7 @@ public class PackActivity extends AppCompatActivity {
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
 
-        changeStatus = (Button)findViewById(R.id.ID_CHANGE_PACK_STATUS);
+        buttonChangeStatus = (Button)findViewById(R.id.buttonChangeStatus);
 
 
 
@@ -62,7 +71,28 @@ public class PackActivity extends AppCompatActivity {
         statusPrint = (TextView)findViewById(R.id.ID_STATUS_VIEW);
         courierPrint = (TextView)findViewById(R.id.ID_COURIER_INFO_VIEW);
 
-        if( dbH.checkIfInStorehouse(idMessage)) {
+        idPrint.setText("Id paczki: " + idMessage);
+        statusPrint.setText("Status: " + statusIntToText( Integer.parseInt( dbH.getData("status","Paczki",parcelId))));
+
+
+        spinnerStatusSelect = findViewById(R.id.spinnerStatusSelect);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stats);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerStatusSelect.setAdapter(adapter);
+
+        buttonChangeStatus.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                int newStatus = spinnerStatusSelect.getSelectedItemPosition();
+                if(newStatus == 5)
+                    newStatus = -1;
+                else
+                    newStatus = newStatus + 1;
+                updateStatus(newStatus);
+            }
+        });
+
+        /*if( dbH.checkIfInStorehouse(idMessage)) {
 
 
 
@@ -73,8 +103,8 @@ public class PackActivity extends AppCompatActivity {
             String courierName = data.getString(2);
             String courierName2 = data.getString(1);
 
-            idPrint.setText("ID paczki : " + idMessage);
-            statusPrint.setText("Status: w magazynie");
+            idPrint.setText("ID paczki : " + idMessage );
+            statusPrint.setText("Status: w magazynie" );
             courierPrint.setText("Dostarczona do magazynu przez: " + courierName + " " + courierName2 + "  |  ID: " + courierId);
 
 
@@ -88,18 +118,39 @@ public class PackActivity extends AppCompatActivity {
         }
         else{
             updateStatus();
-        }
+        }*/
 
     }
 
-    private void updateStatus(){
-        dbH.changePackStatus(idMessage,"4");
-        Toast.makeText(this,"Przekazano do dostarczenia",Toast.LENGTH_SHORT).show();
-        idPrint.setText("ID paczki : " + idMessage);
-        statusPrint.setText("Status: w drodze do odbiorcy");
-        courierPrint.setText("DO WYZNACZENIA !!!");
-        changeStatus.setVisibility(View.INVISIBLE);
+    private void updateStatus(int newStatus){
+        dbH.changePackStatus(Integer.toString(parcelId),Integer.toString(newStatus));
+        Toast.makeText(this,"Zmieniono status",Toast.LENGTH_SHORT).show();
+        statusPrint.setText("Status: " + statusIntToText(newStatus));
+    }
 
+    private String statusIntToText(int status)
+    {
+        /*
+            1 - przyjete
+            -1 anulowane
+            2 - odebrane od nadawcy
+            3 - w magazynie
+            4 - w drodze do odbiorcy
+            5 - dostarczone
+         */
+
+        if(status > 0 && status < 6)
+        {
+            return stats[status-1];
+        }
+        else if(status == -1)
+        {
+            return "Anulowane";
+        }
+        else
+        {
+            return "";
+        }
     }
 
 }

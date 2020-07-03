@@ -21,6 +21,7 @@ public class ParcelListRecyclerViewAdapter extends RecyclerView.Adapter<ParcelLi
 
     private ArrayList<HashMap<String,String>> mParcelData = new ArrayList<>();
     private int userId;
+    private int pos;
 
     public ParcelListRecyclerViewAdapter(ArrayList<HashMap<String, String>> mParcelData, int userId) {
         this.mParcelData = mParcelData;
@@ -38,6 +39,7 @@ public class ParcelListRecyclerViewAdapter extends RecyclerView.Adapter<ParcelLi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        pos = position;
         holder.parcel_id.setText("id paczki: " + mParcelData.get(position).get("id") );
         holder.parcel_courier_id.setText("id kuriera"+mParcelData.get(position).get("id_kuriera"));
         holder.parcel_status.setText("status paczki: " + mParcelData.get(position).get("status"));
@@ -48,7 +50,8 @@ public class ParcelListRecyclerViewAdapter extends RecyclerView.Adapter<ParcelLi
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext() , PackActivity.class);
                 intent.putExtra("userId",userId);
-                intent.putExtra("parcelId",mParcelData.get(position).get("id"));
+                intent.putExtra("parcelId", Integer.parseInt(mParcelData.get(pos).get("id")));
+
                 v.getContext().startActivity(intent);
             }
         });
