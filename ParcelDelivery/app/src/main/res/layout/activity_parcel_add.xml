@@ -25,13 +25,12 @@
         android:layout_width="186dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="115dp"
-        android:layout_marginLeft="115dp"
         android:layout_marginEnd="115dp"
-        android:layout_marginRight="115dp"
-        android:layout_marginBottom="369dp"
+        android:layout_marginBottom="312dp"
         android:text="Zatwierdź paczkę"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -39,16 +38,62 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="34dp"
-        android:layout_marginLeft="34dp"
         android:layout_marginTop="31dp"
         android:layout_marginEnd="337dp"
-        android:layout_marginRight="337dp"
         android:layout_marginBottom="11dp"
         android:text="Kurier:"
         app:layout_constraintBottom_toTopOf="@+id/spinnerCourierSelect"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.189" />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/editTextSenderAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:ems="10"
+        android:hint="Aleja Tadeusza Słomki"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.671"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerCourierSelect" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Adres nadawcy"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextSenderAddress"
+        app:layout_constraintEnd_toStartOf="@+id/editTextSenderAddress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextSenderAddress" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Adres odbiorcy"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextRecipientAddress"
+        app:layout_constraintEnd_toStartOf="@+id/editTextRecipientAddress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextRecipientAddress" />
+
+    <EditText
+        android:id="@+id/editTextRecipientAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Plac św. Zdzisława"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/buttonConfirmParcel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.676"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextSenderAddress"
+        app:layout_constraintVertical_bias="0.329" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

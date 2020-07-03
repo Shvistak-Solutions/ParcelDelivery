@@ -21,7 +21,7 @@ import com.example.ParcelDelivery.R;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 1;
+    private static final int databaseVersion = 2;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
@@ -46,7 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("CREATE TABLE "+TAB_SCHEDULE+"(id INTEGER PRIMARY KEY AUTOINCREMENT,id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, wejscie DATETIME, wyjscie DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id),UNIQUE(id_prac, data))");
         database.execSQL("CREATE TABLE "+TAB_AVAILABILITY+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_prac INTEGER, data DATE , godzina_rozpoczecia DATETIME, godzina_zakonczenia DATETIME, FOREIGN KEY(id_prac) REFERENCES Pracownicy(id), UNIQUE(id_prac, data));");
         database.execSQL("CREATE TABLE "+TAB_CLIENTS+"(id INTEGER PRIMARY KEY AUTOINCREMENT, imie VARCHAR, nazwisko VARCHAR, adres VARCHAR, kod_pocztowy VARCHAR);");
-        database.execSQL("CREATE TABLE "+TAB_PACKAGES+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_kuriera INTEGER, status INTEGER, id_nadawcy INTEGER, id_odbiorcy INTEGER, FOREIGN KEY(id_kuriera) REFERENCES Pracownicy(id), FOREIGN KEY(id_odbiorcy) REFERENCES Klienci(id), FOREIGN KEY(id_nadawcy) REFERENCES Klienci(id));");
+        database.execSQL("CREATE TABLE "+TAB_PACKAGES+"(id INTEGER PRIMARY KEY AUTOINCREMENT, id_kuriera INTEGER, status INTEGER, adres_nadawcy VARCHAR, adres_odbiorcy VARCHAR, FOREIGN KEY(id_kuriera) REFERENCES Pracownicy(id));");
         database.execSQL("CREATE TABLE "+TAB_AVATAR+"(id INTEGER PRIMARY KEY, image VARCHAR);");
         update = true;
     }
@@ -397,12 +397,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // =========================================== PARCEL =============================================================
 
     // Adding new parcel into database
-    public long insertNewParcel(int courierId/*, int senderId, int ricipientId*/){
+    public long insertNewParcel(int courierId, String senderAddress, String recipientAddress){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cValues = new ContentValues();
         cValues.put("id_kuriera", courierId);
-        cValues.put("id_nadawcy", 23); // temporary solution - no proper table fills
-        cValues.put("id_odbiorcy", 23);
+        cValues.put("adres_nadawcy", senderAddress); // temporary solution - no proper table fills
+        cValues.put("adres_odbiorcy", recipientAddress);
         cValues.put("status", 1);
         long newRowId = db.insert(TAB_PACKAGES,null, cValues);
         db.close();
