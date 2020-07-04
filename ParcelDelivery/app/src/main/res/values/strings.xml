@@ -44,4 +44,8 @@
     <string name="check_availability">Sprawdź dostępność</string>
     <string name="availability">Dostępność</string>
     <string name="check_schedule">Sprawdź grafik</string>
+    <string name="present">Jestem!</string>
+    <string name="absent">Wychodzę!</string>
+    <string name="presence_is_set">Obecność już dodana</string>
+    <string name="not_working">Dziś nie pracujesz</string>
 </resources>

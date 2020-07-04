@@ -3,20 +3,37 @@ package com.example.ParcelDelivery.ui.manager;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
+import android.location.Location;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.ParcelDelivery.R;
+import com.example.ParcelDelivery.db.DatabaseHelper;
 import com.example.ParcelDelivery.ui.login.LoginActivity;
 import com.example.ParcelDelivery.ui.user.UserDetailsActivity;
 import com.example.ParcelDelivery.ui.user.UserListActivity;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 
 public class ManagerActivity extends AppCompatActivity {
 
     Intent intent;
     int userId;
+    boolean presentSet = false;
+    boolean absentSet = false;
+    boolean workDay = true;
+    Calendar cal;
+    DatabaseHelper db;
+    ArrayList<HashMap<String,String>> details;
+    
+    Button buttonUserList, buttonMyAccount, buttonPresence, buttonLogout;
 
 
     @Override
@@ -25,12 +42,10 @@ public class ManagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_manager);
 
         userId = getIntent().getIntExtra("userId", 0);
+        
+        prepareData();
 
-        Button buttonUserList = (Button) findViewById(R.id.buttonUserList);
-        Button buttonMyAccount = (Button) findViewById(R.id.buttonManagerAccount);
 
-        // logout
-        Button buttonLogout = findViewById(R.id.buttonLogoutManag);
         buttonLogout.setOnClickListener( v -> {
             Toast.makeText(ManagerActivity.this, "Wylogowano", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(ManagerActivity.this, LoginActivity.class));
@@ -57,6 +72,16 @@ public class ManagerActivity extends AppCompatActivity {
             intent.putExtra("id", userId);
             startActivity(intent);
         });
+        if(workDay) {
+            buttonPresence.setOnClickListener(v -> {
+                if (presentSet) {
+                    addExit();
+                } else {
+                    addEnter();
+                }
+            });
+        }
+
 
         //---------------- AVATAR -----------------------------
 //        ImageView mainAvatarView = (ImageView)findViewById(R.id.ID_MAIN_AVATAR_VIEW);
@@ -82,5 +107,63 @@ public class ManagerActivity extends AppCompatActivity {
 //            }
 //        });
 
+    }
+
+    
+    private void prepareData(){
+        buttonUserList = (Button) findViewById(R.id.buttonUserList);
+        buttonMyAccount = (Button) findViewById(R.id.buttonManagerAccount);
+        buttonPresence = (Button) findViewById(R.id.buttonPresence);
+        buttonLogout = findViewById(R.id.buttonLogoutManag);
+
+        cal = Calendar.getInstance();
+        db = new DatabaseHelper(this);
+
+//        try{
+//            db.insertSchedule(db.makeDateYMD(cal),"0","0",1,userId);
+//        }catch(SQLiteConstraintException e){
+//
+//        }
+
+        details = db.getDataSQL("select data,wejscie, wyjscie from Grafik where id_prac="+userId+" and data like '"+db.makeDateYMD(cal)+"'");
+
+        if(details.size() > 0){
+            if(!db.cutTimeFromDateTime(details.get(0).get("wejscie")).equals("0")) {
+                presentSet = true;
+            }
+            if(!db.cutTimeFromDateTime(details.get(0).get("wyjscie")).equals("0")){
+                absentSet = true;
+            }
+            if(presentSet){
+                if(absentSet){
+                    buttonPresence.setEnabled(false);
+                    buttonPresence.setText(R.string.presence_is_set);
+                }
+                else
+                    buttonPresence.setText(R.string.absent);
+            }
+        }
+        else{
+            workDay = false;
+            buttonPresence.setText(R.string.not_working);
+        }
+
+    }
+
+    private void addEnter(){
+        cal = Calendar.getInstance();
+        db.updateDataSQL("update Grafik set wejscie=" + db.makeDateTime(cal) + " where id_prac="+userId+" and data =" + db.makeDateYMD(cal));
+        presentSet = true;
+        buttonPresence.setText(R.string.absent);
+        details = db.getDataSQL("select data,wejscie, wyjscie from Grafik where id_prac="+userId+" and data like '"+db.makeDateYMD(cal)+"'");
+    }
+
+    private void addExit(){
+        cal = Calendar.getInstance();
+        db.updateDataSQL("update Grafik set wyjscie="+db.makeDateTime(cal)+" where id_prac="+userId+" and data ="+db.makeDateYMD(cal));
+        absentSet = true;
+        buttonPresence.setEnabled(false);
+        buttonPresence.setText(R.string.presence_is_set);
+        details = db.getDataSQL("select data,wejscie, wyjscie from Grafik where id_prac="+userId+" and data like '"+db.makeDateYMD(cal)+"'");
     }
 }

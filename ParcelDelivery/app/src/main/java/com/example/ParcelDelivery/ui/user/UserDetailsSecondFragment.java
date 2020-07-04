@@ -183,9 +183,6 @@ public class UserDetailsSecondFragment extends Fragment {
             return true;
     }
 
-    private String MakeDateTimeFromDateAndTime(String date, String Time){
-        return date.replace(" ","")+" "+Time.replace(" ","");
-    }
 
     private void saveHourData(int state){
         boolean allTrue = true;
@@ -198,7 +195,7 @@ public class UserDetailsSecondFragment extends Fragment {
                     if(firstFalseIndex < 0 )
                         firstFalseIndex = index;
                 }else{
-                    String dateTime = MakeDateTimeFromDateAndTime(weekDays[index/2],edit.getText().toString());
+                    String dateTime = db.makeDateTimeFromDateAndTime(weekDays[index/2],edit.getText().toString());
                     if( index % 2 == 0) {
                         if(state == 1){
                             if(db.updateSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId) == 0)

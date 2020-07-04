@@ -21,7 +21,7 @@ import com.example.ParcelDelivery.R;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 1;
+    private static final int databaseVersion = 2;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
@@ -537,6 +537,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return text;
     }
 
+    public String makeDateTimeFromDateAndTime(String date, String Time){
+        return date.replace(" ","")+" "+Time.replace(" ","");
+    }
+
     public Calendar dateTimeConvert(String data){
         String[] date = data.split(" ")[0].split("-");
         String[] time = data.split(" ")[1].split(":");
@@ -619,6 +623,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         int monday = Calendar.MONDAY;
         int day = cal.get(Calendar.DAY_OF_WEEK);
+        if(day == Calendar.SATURDAY){
+            cal.add(Calendar.DATE, 2);
+            day = cal.get(Calendar.DAY_OF_WEEK);
+        }
+        if(day == Calendar.SUNDAY){
+            cal.add(Calendar.DATE, 1);
+            day = cal.get(Calendar.DAY_OF_WEEK);
+        }
 
         int i = cal.get(Calendar.DATE);
         String date = makeDateYMD(cal);

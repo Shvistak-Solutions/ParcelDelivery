@@ -9,24 +9,18 @@
     <Button
         android:id="@+id/buttonUserList"
         style="@style/buttonGreen"
-        android:layout_width="312dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/user_list"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonManagerAccount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonManagerAccount"
         style="@style/buttonGreen"
-        android:layout_width="312dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="40dp"
         android:text="@string/my_account"
-        app:layout_constraintBottom_toTopOf="@+id/buttonUserList"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -47,5 +41,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonPresence"
+        style="@style/buttonGreen"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/present"
+        app:layout_constraintBottom_toTopOf="@+id/buttonUserList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
