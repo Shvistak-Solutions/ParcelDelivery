@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent2 = new Intent(LoginActivity.this, CoordinatorActivity.class);
         Intent intent3 = new Intent(LoginActivity.this, CourierActivity.class);
         Intent intent4 = new Intent(LoginActivity.this, StorekeeperActivity.class);
-        int id = db.getUserId(Name.getText().toString().toLowerCase());
+        int id = db.getUserId(Name.getText().toString().toLowerCase().replaceAll("\\s+",""));
         String position = db.getData("stanowisko", "Pracownicy", id);
         if(id == 0)
         {

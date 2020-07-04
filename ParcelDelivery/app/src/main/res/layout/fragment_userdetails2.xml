@@ -31,9 +31,11 @@
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="500dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:gravity="center_vertical"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/buttonSaveSchedule"
@@ -45,26 +47,41 @@
         <include
             android:id="@+id/includedLayoutMonday"
             layout="@layout/row_schedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:visibility="visible" />
 
         <include
             android:id="@+id/includedLayoutTuesday"
             layout="@layout/row_schedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:visibility="visible" />
 
         <include
             android:id="@+id/includedLayoutWednesday"
             layout="@layout/row_schedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:visibility="visible" />
 
         <include
             android:id="@+id/includedLayoutThursday"
             layout="@layout/row_schedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:visibility="visible" />
 
         <include
             android:id="@+id/includedLayoutFriday"
             layout="@layout/row_schedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:visibility="visible" />
     </LinearLayout>
 

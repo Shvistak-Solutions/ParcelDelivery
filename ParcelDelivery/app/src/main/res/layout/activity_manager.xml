@@ -19,26 +19,14 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonScheduleView"
-        style="@style/buttonGreen"
-        android:layout_width="312dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/schedule"
-        app:layout_constraintBottom_toTopOf="@+id/buttonUserList"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
         android:id="@+id/buttonManagerAccount"
         style="@style/buttonGreen"
         android:layout_width="312dp"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/my_account"
-        app:layout_constraintBottom_toTopOf="@+id/buttonScheduleView"
+        app:layout_constraintBottom_toTopOf="@+id/buttonUserList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -59,37 +47,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        style="@style/headerWhite"
-        android:layout_marginStart="110dp"
-        android:layout_marginTop="180dp"
-        android:layout_marginEnd="110dp"
-        android:text="Menadżer"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogoutManag" />
-
-    <ImageView
-        android:id="@+id/ID_MAIN_AVATAR_VIEW"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogoutManag"
-        app:srcCompat="@android:drawable/btn_dialog" />
-
-    <Button
-        android:id="@+id/ID_GO_TO_AVATAR"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="ZMAINA ZDJĘCIA "
-        app:layout_constraintBottom_toTopOf="@+id/buttonManagerAccount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
