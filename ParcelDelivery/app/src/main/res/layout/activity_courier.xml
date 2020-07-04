@@ -64,9 +64,9 @@
         android:id="@+id/ID_GO_TO_AVATAR"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:text="ZMIANA ZDJĘCIA"
-        app:layout_constraintBottom_toTopOf="@+id/buttonCourierAccount"
+        app:layout_constraintBottom_toTopOf="@+id/buttonPresence"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
@@ -79,6 +79,16 @@
         android:layout_marginBottom="16dp"
         android:text="@string/my_account"
         app:layout_constraintBottom_toTopOf="@+id/buttonParcelList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonPresence"
+        style="@style/buttonGreen"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/present"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCourierAccount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

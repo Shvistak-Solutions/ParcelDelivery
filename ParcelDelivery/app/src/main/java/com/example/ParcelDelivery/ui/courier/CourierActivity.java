@@ -17,10 +17,16 @@ import com.example.ParcelDelivery.ui.avatar.AvatarActivity;
 import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
 import com.example.ParcelDelivery.ui.login.LoginActivity;
 import com.example.ParcelDelivery.ui.user.UserDetailsActivity;
+import com.example.ParcelDelivery.ui.user.UserPresence;
 
 public class CourierActivity extends AppCompatActivity {
 
     int userId;
+    boolean presentSet = false;
+    boolean absentSet = false;
+    boolean workDay = true;
+    UserPresence presence;
+    Button buttonMyAccount, buttonPresence, buttonLogout, buttonParcelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +35,10 @@ public class CourierActivity extends AppCompatActivity {
 
         userId = getIntent().getIntExtra("userId", 0);
 
-        // logout
-        Button buttonLogout = findViewById(R.id.buttonLogoutCou);
+        prepareData();
 
-        Button buttonMyAccount = (Button) findViewById(R.id.buttonCourierAccount);
+        // logout
+
 
         buttonMyAccount.setOnClickListener(v -> {
             Intent intent = new Intent(CourierActivity.this, UserDetailsActivity.class);
@@ -54,7 +60,7 @@ public class CourierActivity extends AppCompatActivity {
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
 
-        Button buttonParcelList = (Button) findViewById(R.id.buttonParcelList);
+
         buttonParcelList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +69,21 @@ public class CourierActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        if(workDay) {
+            buttonPresence.setOnClickListener(v -> {
+                if (presentSet) {
+                    presence.addExit();
+                    absentSet = true;
+                    buttonPresence.setEnabled(false);
+                    buttonPresence.setText(R.string.presence_is_set);
+                } else {
+                    presence.addEnter();
+                    presentSet = true;
+                    buttonPresence.setText(R.string.absent);
+                }
+            });
+        }
 
         //---------------- AVATAR -----------------------------
         ImageView mainAvatarView = (ImageView)findViewById(R.id.ID_MAIN_AVATAR_VIEW);
@@ -93,5 +114,31 @@ public class CourierActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void prepareData(){
+        buttonPresence = (Button) findViewById(R.id.buttonPresence);
+        buttonLogout = findViewById(R.id.buttonLogoutCou);
+        buttonMyAccount = (Button) findViewById(R.id.buttonCourierAccount);
+        buttonParcelList = (Button) findViewById(R.id.buttonParcelList);
+
+        presence = new UserPresence(userId,this);
+
+        int prs = presence.prepareFields();
+
+        if(prs == -3){
+            workDay = false;
+            buttonPresence.setText(R.string.not_working);
+        }
+        else if(prs == -2){
+            buttonPresence.setEnabled(false);
+            buttonPresence.setText(R.string.presence_is_set);
+            absentSet = true;
+            presentSet = true;
+        }
+        else if(prs == -1){
+            buttonPresence.setText(R.string.absent);
+            presentSet = true;
+        }
     }
 }

@@ -15,14 +15,20 @@ import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
 import com.example.ParcelDelivery.ui.avatar.AvatarActivity;
 import com.example.ParcelDelivery.ui.login.LoginActivity;
-import com.example.ParcelDelivery.ui.manager.ManagerActivity;
 import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
 import com.example.ParcelDelivery.ui.password_reset.ChangePasswordActivity;
 import com.example.ParcelDelivery.ui.user.UserDetailsActivity;
+import com.example.ParcelDelivery.ui.user.UserPresence;
 
 public class CoordinatorActivity extends AppCompatActivity {
 
     int userId;
+
+    boolean presentSet = false;
+    boolean absentSet = false;
+    boolean workDay = true;
+    UserPresence presence;
+    Button buttonMyAccount, buttonPresence, buttonLogout, buttonParcelList;
 
 
     @Override
@@ -33,8 +39,9 @@ public class CoordinatorActivity extends AppCompatActivity {
         userId = getIntent().getIntExtra("userId", 0);
 
         // logout
-        Button buttonLogout = findViewById(R.id.buttonLogoutCoord);
-        Button buttonMyAccount = (Button) findViewById(R.id.buttonCoordinatorAccount);
+
+        prepareData();
+
 
         buttonMyAccount.setOnClickListener(v -> {
             Intent intent = new Intent(CoordinatorActivity.this, UserDetailsActivity.class);
@@ -61,7 +68,6 @@ public class CoordinatorActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, callback);
 
         // list of packages
-        Button buttonParcelList = (Button) findViewById(R.id.buttonParcelList);
         buttonParcelList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,6 +76,21 @@ public class CoordinatorActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        if(workDay) {
+            buttonPresence.setOnClickListener(v -> {
+                if (presentSet) {
+                    presence.addExit();
+                    absentSet = true;
+                    buttonPresence.setEnabled(false);
+                    buttonPresence.setText(R.string.presence_is_set);
+                } else {
+                    presence.addEnter();
+                    presentSet = true;
+                    buttonPresence.setText(R.string.absent);
+                }
+            });
+        }
 
         //---------------- AVATAR -----------------------------
         ImageView mainAvatarView = (ImageView)findViewById(R.id.ID_MAIN_AVATAR_VIEW);
@@ -108,4 +129,31 @@ public class CoordinatorActivity extends AppCompatActivity {
         });
         //------------------------------------
     }
+
+    private void prepareData(){
+        buttonMyAccount = (Button) findViewById(R.id.buttonCoordinatorAccount);
+        buttonPresence = (Button) findViewById(R.id.buttonPresence);
+        buttonLogout = findViewById(R.id.buttonLogoutCoord);
+        buttonParcelList = (Button) findViewById(R.id.buttonParcelList);
+
+        presence = new UserPresence(userId,this);
+
+        int prs = presence.prepareFields();
+
+        if(prs == -3){
+            workDay = false;
+            buttonPresence.setText(R.string.not_working);
+        }
+        else if(prs == -2){
+            buttonPresence.setEnabled(false);
+            buttonPresence.setText(R.string.presence_is_set);
+            absentSet = true;
+            presentSet = true;
+        }
+        else if(prs == -1){
+            buttonPresence.setText(R.string.absent);
+            presentSet = true;
+        }
+    }
+
 }

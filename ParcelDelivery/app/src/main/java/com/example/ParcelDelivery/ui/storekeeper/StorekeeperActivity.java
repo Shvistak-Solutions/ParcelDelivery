@@ -18,6 +18,7 @@ import com.example.ParcelDelivery.ui.coordinator.CoordinatorActivity;
 import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
 import com.example.ParcelDelivery.ui.login.LoginActivity;
 import com.example.ParcelDelivery.ui.user.UserDetailsActivity;
+import com.example.ParcelDelivery.ui.user.UserPresence;
 
 public class StorekeeperActivity extends AppCompatActivity {
 
@@ -25,9 +26,13 @@ public class StorekeeperActivity extends AppCompatActivity {
     int test = 0;
 
     Intent intent;
-
-    private Button viewStorehouse;
     private DatabaseHelper dbH;
+
+    boolean presentSet = false;
+    boolean absentSet = false;
+    boolean workDay = true;
+    UserPresence presence;
+    Button buttonMyAccount, buttonPresence, buttonLogout, buttonParcelList;
 
 
     @Override
@@ -36,6 +41,8 @@ public class StorekeeperActivity extends AppCompatActivity {
         setContentView(R.layout.activity_storekeeper);
 
         userId = getIntent().getIntExtra("userId", 0);
+
+        prepareData();
 
         // back button
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
@@ -46,7 +53,7 @@ public class StorekeeperActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, callback);
 
         // logout
-        Button buttonLogout = findViewById(R.id.buttonLogoutStore);
+
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,7 +62,7 @@ public class StorekeeperActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonMyAccount = (Button) findViewById(R.id.buttonStoreKeeperAccount);
+
 
         buttonMyAccount.setOnClickListener(v -> {
             Intent intent = new Intent(StorekeeperActivity.this, UserDetailsActivity.class);
@@ -64,8 +71,8 @@ public class StorekeeperActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        viewStorehouse = (Button)findViewById(R.id.ID_VIEW_STOREHOUSE);
-        viewStorehouse.setOnClickListener(new View.OnClickListener() {
+
+        buttonParcelList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent = new Intent(StorekeeperActivity.this, ParcelListActivity.class);
@@ -73,6 +80,21 @@ public class StorekeeperActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        if(workDay) {
+            buttonPresence.setOnClickListener(v -> {
+                if (presentSet) {
+                    presence.addExit();
+                    absentSet = true;
+                    buttonPresence.setEnabled(false);
+                    buttonPresence.setText(R.string.presence_is_set);
+                } else {
+                    presence.addEnter();
+                    presentSet = true;
+                    buttonPresence.setText(R.string.absent);
+                }
+            });
+        }
 
 
         //---------------- AVATAR -----------------------------
@@ -99,5 +121,31 @@ public class StorekeeperActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void prepareData(){
+        buttonMyAccount = (Button) findViewById(R.id.buttonStoreKeeperAccount);
+        buttonPresence = (Button) findViewById(R.id.buttonPresence);
+        buttonLogout = findViewById(R.id.buttonLogoutStore);
+        buttonParcelList = (Button)findViewById(R.id.ID_VIEW_STOREHOUSE);
+
+        presence = new UserPresence(userId,this);
+
+        int prs = presence.prepareFields();
+
+        if(prs == -3){
+            workDay = false;
+            buttonPresence.setText(R.string.not_working);
+        }
+        else if(prs == -2){
+            buttonPresence.setEnabled(false);
+            buttonPresence.setText(R.string.presence_is_set);
+            absentSet = true;
+            presentSet = true;
+        }
+        else if(prs == -1){
+            buttonPresence.setText(R.string.absent);
+            presentSet = true;
+        }
     }
 }
