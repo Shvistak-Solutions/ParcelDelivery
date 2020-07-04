@@ -15,7 +15,6 @@ public class UserPresence {
     DatabaseHelper db;
     boolean presentSet;
     boolean absentSet;
-    boolean workDay;
     ArrayList<HashMap<String,String>> details;
     int userId;
     Context context;
@@ -47,7 +46,6 @@ public class UserPresence {
             }
         }
         else{
-            workDay = false;
             return -3;
         }
         return 1;
