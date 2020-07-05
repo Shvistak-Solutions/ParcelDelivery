@@ -98,17 +98,6 @@ public class CourierActivity extends AppCompatActivity {
             mainAvatarView.setImageBitmap(bitmap);
         }
 
-        Button avatar = (Button) findViewById(R.id.ID_GO_TO_AVATAR);
-        avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CourierActivity.this, AvatarActivity.class);
-                intent.putExtra("userId", userId);
-                intent.putExtra("class","com.example.ParcelDelivery.ui.courier.CourierActivity");
-                startActivity(intent);
-            }
-        });
-
 
 
 

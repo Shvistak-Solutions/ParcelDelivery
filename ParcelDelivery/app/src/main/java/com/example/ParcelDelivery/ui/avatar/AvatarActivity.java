@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
+import com.example.ParcelDelivery.ui.user.UserDetailsActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,7 +27,7 @@ import java.io.InputStream;
 
 public class AvatarActivity extends AppCompatActivity {
 
-    int usrID;
+    int thisUserId;
 
     Class cls;
     int control;
@@ -49,7 +50,7 @@ public class AvatarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_avatar);
 
         //========================= SETUP
-        usrID = getIntent().getIntExtra("userId", 0);
+        thisUserId = getIntent().getIntExtra("thisUserId", 0);
         Bundle extras = getIntent().getExtras();
 
         String classname = extras.getString("class");
@@ -103,8 +104,9 @@ public class AvatarActivity extends AppCompatActivity {
             @Override
             public void handleOnBackPressed() {
 
-                Intent intent = new Intent(AvatarActivity.this,cls);
-                intent.putExtra("userId", usrID);
+                Intent intent = new Intent(AvatarActivity.this, UserDetailsActivity.class);
+                intent.putExtra("userId", thisUserId);
+                intent.putExtra("id",thisUserId);
                 startActivity(intent);
             }
         };
@@ -168,7 +170,7 @@ public class AvatarActivity extends AppCompatActivity {
     public void saveAvatar(){
         if (control == 2)
         {
-            dbH.updateAvatar(usrID,bitmapToString(imageBitmap));
+            dbH.updateAvatar(thisUserId,bitmapToString(imageBitmap));
             Toast.makeText(this,"Zdjęcie zostało zmienione",Toast.LENGTH_SHORT).show();
         }
         else {
@@ -178,7 +180,7 @@ public class AvatarActivity extends AppCompatActivity {
 
     public void deleteAvatar(){
         if (control != 0){
-            dbH.deleteProfilePicture(usrID);
+            dbH.deleteProfilePicture(thisUserId);
             Toast.makeText(this,"Usinuęto zdjęcie",Toast.LENGTH_SHORT).show();
             control = 0;
             printAvatar();
@@ -189,13 +191,13 @@ public class AvatarActivity extends AppCompatActivity {
     }
 
     public void printAvatar(){
-        int avatarExists = dbH.doesUserHasAvatar(usrID);
+        int avatarExists = dbH.doesUserHasAvatar(thisUserId);
         if( avatarExists == 0){
             selectedImageView.setImageResource(R.drawable.avatar0);
             control = 0;
         }
         else{
-            imageBitmap = dbH.getAvatarAsBitmap(usrID);
+            imageBitmap = dbH.getAvatarAsBitmap(thisUserId);
             selectedImageView.setImageBitmap(imageBitmap);
             control = 1;
         }

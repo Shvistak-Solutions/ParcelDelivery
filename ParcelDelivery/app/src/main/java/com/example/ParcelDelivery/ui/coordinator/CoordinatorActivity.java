@@ -105,16 +105,6 @@ public class CoordinatorActivity extends AppCompatActivity {
             mainAvatarView.setImageBitmap(bitmap);
         }
 
-        Button avatar = (Button) findViewById(R.id.ID_GO_TO_AVATAR);
-        avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CoordinatorActivity.this, AvatarActivity.class);
-                intent.putExtra("userId", userId);
-                intent.putExtra("class","com.example.ParcelDelivery.ui.coordinator.CoordinatorActivity");
-                startActivity(intent);
-            }
-        });
 
 
         //--------------- ZMIANA HASLA - DEMO

@@ -1,10 +1,16 @@
 package com.example.ParcelDelivery.ui.user;
+import com.example.ParcelDelivery.ui.avatar.AvatarActivity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
@@ -13,12 +19,17 @@ import androidx.fragment.app.Fragment;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
+import com.example.ParcelDelivery.ui.avatar.AvatarActivity;
+import com.example.ParcelDelivery.ui.courier.CourierActivity;
 
 import java.util.HashMap;
 
 public class UserDetailsZeroFragment extends Fragment {
     private  int userId, thisUserId ;
-
+    private HashMap<String, String> details;
+    private TextView name, surname;
+    private ImageView avatar;
+    private Button avatarChange;
     private DatabaseHelper db;
 
 
@@ -40,6 +51,8 @@ public class UserDetailsZeroFragment extends Fragment {
         super.onCreate(savedInstanceState);
         userId = getArguments().getInt("userId", 0);
         thisUserId = getArguments().getInt("thisUserId", 0);
+
+
     }
 
     @Nullable
@@ -48,8 +61,6 @@ public class UserDetailsZeroFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(
                 R.layout.fragment_userdetails0, container, false);
-        db = new DatabaseHelper(getContext());
-        findLayoutItems(view);
 
         if(userId == thisUserId) // jeżeli użytkownik przeglądający, jest użytkownikiem posiadającym to konto - uniwersalność
         {
@@ -63,41 +74,60 @@ public class UserDetailsZeroFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        db = new DatabaseHelper(getContext());
+        details = db.getData("Pracownicy", thisUserId);
+        findLayoutItems(view);
+        fillTextViews(details);
+        ImageView mainAvatarView = (ImageView)view.findViewById(R.id.ID_UD0_AVATAR_VIEW);
+        Bitmap bitmap;
+       // DatabaseHelper dbH = new DatabaseHelper(this);
+        int avatarExists = db.doesUserHasAvatar(thisUserId);
+        if( avatarExists == 0){
+            mainAvatarView.setImageResource(R.drawable.avatar0);
+        }
+        else{
+            bitmap = db.getAvatarAsBitmap(thisUserId);
+            mainAvatarView.setImageBitmap(bitmap);
+        }
+
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
+        if(userId == thisUserId)
+        {
+            avatarChange.setVisibility(View.VISIBLE);
+        }
 
-    }
-
-
-    private void fillTextViews(HashMap<String,String> details) {       // tutaj filluje danymi przykłąd na dole - taka sugestia, zeby pasowalo do reszty fragmentow
-
-//        if(details.get("stawka") != null)
-//            rate = Float.parseFloat((Objects.requireNonNull(details.get("stawka"))));
-//        else
-//            rate = 0;
-//        if(details.get("ilosc_godzin") != null)
-//            hours = Float.parseFloat((Objects.requireNonNull(details.get("ilosc_godzin"))));
-//        else
-//            hours = 0;
-//        textRate.setText(details.get("stawka"));
-//        textHours.setText(Float.toString(hours));
-//
-//        textSalary.setText(details.get("pensja"));
+        avatarChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), AvatarActivity.class);
+                intent.putExtra("thisUserId", thisUserId);
+                intent.putExtra("class","com.example.ParcelDelivery.ui.courier.CourierActivity");
+                startActivity(intent);
+            }
+        });
 
 
     }
 
-    private void findLayoutItems(View view){ // tutaj znajduje itemy layoutu - tak w kwestii uporządkowania
 
-//        textRate = (TextView)view.findViewById(R.id.textSalaryRate);
-//        textRate.setInputType(InputType.TYPE_NULL);
-//        textSalary = (TextView)view.findViewById(R.id.textSalary);
-//        textHours = (TextView)view.findViewById(R.id.textSalaryHours);
-//        buttonEdit = (Button)view.findViewById(R.id.buttonSalary);
+    private void fillTextViews(HashMap<String,String> details) {
+        name.setText(details.get("imie"));
+        surname.setText(details.get("nazwisko"));
+
+    }
+
+    private void findLayoutItems(View view){
+        name = (TextView)view.findViewById(R.id.ID_UD0_NAME);
+        surname = (TextView)view.findViewById(R.id.ID_UD0_SURNAME);
+        avatar = (ImageView)view.findViewById(R.id.ID_UD0_AVATAR_VIEW);
+        avatarChange = (Button)view.findViewById(R.id.ID_GO_TO_AVATAR);
+        avatarChange.setVisibility(View.INVISIBLE);
 
     }
 

@@ -109,18 +109,6 @@ public class StorekeeperActivity extends AppCompatActivity {
             bitmap = dbH.getAvatarAsBitmap(userId);
             mainAvatarView.setImageBitmap(bitmap);
         }
-
-        Button avatar = (Button) findViewById(R.id.ID_GO_TO_AVATAR);
-        avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StorekeeperActivity.this, AvatarActivity.class);
-                intent.putExtra("userId", userId);
-                intent.putExtra("class","com.example.ParcelDelivery.ui.storekeeper.StorekeeperActivity");
-                startActivity(intent);
-            }
-        });
-
     }
 
     private void prepareData(){
