@@ -20,7 +20,9 @@ import androidx.fragment.app.Fragment;
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
 import com.example.ParcelDelivery.ui.avatar.AvatarActivity;
+import com.example.ParcelDelivery.ui.coordinator.CoordinatorActivity;
 import com.example.ParcelDelivery.ui.courier.CourierActivity;
+import com.example.ParcelDelivery.ui.password_reset.ChangePasswordActivity;
 
 import java.util.HashMap;
 
@@ -29,7 +31,7 @@ public class UserDetailsZeroFragment extends Fragment {
     private HashMap<String, String> details;
     private TextView name, surname;
     private ImageView avatar;
-    private Button avatarChange;
+    private Button avatarChange,passwordChange;
     private DatabaseHelper db;
 
 
@@ -100,6 +102,7 @@ public class UserDetailsZeroFragment extends Fragment {
         if(userId == thisUserId)
         {
             avatarChange.setVisibility(View.VISIBLE);
+            passwordChange.setVisibility(View.VISIBLE);
         }
 
         avatarChange.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +111,15 @@ public class UserDetailsZeroFragment extends Fragment {
                 Intent intent = new Intent(v.getContext(), AvatarActivity.class);
                 intent.putExtra("thisUserId", thisUserId);
                 intent.putExtra("class","com.example.ParcelDelivery.ui.courier.CourierActivity");
+                startActivity(intent);
+            }
+        });
+
+        passwordChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ChangePasswordActivity.class);
+                intent.putExtra("thisUserId", thisUserId);
                 startActivity(intent);
             }
         });
@@ -128,6 +140,8 @@ public class UserDetailsZeroFragment extends Fragment {
         avatar = (ImageView)view.findViewById(R.id.ID_UD0_AVATAR_VIEW);
         avatarChange = (Button)view.findViewById(R.id.ID_GO_TO_AVATAR);
         avatarChange.setVisibility(View.INVISIBLE);
+        passwordChange = (Button)view.findViewById(R.id.ID_CHANGE_PASSWORD);
+        passwordChange.setVisibility(View.INVISIBLE);
 
     }
 
