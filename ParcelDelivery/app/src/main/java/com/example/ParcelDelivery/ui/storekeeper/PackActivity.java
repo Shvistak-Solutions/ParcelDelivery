@@ -71,9 +71,10 @@ public class PackActivity extends AppCompatActivity {
         statusPrint = (TextView)findViewById(R.id.ID_STATUS_VIEW);
         courierPrint = (TextView)findViewById(R.id.ID_COURIER_INFO_VIEW);
 
-        idPrint.setText("Id paczki: " + idMessage);
+        idPrint.setText("Paczka #" + idMessage);
         statusPrint.setText("Status: " + statusIntToText( Integer.parseInt( dbH.getData("status","Paczki",parcelId))));
-
+        int courierId = Integer.parseInt( dbH.getData("id_kuriera","Paczki",parcelId));
+        courierPrint.setText(" Kurier: " + dbH.getData("imie","Pracownicy",courierId) + " " + dbH.getData("nazwisko","Pracownicy",courierId) + " #" + dbH.getData("id_kuriera","Paczki",parcelId));
 
         spinnerStatusSelect = findViewById(R.id.spinnerStatusSelect);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stats);
