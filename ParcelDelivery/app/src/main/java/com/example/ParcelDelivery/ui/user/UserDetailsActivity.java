@@ -10,7 +10,11 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.ParcelDelivery.db.DatabaseHelper;
+import com.example.ParcelDelivery.ui.coordinator.CoordinatorActivity;
+import com.example.ParcelDelivery.ui.courier.CourierActivity;
 import com.example.ParcelDelivery.ui.manager.ManagerActivity;
+import com.example.ParcelDelivery.ui.storekeeper.StorekeeperActivity;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import com.google.android.material.tabs.TabLayout;
@@ -24,6 +28,7 @@ public class UserDetailsActivity extends FragmentActivity {
     int thisUserId;
     int userId;
     ViewPager2 viewPager;
+    Intent intent;
 
     private static final int NUM_PAGES = 4;
     FragmentStateAdapter adapterViewPager;
@@ -51,10 +56,40 @@ public class UserDetailsActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         if (viewPager.getCurrentItem() == 0) {
-            super.onBackPressed();
-//            Intent intent = new Intent(UserDetailsActivity.this, ManagerActivity.class);
-//            intent.putExtra("userId", userId);
-//            startActivity(intent);
+            //super.onBackPressed();
+
+            if(thisUserId != userId){
+                intent = new Intent(UserDetailsActivity.this, UserListActivity.class);
+                intent.putExtra("userId", userId);
+                startActivity(intent);
+            }
+            else
+            {
+                DatabaseHelper db = new DatabaseHelper(this);
+                int who = db.positionStringToInt(db.getData("stanowisko","Pracownicy", userId));
+                switch (who){
+                    case 0:
+                        intent = new Intent(UserDetailsActivity.this, CourierActivity.class);
+                        intent.putExtra("userId", userId);
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        intent = new Intent(UserDetailsActivity.this, StorekeeperActivity.class);
+                        intent.putExtra("userId", userId);
+                        startActivity(intent);
+                        break;
+                    case 2:
+                        intent = new Intent(UserDetailsActivity.this, CoordinatorActivity.class);
+                        intent.putExtra("userId", userId);
+                        startActivity(intent);
+                        break;
+                    case 3:
+                        intent = new Intent(UserDetailsActivity.this, ManagerActivity.class);
+                        intent.putExtra("userId", userId);
+                        startActivity(intent);
+                        break;
+                }
+            }
         } else {
             // Otherwise, select the previous step.
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
