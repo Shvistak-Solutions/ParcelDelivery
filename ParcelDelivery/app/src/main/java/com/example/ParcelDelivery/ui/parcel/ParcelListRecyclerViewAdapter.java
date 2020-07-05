@@ -50,7 +50,7 @@ public class ParcelListRecyclerViewAdapter extends RecyclerView.Adapter<ParcelLi
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext() , PackActivity.class);
                 intent.putExtra("userId",userId);
-                intent.putExtra("parcelId", Integer.parseInt(mParcelData.get(pos).get("id")));
+                intent.putExtra("parcelId", Integer.parseInt(mParcelData.get(position).get("id")));
 
                 v.getContext().startActivity(intent);
             }
