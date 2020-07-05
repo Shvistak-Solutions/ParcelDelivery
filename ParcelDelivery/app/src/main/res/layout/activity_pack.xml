@@ -17,11 +17,10 @@
         style="@style/buttonGreen"
         android:layout_marginStart="100dp"
         android:layout_marginEnd="100dp"
-        android:layout_marginBottom="176dp"
+        android:layout_marginBottom="96dp"
         android:text="@string/buttonChangeStatus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -54,32 +53,47 @@
         android:id="@+id/textViewSenderAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:text="Adres Nadawcy"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/textViewCourierId"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCourierId" />
+
+    <TextView
+        android:id="@+id/textViewCourierId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Kurier:"
         android:textColor="#000000"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ID_STATUS_VIEW"
         app:layout_constraintTop_toBottomOf="@+id/ID_STATUS_VIEW" />
-
-    <Spinner
-        android:id="@+id/spinnerStatusSelect"
-        android:layout_width="354dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonChangeStatus"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textViewRecipientAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/spinnerStatusSelect"
+        android:text="Adres Odbiorcy"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/textViewSenderAddress"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSenderAddress" />
+
+    <Spinner
+        android:id="@+id/spinnerStatusSelect"
+        android:layout_width="355dp"
+        android:layout_height="36dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonChangeStatus"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSenderAddress"
-        app:layout_constraintVertical_bias="0.131" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nowy status:"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerStatusSelect"
+        app:layout_constraintStart_toStartOf="@+id/spinnerStatusSelect" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

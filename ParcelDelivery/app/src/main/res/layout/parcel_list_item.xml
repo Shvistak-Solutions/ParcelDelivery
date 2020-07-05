@@ -5,6 +5,7 @@
     android:id="@+id/parcel_list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@android:drawable/editbox_dropdown_light_frame"
     app:layout_constraintTop_toTopOf="parent">
 
     <TextView
@@ -14,8 +15,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="#"
-        android:textSize="27sp"
         android:textColor="@color/colorPrimary"
+        android:textSize="27sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,8 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Status: "
-        android:textSize="18sp"
         android:textColor="#000000"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/parcel_id" />
 
@@ -36,8 +37,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Kurier: "
-        android:textSize="18sp"
         android:textColor="#000000"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/parcel_status" />
 </androidx.constraintlayout.widget.ConstraintLayout>

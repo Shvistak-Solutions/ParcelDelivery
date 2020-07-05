@@ -28,7 +28,7 @@ public class PackActivity extends AppCompatActivity {
     TextView idPrint;
     TextView senderAddressText;
     TextView recipientAddressText;
-
+    TextView courierIdText;
 
     Spinner spinnerStatusSelect;
 
@@ -69,11 +69,13 @@ public class PackActivity extends AppCompatActivity {
         statusPrint = (TextView)findViewById(R.id.ID_STATUS_VIEW);
         senderAddressText = findViewById(R.id.textViewSenderAddress);
         recipientAddressText = findViewById(R.id.textViewRecipientAddress);
+        courierIdText = findViewById(R.id.textViewCourierId);
+
 
         idPrint.setText("Paczka #" + idMessage);
         statusPrint.setText("Status: " + statusIntToText( Integer.parseInt( dbH.getData("status","Paczki",parcelId))));
         int courierId = Integer.parseInt( dbH.getData("id_kuriera","Paczki",parcelId));
-        courierPrint.setText(" Kurier: " + dbH.getData("imie","Pracownicy",courierId) + " " + dbH.getData("nazwisko","Pracownicy",courierId) + " #" + dbH.getData("id_kuriera","Paczki",parcelId));
+        courierIdText.setText(" Kurier: " + dbH.getData("imie","Pracownicy",courierId) + " " + dbH.getData("nazwisko","Pracownicy",courierId) + " #" + dbH.getData("id_kuriera","Paczki",parcelId));
         senderAddressText.setText("Adres nadawcy: "+ dbH.getData("adres_nadawcy","Paczki",parcelId));
         recipientAddressText.setText("Adres odbiorcy: "+ dbH.getData("adres_odbiorcy","Paczki",parcelId));
 
