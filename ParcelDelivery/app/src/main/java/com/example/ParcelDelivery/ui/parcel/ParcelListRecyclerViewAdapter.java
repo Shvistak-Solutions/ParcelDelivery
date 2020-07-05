@@ -1,6 +1,7 @@
 package com.example.ParcelDelivery.ui.parcel;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,11 +41,12 @@ public class ParcelListRecyclerViewAdapter extends RecyclerView.Adapter<ParcelLi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         pos = position;
-        holder.parcel_id.setText("#" + mParcelData.get(position).get("id") );
-        holder.parcel_courier_id.setText("Kurier: " + mParcelData.get(position).get("id_kuriera"));
+        final int temp = position;
+        holder.parcel_id.setText("#" + mParcelData.get(pos).get("id") );
+        holder.parcel_courier_id.setText("Kurier: " + mParcelData.get(pos).get("id_kuriera"));
 
         String status = "?";
-        switch (Integer.parseInt(mParcelData.get(position).get("status"))) {
+        switch (Integer.parseInt(mParcelData.get(pos).get("status"))) {
             case 1:
                 status = "Przyjęte do realizacji";
                 break;
@@ -74,7 +76,8 @@ public class ParcelListRecyclerViewAdapter extends RecyclerView.Adapter<ParcelLi
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext() , PackActivity.class);
                 intent.putExtra("userId",userId);
-                intent.putExtra("parcelId", Integer.parseInt(mParcelData.get(pos).get("id")));
+                intent.putExtra("parcelId", temp + 1);
+                Log.w("Paczka ", Integer.toString(temp));
 
                 v.getContext().startActivity(intent);
             }
