@@ -34,7 +34,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_change_password);
 
         note = (TextView)findViewById(R.id.ID_NOTE_2);
-        userId = getIntent().getIntExtra("userId", 0);
+        userId = getIntent().getIntExtra("thisUserId", 0);
         dbH = new DatabaseHelper(this);
         nextStep = (Button) findViewById(R.id.ID_VERIFY_PASSWORD);
 
@@ -90,7 +90,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             Toast.makeText(this,"Podaj nowe hasło",Toast.LENGTH_SHORT).show();
             newPasswordAgain.setText("");
         }
-        else if(password.length() < 5){
+        else if(password.length() < 4){
             Toast.makeText(this,"Podane hasło jest za krótkie - minimum 5 znaków",Toast.LENGTH_SHORT).show();
             newPassword.setText("");
             newPasswordAgain.setText("");
