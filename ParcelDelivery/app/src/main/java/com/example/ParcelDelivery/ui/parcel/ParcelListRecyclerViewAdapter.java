@@ -40,9 +40,33 @@ public class ParcelListRecyclerViewAdapter extends RecyclerView.Adapter<ParcelLi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         pos = position;
-        holder.parcel_id.setText("id paczki: " + mParcelData.get(position).get("id") );
-        holder.parcel_courier_id.setText("id kuriera"+mParcelData.get(position).get("id_kuriera"));
-        holder.parcel_status.setText("status paczki: " + mParcelData.get(position).get("status"));
+        holder.parcel_id.setText("#" + mParcelData.get(position).get("id") );
+        holder.parcel_courier_id.setText("Kurier: " + mParcelData.get(position).get("id_kuriera"));
+
+        String status = "?";
+        switch (Integer.parseInt(mParcelData.get(position).get("status"))) {
+            case 1:
+                status = "Przyjęte do realizacji";
+                break;
+            case 2:
+                status = "Odebrane od nadawcy";
+                break;
+            case 3:
+                status = "W magazynie";
+                break;
+            case 4:
+                status = "W drodze do odbiorcy";
+                break;
+            case 5:
+                status = "Dostarczone";
+                break;
+            case -1:
+                status = "Anulowane";
+                break;
+            default:
+                break;
+        }
+        holder.parcel_status.setText("Status: " + status);
 
 
         holder.parcel_list_item.setOnClickListener(new View.OnClickListener() {
