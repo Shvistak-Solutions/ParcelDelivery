@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -23,6 +24,9 @@ import static java.lang.Integer.parseInt;
 
 public class ParcelAddActivity extends AppCompatActivity {
     Intent intent;
+    EditText senderAddressEdit;
+    EditText recipientAddressEdit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,8 @@ public class ParcelAddActivity extends AppCompatActivity {
         final Spinner spinnerCouriers = (Spinner) findViewById(R.id.spinnerCourierSelect);
         spinnerCouriers.setAdapter(adapter);
 
+        senderAddressEdit = findViewById(R.id.editTextSenderAddress);
+        recipientAddressEdit = findViewById(R.id.editTextRecipientAddress);
         // back button
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
@@ -61,8 +67,11 @@ public class ParcelAddActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String courierSurname = spinnerCouriers.getSelectedItem().toString().split(" ")[1];
                 String courierId = dbHelper.getData("id", "Pracownicy", "nazwisko", courierSurname).get(0);
+                String senderAddress = senderAddressEdit.getText().toString();
+                String recipientAddress = recipientAddressEdit.getText().toString();
 
-                long result = dbHelper.insertNewParcel(parseInt(courierId));
+
+                long result = dbHelper.insertNewParcel(parseInt(courierId),senderAddress,recipientAddress);
                 if (result > 0) {
                     intent = new Intent(ParcelAddActivity.this, ParcelListActivity.class);
                     intent.putExtra("userId",getIntent().getIntExtra("userId",0));

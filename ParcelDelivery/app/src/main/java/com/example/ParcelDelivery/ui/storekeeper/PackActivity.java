@@ -1,13 +1,10 @@
 package com.example.ParcelDelivery.ui.storekeeper;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -15,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
@@ -29,8 +25,10 @@ public class PackActivity extends AppCompatActivity {
     private int userId;
     private int parcelId;
     TextView statusPrint;
-    TextView courierPrint;
     TextView idPrint;
+    TextView senderAddressText;
+    TextView recipientAddressText;
+
 
     Spinner spinnerStatusSelect;
 
@@ -69,12 +67,15 @@ public class PackActivity extends AppCompatActivity {
 
         idPrint = (TextView)findViewById(R.id.ID_PACKID_VIEW);
         statusPrint = (TextView)findViewById(R.id.ID_STATUS_VIEW);
-        courierPrint = (TextView)findViewById(R.id.ID_COURIER_INFO_VIEW);
+        senderAddressText = findViewById(R.id.textViewSenderAddress);
+        recipientAddressText = findViewById(R.id.textViewRecipientAddress);
 
         idPrint.setText("Paczka #" + idMessage);
         statusPrint.setText("Status: " + statusIntToText( Integer.parseInt( dbH.getData("status","Paczki",parcelId))));
         int courierId = Integer.parseInt( dbH.getData("id_kuriera","Paczki",parcelId));
         courierPrint.setText(" Kurier: " + dbH.getData("imie","Pracownicy",courierId) + " " + dbH.getData("nazwisko","Pracownicy",courierId) + " #" + dbH.getData("id_kuriera","Paczki",parcelId));
+        senderAddressText.setText("Adres nadawcy: "+ dbH.getData("adres_nadawcy","Paczki",parcelId));
+        recipientAddressText.setText("Adres odbiorcy: "+ dbH.getData("adres_odbiorcy","Paczki",parcelId));
 
         spinnerStatusSelect = findViewById(R.id.spinnerStatusSelect);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stats);

@@ -51,7 +51,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/textViewRecipientAddress"
         style="@style/headerWhite"
         android:layout_marginStart="95dp"
         android:layout_marginTop="186dp"
