@@ -1,8 +1,14 @@
 package com.example.ParcelDelivery.ui.user;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -13,11 +19,16 @@ import android.widget.SimpleAdapter;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
+import com.example.ParcelDelivery.ui.avatar.AvatarActivity;
 import com.example.ParcelDelivery.ui.manager.ManagerActivity;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -51,7 +62,7 @@ public class UserListActivity extends AppCompatActivity {
 
         final DatabaseHelper db = new DatabaseHelper(this);
         final ListView lv = (ListView) findViewById(R.id.user_list);
-        final ArrayList<HashMap<String, String>> userList = db.getData(new String[]{"imie","nazwisko","email","stanowisko"}, "Pracownicy", null,null);
+        final ArrayList<HashMap<String, String>> userList = db.getData(new String[]{"id","imie","nazwisko","email","stanowisko"}, "Pracownicy", null,null);
         String myMail = db.getData("email","Pracownicy",userId);
         int i = 0;
         for( HashMap<String,String> a : userList)
@@ -62,8 +73,26 @@ public class UserListActivity extends AppCompatActivity {
                 break;
             }
             i++;
+            int id = Integer.parseInt(a.get("id"));
+            int avatarExists = db.doesUserHasAvatar(id);
+            if( avatarExists == 0){
+                a.put("avatar",Integer.toString(R.drawable.avatar0));
+            }
+            else{
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                        PackageManager.PERMISSION_GRANTED) {
+                    Bitmap bitmap = db.getAvatarAsBitmap(id);
+                    Uri uri =getImageUri(this,bitmap);
+                    a.put("avatar",uri.toString());
+                }else
+                {
+                    a.put("avatar",Integer.toString(R.drawable.avatar0));
+                }
+
+            }
+
         }
-        final SimpleAdapter adapter = new SimpleAdapter(UserListActivity.this, userList, R.layout.row_userlist,new String[]{"imie","nazwisko","email","stanowisko"}, new int[]{R.id.textListName, R.id.textListSurname,R.id.textListEmail, R.id.textListPosition});
+        final SimpleAdapter adapter = new SimpleAdapter(UserListActivity.this, userList, R.layout.row_userlist,new String[]{"avatar","imie","nazwisko","email","stanowisko"}, new int[]{R.id.imageViewList,R.id.textListName, R.id.textListSurname,R.id.textListEmail, R.id.textListPosition});
         lv.setAdapter(adapter);
         lv.setClickable(true);
 
@@ -129,6 +158,13 @@ public class UserListActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 }
 

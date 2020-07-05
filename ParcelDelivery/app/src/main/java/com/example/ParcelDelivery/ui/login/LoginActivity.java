@@ -2,7 +2,9 @@ package com.example.ParcelDelivery.ui.login;
 
         import androidx.activity.OnBackPressedCallback;
         import androidx.appcompat.app.AppCompatActivity;
+        import androidx.core.app.ActivityCompat;
 
+        import android.Manifest;
         import android.content.Intent;
         import android.database.sqlite.SQLiteDatabase;
         import android.os.Bundle;
@@ -54,6 +56,9 @@ public class LoginActivity extends AppCompatActivity {
         Name = (EditText)findViewById(R.id.etName);
         Password = (EditText)findViewById(R.id.etPassword);
         Login = (Button)findViewById(R.id.btLogin);
+
+        ActivityCompat.requestPermissions(this, new String[]
+                { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE }, 0);
 
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
