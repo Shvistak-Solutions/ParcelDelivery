@@ -7,15 +7,15 @@ android:layout_height="match_parent"
 tools:context=".ui.login.LoginActivity">
 
     <EditText
-        style="@style/editTextField"
         android:id="@+id/etName"
+        style="@style/editTextField"
         android:layout_marginStart="66dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="66dp"
         android:layout_marginBottom="20dp"
         android:ems="10"
         android:hint="@string/hintEmail"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/etPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 
 import androidx.activity.OnBackPressedCallback;
@@ -27,6 +28,7 @@ import com.example.ParcelDelivery.ui.avatar.AvatarActivity;
 import com.example.ParcelDelivery.ui.manager.ManagerActivity;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,6 +42,8 @@ public class UserListActivity extends AppCompatActivity {
     SearchView search;
     Intent intent;
     int userId;
+    DatabaseHelper db;
+    ArrayList<HashMap<String, String>> userList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +64,9 @@ public class UserListActivity extends AppCompatActivity {
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
 
-        final DatabaseHelper db = new DatabaseHelper(this);
+        db = new DatabaseHelper(this);
         final ListView lv = (ListView) findViewById(R.id.user_list);
-        final ArrayList<HashMap<String, String>> userList = db.getData(new String[]{"id","imie","nazwisko","email","stanowisko"}, "Pracownicy", null,null);
+        userList = db.getData(new String[]{"id","imie","nazwisko","email","stanowisko"}, "Pracownicy", null,null);
         String myMail = db.getData("email","Pracownicy",userId);
         int i = 0;
         for( HashMap<String,String> a : userList)
@@ -88,7 +92,6 @@ public class UserListActivity extends AppCompatActivity {
                 {
                     a.put("avatar",Integer.toString(R.drawable.avatar0));
                 }
-
             }
 
         }
@@ -97,10 +100,11 @@ public class UserListActivity extends AppCompatActivity {
         lv.setClickable(true);
 
 
+
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 String email = null;
                 email = getEmailFromAdapter(adapter, position);
                 intent = new Intent(UserListActivity.this, UserDetailsActivity.class);
@@ -157,6 +161,7 @@ public class UserListActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        deleteImage();
         super.onStop();
     }
 
@@ -165,6 +170,15 @@ public class UserListActivity extends AppCompatActivity {
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
+    }
+
+    private void deleteImage(){
+        for (HashMap<String,String> a : userList){
+            if(!a.get("avatar").equals(Integer.toString(R.drawable.avatar0))){
+               int cnt =  getApplicationContext().getContentResolver().delete(Uri.parse(a.get("avatar")), null, null);
+               //Toast.makeText(getApplicationContext(),"cnt= "+cnt+" uri= "+a.get("avatar"),Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
 
