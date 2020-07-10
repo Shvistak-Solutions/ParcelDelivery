@@ -61,7 +61,7 @@ public class UserPresence {
 
     public void addExit(){
         cal = Calendar.getInstance();
-        cal.add(Calendar.HOUR, 3);
+        //cal.add(Calendar.HOUR, 3);
         db.updateDataSQL("update Grafik set wyjscie="+db.makeDateTime(cal)+" where id_prac="+userId+" and data ="+db.makeDateYMD(cal));
         absentSet = true;
         details = db.getDataSQL("select data,wejscie, wyjscie from Grafik where id_prac="+userId+" and data like '"+db.makeDateYMD(cal)+"'");
