@@ -44,4 +44,5 @@
     <string name="check_availability">Sprawdź dostępność</string>
     <string name="availability">Dostępność</string>
     <string name="check_schedule">Sprawdź grafik</string>
+    <string name="buttonRemoveParcel">Usuń Paczkę</string>
 </resources>

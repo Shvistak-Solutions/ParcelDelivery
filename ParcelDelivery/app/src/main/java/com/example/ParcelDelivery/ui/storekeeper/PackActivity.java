@@ -1,5 +1,6 @@
 package com.example.ParcelDelivery.ui.storekeeper;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ParcelDelivery.R;
@@ -20,6 +22,7 @@ import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
 public class PackActivity extends AppCompatActivity {
 
     Button buttonChangeStatus;
+    Button buttonRemoveParcel;
     private DatabaseHelper dbH;
     String idMessage;
     private int userId;
@@ -60,7 +63,7 @@ public class PackActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, callback);
 
         buttonChangeStatus = (Button)findViewById(R.id.buttonChangeStatus);
-
+        buttonRemoveParcel = findViewById(R.id.buttonRemoveParcel);
 
 
         dbH = new DatabaseHelper(this);
@@ -89,6 +92,27 @@ public class PackActivity extends AppCompatActivity {
                 else
                     newStatus = newStatus + 1;
                 updateStatus(newStatus);
+            }
+        });
+
+        buttonRemoveParcel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(PackActivity.this)
+                        .setTitle("Na pewno?")
+                        .setMessage("Na pewno chcesz usunąć paczkę?")
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Toast.makeText(PackActivity.this, "Usunięto paczkę #"+parcelId, Toast.LENGTH_SHORT).show();
+
+                                dbH.removeParcel(parcelId);
+                                Intent intent = new Intent(PackActivity.this, ParcelListActivity.class);
+                                intent.putExtra("userId",userId);
+                                startActivity(intent);
+                            }})
+                        .setNegativeButton(R.string.cancel, null).show();
+
             }
         });
 
