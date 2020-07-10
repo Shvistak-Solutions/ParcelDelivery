@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
+import com.example.ParcelDelivery.ui.login.LoginActivity;
+import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
 
 public class ChangePasswordActivity extends AppCompatActivity {
 
@@ -25,7 +28,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     EditText newPassword;
     EditText newPasswordAgain;
     String passwordCompare;
-    Button nextStep;
+    Button nextStep, buttonLogout;
     TextView note;
 
     @Override
@@ -44,6 +47,15 @@ public class ChangePasswordActivity extends AppCompatActivity {
         newPasswordAgain = (EditText)findViewById(R.id.ID_NEW_PASSWORD_AGAIN);
         newPassword.setVisibility(View.INVISIBLE);
         newPasswordAgain.setVisibility(View.INVISIBLE);
+
+        buttonLogout = findViewById(R.id.buttonLogoutPassword);
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ChangePasswordActivity.this, "Wylogowano", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(ChangePasswordActivity.this, LoginActivity.class));
+            }
+        });
 
 
         ((AppCompatButton)nextStep).setOnClickListener(new View.OnClickListener() {
