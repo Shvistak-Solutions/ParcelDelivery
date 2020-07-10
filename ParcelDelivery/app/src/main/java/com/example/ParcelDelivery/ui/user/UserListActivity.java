@@ -70,15 +70,9 @@ public class UserListActivity extends AppCompatActivity {
         final ListView lv = (ListView) findViewById(R.id.user_list);
         userList = db.getData(new String[]{"id","imie","nazwisko","email","stanowisko"}, "Pracownicy", null,null);
         String myMail = db.getData("email","Pracownicy",userId);
-        int i = 0;
+
         for( HashMap<String,String> a : userList)
         {
-            String toCheck = a.get("email");
-            if(toCheck.equals(myMail)) {
-                userList.remove(i);
-                break;
-            }
-            i++;
             int id = Integer.parseInt(a.get("id"));
             int avatarExists = db.doesUserHasAvatar(id);
             if( avatarExists == 0){
@@ -96,6 +90,16 @@ public class UserListActivity extends AppCompatActivity {
                 }
             }
 
+        }
+        int i = 0;
+        for( HashMap<String,String> a : userList)
+        {
+            String toCheck = a.get("email");
+            if(toCheck.equals(myMail)) {
+                userList.remove(i);
+                break;
+            }
+            i++;
         }
         final SimpleAdapter adapter = new SimpleAdapter(UserListActivity.this, userList, R.layout.row_userlist,new String[]{"avatar","imie","nazwisko","email","stanowisko"}, new int[]{R.id.imageViewList,R.id.textListName, R.id.textListSurname,R.id.textListEmail, R.id.textListPosition});
         lv.setAdapter(adapter);

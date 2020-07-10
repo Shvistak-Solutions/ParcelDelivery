@@ -23,7 +23,7 @@ import static java.lang.Integer.parseInt;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 15;
+    private static final int databaseVersion = 18;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";

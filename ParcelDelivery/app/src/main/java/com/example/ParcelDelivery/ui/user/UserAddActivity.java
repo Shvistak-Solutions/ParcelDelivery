@@ -1,6 +1,7 @@
 package com.example.ParcelDelivery.ui.user;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -50,15 +51,19 @@ public class UserAddActivity extends AppCompatActivity {
                 String userSurname = surname.getText().toString();
                 String userEmail = email.getText().toString();
                 String userPesel = pesel.getText().toString();
-                String userId = idNum.getText().toString();
-                String userAddress = surname.getText().toString();
+                String userId2 = idNum.getText().toString();
+                String userAddress = address.getText().toString();
                 String userPostal = postal.getText().toString();
                 dbHandler = new DatabaseHelper(UserAddActivity.this);
 
                 String SpinnerValue = positionSpinner.getSelectedItem().toString();
                 int userPosition = dbHandler.positionStringToInt(SpinnerValue);
-
-                long res = dbHandler.insertNewUser(userName,userSurname,userPosition,userEmail,userPesel,userId,userAddress,userPostal);
+                long res;
+                try {
+                    res = dbHandler.insertNewUser(userName, userSurname, userPosition, userEmail, userPesel, userId2, userAddress, userPostal);
+                }catch(SQLiteConstraintException e){
+                    res = -1;
+                }
                 if(res > 0)
                 {
                     intent = new Intent(UserAddActivity.this, com.example.ParcelDelivery.ui.user.UserListActivity.class);
