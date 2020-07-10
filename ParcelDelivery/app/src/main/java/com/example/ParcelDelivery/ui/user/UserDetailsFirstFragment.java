@@ -35,6 +35,7 @@ public class UserDetailsFirstFragment extends Fragment {
     private AlertDialog dialogRemove;
     private AlertDialog dialogReset;
     boolean edit = false;
+    boolean sameUser = false;
 
     public static UserDetailsFirstFragment newInstance(int thisUserId, int userId) {
         UserDetailsFirstFragment fragment = new UserDetailsFirstFragment();
@@ -54,6 +55,9 @@ public class UserDetailsFirstFragment extends Fragment {
         assert getArguments() != null;
         userId = getArguments().getInt("userId", 0);
         thisUserId = getArguments().getInt("thisUserId", 0);
+        if( userId == thisUserId){
+            sameUser = true;
+        }
     }
 
     @Override
@@ -72,17 +76,17 @@ public class UserDetailsFirstFragment extends Fragment {
         details = db.getData("Pracownicy", thisUserId);
         findLayoutItems(view);
         fillTextViews(details);
-        if( userId == thisUserId){
+
+        if( sameUser){
             buttonRmv.setVisibility(View.GONE);
             buttonResetPassword.setVisibility(View.GONE);
         }
-
-        dialogRemove = removeAlert(details.get("email"));
-        dialogReset = resetAlert(details.get("email"));
-
-        buttonRmv.setOnClickListener(v -> dialogRemove.show());
-
-        buttonResetPassword.setOnClickListener(v -> dialogReset.show());
+        else{
+            dialogRemove = removeAlert(details.get("email"));
+            dialogReset = resetAlert(details.get("email"));
+            buttonRmv.setOnClickListener(v -> dialogRemove.show());
+            buttonResetPassword.setOnClickListener(v -> dialogReset.show());
+        }
 
         buttonEditData.setOnClickListener(v->{
             if(!edit) {
@@ -145,12 +149,63 @@ public class UserDetailsFirstFragment extends Fragment {
 
         spinner.setVisibility(View.VISIBLE);
         position.setVisibility(View.INVISIBLE);
-
-
         spinner.setSelection(db.positionStringToInt(details.get("stanowisko")));
+        buttonEditData.setText(R.string.save_rate);
     }
 
     private void updateData(){
+        boolean passed = true;
+        boolean updated = false;
+        if(!name.getText().toString().equals(details.get("imie"))){
+            updated = true;
+            if(db.updateDataSQL("update Pracownicy set imie="+name.getText().toString()+" where id="+thisUserId) < 1)
+                passed = false;
+        }
+        if(!surname.getText().toString().equals(details.get("nazwisko"))){
+            updated = true;
+            if(db.updateDataSQL("update Pracownicy set nazwisko="+surname.getText().toString()+" where id="+thisUserId) < 1)
+                passed = false;
+        }
+        if(!email.getText().toString().equals(details.get("email"))){
+            updated = true;
+            if(db.updateDataSQL("update Pracownicy set email="+email.getText().toString()+" where id="+thisUserId) < 1)
+                passed = false;
+        }
+        if(!pesel.getText().toString().equals(details.get("pesel"))){
+            updated = true;
+            if(db.updateDataSQL("update Pracownicy set pesel="+pesel.getText().toString()+" where id="+thisUserId) < 1)
+                passed = false;
+        }
+        if(!idNum.getText().toString().equals(details.get("nr_dowodu"))){
+            updated = true;
+            if(db.updateDataSQL("update Pracownicy set nr_dowodu="+idNum.getText().toString()+" where id="+thisUserId) < 1)
+                passed = false;
+        }
+        if(!address.getText().toString().equals(details.get("adres"))){
+            updated = true;
+            if(db.updateDataSQL("update Pracownicy set adres="+address.getText().toString()+" where id="+thisUserId) < 1)
+                passed = false;
+        }
+        if(!postal.getText().toString().equals(details.get("kod_pocztowy"))){
+            updated = true;
+            if(db.updateDataSQL("update Pracownicy set kod_pocztowy="+postal.getText().toString()+" where id="+thisUserId) < 1)
+                passed = false;
+        }
+        if(!spinner.getSelectedItem().toString().equals(details.get("stanowisko"))){
+            updated = true;
+            int pos = db.positionStringToInt(spinner.getSelectedItem().toString());
+            if(db.updateDataSQL("update Pracownicy set stanowisko="+pos+" where id="+thisUserId) < 1)
+                passed = false;
+        }
+
+        if(updated){
+            if(passed)
+                Toast.makeText(getContext(),"Zaktualizowano dane",Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getContext(),"Przy aktualizacji wystąpił błąd",Toast.LENGTH_SHORT).show();
+        }
+
+
         name.setInputType(InputType.TYPE_NULL);
         surname.setInputType(InputType.TYPE_NULL);
         email.setInputType(InputType.TYPE_NULL);
@@ -161,7 +216,10 @@ public class UserDetailsFirstFragment extends Fragment {
         postal.setInputType(InputType.TYPE_NULL);
 
         spinner.setVisibility(View.GONE);
+        position.setText(spinner.getSelectedItem().toString());
         position.setVisibility(View.VISIBLE);
+        buttonEditData.setText(R.string.editdetails);
+        details = db.getData("Pracownicy", thisUserId);
     }
 
     private void fillTextViews(HashMap<String,String> details) {

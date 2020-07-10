@@ -21,7 +21,7 @@ import com.example.ParcelDelivery.R;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 2;
+    private static final int databaseVersion = 6;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
@@ -355,7 +355,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 val.put(data[i++],value);
             }
             else
-                val.put(data[i++],data[i]);
+                val.put(data[i++],data[i].trim());
         }
         StringBuilder wheres = new StringBuilder();
         String[] values = new String[(data.length - (i+1))/2];
@@ -856,11 +856,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int length = (helper.length*2)+2;
         String[] toWhere = new String[length];
         int i = 0;
-        toWhere[i++] = table.replace(" ", "");;
+        toWhere[i++] = table.trim();
         for(String a : helper)
         {
-            toWhere[i++] = a.split("=")[0].replace(" ", "");
-            toWhere[i++] = a.split("=")[1];
+            toWhere[i++] = a.split("=")[0].trim();
+            toWhere[i++] = a.split("=")[1].trim();
         }
         toWhere[i] = "where";
         helper = query.split("(?i)\\band\\b");
@@ -868,8 +868,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         i = 0;
         for(String a : helper)
         {
-            where[i++] = a.split("=")[0].replace(" ", "");;
-            where[i++] = a.split("=")[1];
+            where[i++] = a.split("=")[0].trim();
+            where[i++] = a.split("=")[1].trim();
         }
         String[] res = new String[length+where.length];
         i = 0;

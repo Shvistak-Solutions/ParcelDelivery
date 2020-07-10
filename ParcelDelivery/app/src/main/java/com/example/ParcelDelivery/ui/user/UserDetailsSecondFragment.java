@@ -99,7 +99,6 @@ public class UserDetailsSecondFragment extends Fragment {
                         edit = true;
                     } else {
                             saveHourData(1);
-
                     }
                 }
             }
