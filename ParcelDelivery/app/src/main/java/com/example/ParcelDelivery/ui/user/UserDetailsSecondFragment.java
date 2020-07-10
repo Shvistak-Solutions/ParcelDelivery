@@ -111,6 +111,7 @@ public class UserDetailsSecondFragment extends Fragment {
             }else{
                 switchToSchedule();
             }
+            makeAllNoInput();
         });
 
 
@@ -137,6 +138,7 @@ public class UserDetailsSecondFragment extends Fragment {
             buttonSaveChanges.setVisibility(View.INVISIBLE);
         showWeek(0,0);
         buttonAvailability.setText(R.string.check_schedule);
+        buttonSaveChanges.setText(R.string.edit_availability);
         scheduleTrue = false;
     }
 
@@ -148,6 +150,7 @@ public class UserDetailsSecondFragment extends Fragment {
             buttonSaveChanges.setVisibility(View.VISIBLE);
         showWeek(0,1);
         buttonAvailability.setText(R.string.check_availability);
+        buttonSaveChanges.setText(R.string.edit_schedule);
         scheduleTrue = true;
     }
 
@@ -345,6 +348,11 @@ public class UserDetailsSecondFragment extends Fragment {
         setNoInput(endThursday);
         setNoInput(endTuesday);
         setNoInput(endWednesday);
+
+        if(scheduleTrue)
+            buttonSaveChanges.setText(R.string.edit_schedule);
+        else
+            buttonSaveChanges.setText(R.string.edit_availability);
     }
     
     private void setInput(EditText edit) {edit.setInputType(InputType.TYPE_DATETIME_VARIATION_TIME);}
@@ -361,6 +369,10 @@ public class UserDetailsSecondFragment extends Fragment {
         setInput(endThursday);
         setInput(endTuesday);
         setInput(endWednesday);
+
+
+        buttonSaveChanges.setText(R.string.save_rate);
+
     }
 
     private void assignEditTextToArray(){

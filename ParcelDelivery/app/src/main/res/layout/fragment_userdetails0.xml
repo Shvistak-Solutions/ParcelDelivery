@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,8 +9,6 @@
         android:id="@+id/ID_UD0_NAME"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="32dp"
         android:autofillHints=""
         android:background="#F1EEEE"
         android:clickable="false"
@@ -21,9 +18,11 @@
         android:hint="@string/imie"
         android:inputType="textPersonName"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/ID_UD0_SURNAME"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ID_UD0_NAME_TEXT"
+        app:layout_constraintTop_toBottomOf="@+id/ID_UD0_AVATAR_VIEW"
         tools:visibility="visible" />
 
 
@@ -32,21 +31,18 @@
         android:layout_width="120dp"
         android:layout_height="32dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
         android:gravity="center_vertical"
         android:text="@string/imie"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/ID_UD0_SURNAME_TEXT"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toBottomOf="@+id/ID_UD0_AVATAR_VIEW" />
 
     <EditText
         android:id="@+id/ID_UD0_SURNAME"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="24dp"
         android:autofillHints=""
         android:background="#F1EEEE"
         android:ems="10"
@@ -54,8 +50,10 @@
         android:hint="@string/nazwisko"
         android:inputType="textPersonName"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/ID_GO_TO_AVATAR"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ID_UD0_SURNAME_TEXT"
         app:layout_constraintTop_toBottomOf="@+id/ID_UD0_NAME" />
 
     <TextView
@@ -63,47 +61,48 @@
         android:layout_width="120dp"
         android:layout_height="32dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
         android:gravity="center_vertical"
         android:text="@string/nazwisko"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/ID_GO_TO_AVATAR"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ID_UD0_NAME_TEXT" />
-
 
     <ImageView
         android:id="@+id/ID_UD0_AVATAR_VIEW"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="83dp"
-        android:layout_marginEnd="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/ID_UD0_NAME"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ID_UD0_SURNAME"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/btn_dialog" />
 
     <Button
         android:id="@+id/ID_GO_TO_AVATAR"
         style="@style/buttonGreen"
-        android:layout_width="179dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="ZMIANA ZDJĘCIA"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ID_CHANGE_PASSWORD"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ID_UD0_AVATAR_VIEW" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/ID_CHANGE_PASSWORD"
         style="@style/buttonGreen"
-        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="ZMIANA HASŁA"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ID_GO_TO_AVATAR" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
