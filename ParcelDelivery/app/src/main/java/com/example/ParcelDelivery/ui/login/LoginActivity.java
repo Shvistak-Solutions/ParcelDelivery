@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
             db.setUpdate(false);
         }
         db.updateDates();
+        db.scheduleSeed();
         db.presenceCheck();
 
         Name = (EditText)findViewById(R.id.etName);

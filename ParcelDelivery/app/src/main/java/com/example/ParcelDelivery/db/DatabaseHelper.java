@@ -23,7 +23,7 @@ import static java.lang.Integer.parseInt;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 9;
+    private static final int databaseVersion = 13;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
@@ -101,6 +101,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         changePackStatus("3", "3");
         changePackStatus("4", "3");
+
+    }
+
+    public int scheduleSeed(){
+        ArrayList<HashMap<String,String>> all = getDataSQL("select data, id_prac from Grafik where id>0");
+        for( HashMap<String,String> row : all){
+            updateSchedule(row.get("data"),row.get("data")+" 08:00",row.get("data")+" 16:00",1,Integer.parseInt(row.get("id_prac")));
+        }
+        all = getDataSQL("select data, id_prac from Dyspozycje where id>0");
+        for( HashMap<String,String> row : all){
+            updateSchedule(row.get("data"),row.get("data")+" 08:00",row.get("data")+" 16:00",0,Integer.parseInt(row.get("id_prac")));
+        }
+        return all.size();
     }
 
     public void updatePassword(String email, String password){
