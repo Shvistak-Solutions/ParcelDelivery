@@ -7,9 +7,12 @@
 
     <Button
         android:id="@+id/buttonResetPasswd"
+        style="@style/buttonGreen"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/reset_password"
         app:layout_constraintBottom_toTopOf="@+id/buttonEditDetails"
         app:layout_constraintEnd_toStartOf="@+id/buttonRemoveAccount"
@@ -18,11 +21,12 @@
 
     <Button
         android:id="@+id/buttonEditDetails"
+        style="@style/buttonGreen"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/editdetails"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,9 +34,11 @@
 
     <Button
         android:id="@+id/buttonRemoveAccount"
+        style="@style/buttonGreen"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/remove_account"
         app:layout_constraintBottom_toTopOf="@+id/buttonEditDetails"
         app:layout_constraintEnd_toEndOf="parent"
