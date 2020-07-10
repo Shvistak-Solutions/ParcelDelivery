@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         db.updateDates();
 
         if(db.getUpdate()) {
+            db.monthlySchedule(3);
             db.scheduleSeed();
             db.setUpdate(false);
         }

@@ -23,7 +23,7 @@ import static java.lang.Integer.parseInt;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 13;
+    private static final int databaseVersion = 15;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
@@ -632,6 +632,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if( state == 2) {
             cal.add(Calendar.MONTH, 1);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+        }
+        if(state == 3){
             cal.set(Calendar.DAY_OF_MONTH, 1);
         }
 

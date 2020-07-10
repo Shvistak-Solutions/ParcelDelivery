@@ -210,7 +210,7 @@ public class UserDetailsSecondFragment extends Fragment {
                 }else{
                     String dateTime = db.makeDateTimeFromDateAndTime(weekDays[index/2],edit.getText().toString());
                     if( index % 2 == 0) {
-                        if(EditHolder[index+1].getText().toString().compareTo(edit.getText().toString())>=0 || EditHolder[index+1].getText().toString().equals("0")){
+                        if(EditHolder[index+1].getText().toString().compareTo(edit.getText().toString())>=0 || EditHolder[index+1].getText().toString().equals("0") || EditHolder[index+1].getText().toString().equals("Brak Danych")){
                             if(state == 1){
                                 if(db.updateSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId) == 0)
                                     db.insertSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId);
@@ -226,7 +226,7 @@ public class UserDetailsSecondFragment extends Fragment {
 
 
                     } else {
-                        if(EditHolder[index-1].getText().toString().compareTo(edit.getText().toString())<=0){
+                        if(EditHolder[index-1].getText().toString().compareTo(edit.getText().toString())<=0 || EditHolder[index-1].getText().toString().equals("Brak Danych")){
                             if(state == 1){
                                 if(db.updateSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId) == 0)
                                     db.insertSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId);
