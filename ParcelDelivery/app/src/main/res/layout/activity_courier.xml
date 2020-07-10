@@ -29,22 +29,23 @@
         android:id="@+id/buttonLogoutCou"
         style="@style/buttonGreen"
         android:layout_marginStart="159dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="164dp"
         android:text="Wyloguj"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.472"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toTopOf="@+id/textView6" />
 
     <TextView
         style="@style/headerWhite"
         android:layout_marginStart="155dp"
-        android:layout_marginTop="185dp"
+        android:layout_marginTop="280dp"
         android:layout_marginEnd="155dp"
         android:text="Kurier"
         android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonLogoutCou" />
 
@@ -53,9 +54,10 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="136dp"
         android:layout_marginEnd="100dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonLogoutCou"
         app:srcCompat="@android:drawable/btn_dialog" />

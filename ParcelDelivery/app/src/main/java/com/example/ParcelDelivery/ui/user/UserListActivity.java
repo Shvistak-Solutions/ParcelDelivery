@@ -25,7 +25,9 @@ import androidx.core.content.ContextCompat;
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
 import com.example.ParcelDelivery.ui.avatar.AvatarActivity;
+import com.example.ParcelDelivery.ui.login.LoginActivity;
 import com.example.ParcelDelivery.ui.manager.ManagerActivity;
+import com.example.ParcelDelivery.ui.parcel.ParcelListActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -38,7 +40,7 @@ import java.util.HashMap;
 @SuppressLint("Registered")
 public class UserListActivity extends AppCompatActivity {
 
-    Button saveBtn;
+    Button saveBtn, buttonLogout;
     SearchView search;
     Intent intent;
     int userId;
@@ -115,7 +117,14 @@ public class UserListActivity extends AppCompatActivity {
             }
         });
 
-
+        buttonLogout = findViewById(R.id.buttonLogoutUsers);
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(UserListActivity.this, "Wylogowano", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(UserListActivity.this, LoginActivity.class));
+            }
+        });
 
         saveBtn = (Button)findViewById(R.id.buttonAddUser);
         saveBtn.setOnClickListener(new View.OnClickListener() {
