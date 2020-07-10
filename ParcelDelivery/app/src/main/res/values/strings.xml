@@ -47,4 +47,5 @@
     <string name="absent">Wychodzę!</string>
     <string name="presence_is_set">Obecność już dodana</string>
     <string name="not_working">Dziś nie pracujesz</string>
+    <string name="buttonRemoveParcel">Usuń Paczkę</string>
 </resources>

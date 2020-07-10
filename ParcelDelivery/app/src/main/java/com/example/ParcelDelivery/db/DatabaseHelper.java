@@ -963,7 +963,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-
+    public void removeParcel(int parcelId)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " +TAB_PACKAGES + " WHERE id="+parcelId);
+        db.close();
+    }
 
 
 }
