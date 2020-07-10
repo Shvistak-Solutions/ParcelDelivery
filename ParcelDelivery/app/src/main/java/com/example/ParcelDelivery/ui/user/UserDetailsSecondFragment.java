@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -105,6 +107,7 @@ public class UserDetailsSecondFragment extends Fragment {
         });
 
 
+
         buttonAvailability.setOnClickListener(v->{
             if(scheduleTrue){
                 switchToAvailability();
@@ -132,10 +135,12 @@ public class UserDetailsSecondFragment extends Fragment {
 
     private void switchToAvailability(){
         textScheduleOrAvailability.setText(R.string.availability);
-        if(sameUser)
+        if(sameUser) {
             buttonSaveChanges.setVisibility(View.VISIBLE);
-        else
+        }
+        else {
             buttonSaveChanges.setVisibility(View.INVISIBLE);
+        }
         showWeek(0,0);
         buttonAvailability.setText(R.string.check_schedule);
         buttonSaveChanges.setText(R.string.edit_availability);
@@ -144,10 +149,12 @@ public class UserDetailsSecondFragment extends Fragment {
 
     private void switchToSchedule(){
         textScheduleOrAvailability.setText(R.string.schedule);
-        if(sameUser)
+        if(sameUser) {
             buttonSaveChanges.setVisibility(View.INVISIBLE);
-        else
+        }
+        else {
             buttonSaveChanges.setVisibility(View.VISIBLE);
+        }
         showWeek(0,1);
         buttonAvailability.setText(R.string.check_availability);
         buttonSaveChanges.setText(R.string.edit_schedule);
@@ -188,32 +195,49 @@ public class UserDetailsSecondFragment extends Fragment {
 
     private void saveHourData(int state){
         boolean allTrue = true;
+        int earlier = 0;
         int index = 0;
         int firstFalseIndex = -1;
         for(EditText edit : EditHolder){
             if(!edit.getText().toString().equals("Brak Danych")){
                 if(!checkRegex(edit.getText().toString())){
-                    allTrue = false;
-                    if(firstFalseIndex < 0 )
-                        firstFalseIndex = index;
+                    if(!edit.getText().toString().equals("0")){
+                        allTrue = false;
+                        if(firstFalseIndex < 0 )
+                            firstFalseIndex = index;
+                    }
+
                 }else{
                     String dateTime = db.makeDateTimeFromDateAndTime(weekDays[index/2],edit.getText().toString());
                     if( index % 2 == 0) {
-                        if(state == 1){
-                            if(db.updateSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId) == 0)
-                                db.insertSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId);
+                        if(EditHolder[index+1].getText().toString().compareTo(edit.getText().toString())>=0 || EditHolder[index+1].getText().toString().equals("0")){
+                            if(state == 1){
+                                if(db.updateSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId) == 0)
+                                    db.insertSchedule(weekDays[index / 2], dateTime, null, 1, thisUserId);
+                            }else{
+                                if(db.updateSchedule(weekDays[index / 2], dateTime, null, 0, thisUserId) == 0)
+                                    db.insertSchedule(weekDays[index / 2], dateTime, null, 0, thisUserId);
+                            }
                         }else{
-                            if(db.updateSchedule(weekDays[index / 2], dateTime, null, 0, thisUserId) == 0)
-                                db.insertSchedule(weekDays[index / 2], dateTime, null, 0, thisUserId);
+                            earlier = 1;
+                            if(firstFalseIndex < 0 )
+                                firstFalseIndex = index;
                         }
 
+
                     } else {
-                        if(state == 1){
-                            if(db.updateSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId) == 0)
-                                db.insertSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId);
+                        if(EditHolder[index-1].getText().toString().compareTo(edit.getText().toString())<=0){
+                            if(state == 1){
+                                if(db.updateSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId) == 0)
+                                    db.insertSchedule(weekDays[index / 2], null, dateTime, 1, thisUserId);
+                            }else{
+                                if(db.updateSchedule(weekDays[index / 2], null, dateTime, 0, thisUserId) == 0)
+                                    db.insertSchedule(weekDays[index / 2], null, dateTime, 0, thisUserId);
+                            }
                         }else{
-                            if(db.updateSchedule(weekDays[index / 2], null, dateTime, 0, thisUserId) == 0)
-                                db.insertSchedule(weekDays[index / 2], null, dateTime, 0, thisUserId);
+                            earlier = -1;
+                            if(firstFalseIndex < 0 )
+                                firstFalseIndex = index;
                         }
 
                     }
@@ -221,7 +245,7 @@ public class UserDetailsSecondFragment extends Fragment {
             }
             index++;
         }
-        if(allTrue) {
+        if(allTrue && earlier == 0) {
             makeAllNoInput();
             edit = false;
         }else{
@@ -232,6 +256,12 @@ public class UserDetailsSecondFragment extends Fragment {
                 assert imm != null;
                 imm.showSoftInput(view1, 0);
             }
+            if(earlier < 0)
+                Toast.makeText(getContext(),"Godzina zakończenia nie może być wcześniejsza",Toast.LENGTH_LONG).show();
+            else if(earlier > 0)
+                Toast.makeText(getContext(),"Godzina rozpoczęcia nie może być późniejsza",Toast.LENGTH_LONG).show();
+            if(!allTrue)
+                Toast.makeText(getContext(),"Zły format XX:XX lub przekroczenie zakresu godziny",Toast.LENGTH_LONG).show();
         }
 
     }

@@ -21,7 +21,7 @@ import com.example.ParcelDelivery.R;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 7;
+    private static final int databaseVersion = 9;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
@@ -700,6 +700,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
 
+    }
+
+    public int presenceCheck(){
+        Calendar cal = Calendar.getInstance();
+        ArrayList<HashMap<String,String>> days=getDataSQL("select data, godzina_zakonczenia, wejscie, wyjscie, id_prac from Grafik where wejscie<>0 and wyjscie=0 and data <'"+makeDateYMD(cal)+"'");
+        for (HashMap<String,String> row : days) {
+            if(row.get("godzina_zakonczenia").equals("0") || row.get("wejscie").compareTo(row.get("godzina_zakonczenia")) >= 0){
+                updateDataSQL("update Grafik set wyjscie="+row.get("wejscie")+" where data="+row.get("data")+" and id_prac="+row.get("id_prac"));
+            }else{
+                updateDataSQL("update Grafik set wyjscie="+row.get("godzina_zakonczenia")+" where data="+row.get("data")+" and id_prac="+row.get("id_prac"));
+                updateHoursSalary(Integer.parseInt(row.get("id_prac")),row.get("data"));
+            }
+
+        }
+        return days.size();
     }
 
     // ============================ Auxiliary functions ( Pomocnicze ) ============================================

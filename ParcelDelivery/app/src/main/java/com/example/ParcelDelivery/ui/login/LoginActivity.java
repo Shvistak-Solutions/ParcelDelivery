@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
             db.setUpdate(false);
         }
         db.updateDates();
+        db.presenceCheck();
 
         Name = (EditText)findViewById(R.id.etName);
         Password = (EditText)findViewById(R.id.etPassword);
@@ -67,13 +68,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-        Login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-            }
-        });
 
         forgotPassword = (TextView)findViewById(R.id.ID_PASSWORD_RESET);
         forgotPassword.setOnClickListener(new View.OnClickListener() {

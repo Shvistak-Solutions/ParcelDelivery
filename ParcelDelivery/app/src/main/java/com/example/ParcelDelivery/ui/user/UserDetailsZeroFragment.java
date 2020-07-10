@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,6 +100,8 @@ public class UserDetailsZeroFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+
+
         if(userId == thisUserId)
         {
             avatarChange.setVisibility(View.VISIBLE);
@@ -127,6 +130,12 @@ public class UserDetailsZeroFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        details = db.getData("Pracownicy", thisUserId);
+        fillTextViews(details);
+    }
 
     private void fillTextViews(HashMap<String,String> details) {
         name.setText(details.get("imie"));
@@ -143,6 +152,8 @@ public class UserDetailsZeroFragment extends Fragment {
         passwordChange = (Button)view.findViewById(R.id.ID_CHANGE_PASSWORD);
         passwordChange.setVisibility(View.INVISIBLE);
 
+        name.setInputType(InputType.TYPE_NULL);
+        surname.setInputType(InputType.TYPE_NULL);
     }
 
 
