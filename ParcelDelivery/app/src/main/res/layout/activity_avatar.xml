@@ -12,6 +12,7 @@
         android:layout_marginStart="80dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/ID_GALLERY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,13 +21,14 @@
 
     <Button
         android:id="@+id/ID_CAMERA"
+        style="@style/buttonGreen"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="100dp"
-        style="@style/buttonGreen"
         android:text="ZRÓB ZDJĘCIE"
+        app:layout_constraintBottom_toTopOf="@+id/ID_SAVE_AVATAR"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,27 +36,29 @@
 
     <Button
         android:id="@+id/ID_CLEAR_AVATAR"
+        style="@style/buttonGreen"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="100dp"
-        style="@style/buttonGreen"
         android:text="USUŃ ZDJĘCIE "
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ID_SAVE_AVATAR" />
 
     <Button
         android:id="@+id/ID_SAVE_AVATAR"
+        style="@style/buttonGreen"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="100dp"
-        style="@style/buttonGreen"
         android:text="ZAPISZ"
+        app:layout_constraintBottom_toTopOf="@+id/ID_CLEAR_AVATAR"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,15 +66,16 @@
 
     <Button
         android:id="@+id/ID_GALLERY"
+        style="@style/buttonGreen"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="100dp"
-        style="@style/buttonGreen"
         android:text="WYBIERZ Z GALERII"
+        app:layout_constraintBottom_toTopOf="@+id/ID_CAMERA"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ID_AVATAR_PICTURE" />
 </androidx.constraintlayout.widget.ConstraintLayout>
