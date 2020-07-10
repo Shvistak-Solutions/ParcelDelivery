@@ -24,23 +24,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/buttonLogoutManag"
-        style="@style/buttonGreen"
-        android:layout_marginStart="164dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="159dp"
-        android:text="Wyloguj"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
     <TextView
         android:id="@+id/textView7"
         style="@style/headerBackgroundGreen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonLogoutManag"
+        style="@style/buttonGreen"
+        android:layout_marginStart="164dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="159dp"
+        android:text="Wyloguj"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.527"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView7" />
 
     <Button
         android:id="@+id/buttonPresence"
@@ -52,5 +53,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        style="@style/headerWhite"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="110dp"
+        android:text="Menadżer"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ID_MAIN_AVATAR_VIEW" />
+
+    <ImageView
+        android:id="@+id/ID_MAIN_AVATAR_VIEW"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="131dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        app:srcCompat="@android:drawable/btn_dialog" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

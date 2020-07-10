@@ -12,7 +12,7 @@
         android:layout_width="179dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="75dp"
         android:text="Lista Przesyłek"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +22,7 @@
         android:id="@+id/ID_CHANGE_PASSWORD"
         style="@style/buttonGreen"
         android:layout_marginStart="116dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="116dp"
         android:layout_marginBottom="15dp"
         android:text="ZMIANA HASŁA"
@@ -35,13 +35,12 @@
         android:id="@+id/buttonLogoutCoord"
         style="@style/buttonGreen"
         android:layout_marginStart="161dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="161dp"
         android:text="Wyloguj"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.527"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toTopOf="@+id/textView5" />
 
     <TextView
         style="@style/headerBackgroundGreen"
@@ -54,24 +53,24 @@
         android:id="@+id/textViewRecipientAddress"
         style="@style/headerWhite"
         android:layout_marginStart="95dp"
-        android:layout_marginTop="186dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="95dp"
         android:text="Koordynator"
         android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogoutCoord" />
+        app:layout_constraintTop_toBottomOf="@+id/ID_MAIN_AVATAR_VIEW" />
 
     <ImageView
         android:id="@+id/ID_MAIN_AVATAR_VIEW"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="70dp"
         android:layout_marginEnd="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogoutCoord"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:srcCompat="@android:drawable/btn_dialog" />
 
     <Button

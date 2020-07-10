@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.ParcelDelivery.R;
 import com.example.ParcelDelivery.db.DatabaseHelper;
@@ -26,7 +27,7 @@ public class ParcelListActivity extends AppCompatActivity {
     Intent intent;
     private ArrayList<HashMap<String,String>> mParcelData = new ArrayList<>();
     private int userId;
-    Button saveBtn;
+    Button saveBtn, buttonLogout;
 
 
     private static final String TAG = "ParcelListActivity";
@@ -67,6 +68,15 @@ public class ParcelListActivity extends AppCompatActivity {
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
 
+        buttonLogout = findViewById(R.id.buttonLogoutParcel);
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ParcelListActivity.this, "Wylogowano", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(ParcelListActivity.this, LoginActivity.class));
+            }
+        });
+
 
         // add a new parcel
         saveBtn = findViewById(R.id.buttonAddParcel);
@@ -102,7 +112,6 @@ public class ParcelListActivity extends AppCompatActivity {
                 break;
             case "Magazynier":
                 mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki WHERE status = 3");// tylko te paczki które w magazynie
-
                 saveBtn.setVisibility(View.GONE);
                 break;
             default:

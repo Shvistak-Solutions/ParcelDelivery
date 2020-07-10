@@ -38,4 +38,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/buttonLogoutUsers"
+        style="@style/buttonGreen"
+        android:layout_marginStart="164dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="159dp"
+        android:text="Wyloguj"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.527"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView8" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
