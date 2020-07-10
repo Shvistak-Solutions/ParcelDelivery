@@ -19,9 +19,11 @@ import java.util.HashMap;
 import java.util.Objects;
 import com.example.ParcelDelivery.R;
 
+import static java.lang.Integer.parseInt;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 7;
+    private static final int databaseVersion = 9;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
@@ -80,13 +82,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void dbSeed() {
         //SQLiteDatabase database = this.getWritableDatabase();
-        insertNewUser("Katarzyna", "Kamyczek", 3, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
+        // users
+        insertNewUser("Katarzyna", "Kamyczek", 0, "kkamins@email.com", "666666666666", "kozak", "łukowica", "11111");
         insertNewUser("Rafał", "Świstak", 0, "bober@email.com", "555555555555", "koza", "mielec", "11111");
         insertNewUser("Szczepan", "Komoniewski", 2, "szlachta@email.com", "44444444444444", "szlachta", "KopalniaSiarki", "11111");
         insertNewUser("Krzysztof", "Dżachym", 1, "dżadża@email.com", "333333333333333", "jachym", "krakow", "11111");
         insertNewUser("Patryk", "Frasio", 2, "frasio@email.com", "222222222222", "frasio", "konkurencyjnaKopalniaSiarki", "11111");
         insertNewUser("Łukasz", "Scared", 1, "scared@email.com", "1111111111111", "difrent", "myślenice", "11111");
         insertNewUser("Zdzisław", "Siwy", 3, "siwy@email.com", "0000000000000", "siwy", "kanciapa", "11111");
+
+        // packs
+        insertNewParcel(0, "Ulica 6 Kraków ", "Adresik 11 Warszawa");
+        insertNewParcel(2, "Górka 116 Kraków ", "Polska 2137 Kraków");
+        insertNewParcel(0, "Ulica 6 Kraków ", "Leżakowa 10 Krakow");
+        insertNewParcel(2, "Piękna 22 Kraków", "Miejska 12 Krakow");
+        insertNewParcel(0, "Niespodziewana 23 Kraków", "Przykra 22 Myślenice");
+        insertNewParcel(0, "Ulica 9 Kraków ", "Leżakowa 10 Krakow");
+
+        changePackStatus("3", "3");
+        changePackStatus("4", "3");
     }
 
     public void updatePassword(String email, String password){

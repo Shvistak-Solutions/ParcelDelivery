@@ -112,7 +112,6 @@ public class ParcelListActivity extends AppCompatActivity {
                 break;
             case "Magazynier":
                 mParcelData = dbHelper.getDataSQL("SELECT id, status, id_kuriera FROM Paczki WHERE status = 3");// tylko te paczki które w magazynie
-
                 saveBtn.setVisibility(View.GONE);
                 break;
             default:
