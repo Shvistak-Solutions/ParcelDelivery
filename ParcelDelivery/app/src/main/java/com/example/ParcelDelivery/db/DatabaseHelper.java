@@ -21,7 +21,7 @@ import com.example.ParcelDelivery.R;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "marmot.db"; // not case sensitive
-    private static final int databaseVersion = 6;
+    private static final int databaseVersion = 7;
     private static boolean update = false;
 
     private String TAB_ACCOUNT = "Konta";
@@ -492,31 +492,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
-    public long updatePresence(String date,String startHour,String endHour, int userId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        long newRowId = 1;
-        newRowId = updateDataSQL("update "+TAB_SCHEDULE+" set wejscie="+startHour+", wyjscie="+endHour+" where id_prac="+userId+" and data="+date);
-        db.close();
-        if( newRowId < 1 )
-            return -3;
-        int test = updateHoursSalary(userId,date);
-        if(test < 1)
-            return test;
-        return newRowId;
-    }
 
-
-    private int updateHoursSalary(int userId, String date){
+    public void updateHoursSalary(int userId, String date){
         ArrayList<HashMap<String,String>> salaryTable =  getDataSQL("Select ilosc_godzin, stawka from "+TAB_SALARY+" where data like '"+date.substring(0,7)+"' and id_prac ="+userId);
         if(salaryTable.size() == 0)
-            return -1;
+            return;
         float hours = Float.parseFloat(Objects.requireNonNull(salaryTable.get(0).get("ilosc_godzin")));
         ArrayList<HashMap<String,String>> data = getDataSQL("Select wejscie, wyjscie, godzina_rozpoczecia, godzina_zakonczenia from "+TAB_SCHEDULE+" where id_prac="+userId+" and data like '"+date+"'");
         if(data.size() == 0)
-            return -2;
+            return;
         hours +=  makeHours(computeDifference(dateTimeConvert(Objects.requireNonNull(data.get(0).get("wyjscie"))),dateTimeConvert(Objects.requireNonNull(data.get(0).get("wejscie")))));
         float salary = hours*Float.parseFloat(Objects.requireNonNull(salaryTable.get(0).get("stawka")));
-        return updateDataSQL("update "+TAB_SALARY+" set ilosc_godzin="+hours+", pensja="+salary+" where id_prac="+userId+" and data="+date.substring(0,7));
+        updateDataSQL("update "+TAB_SALARY+" set ilosc_godzin="+hours+", pensja="+salary+" where id_prac="+userId+" and data="+date.substring(0,7));
     }
 
     private long computeDifference(Calendar cal1, Calendar cal2){
