@@ -116,33 +116,10 @@ public class PackActivity extends AppCompatActivity {
             }
         });
 
-        /*if( dbH.checkIfInStorehouse(idMessage)) {
-
-
-
-            Cursor data = dbH.getCourierInfoByPack(idMessage);
-
-            data.moveToFirst();
-            String courierId = data.getString(0);
-            String courierName = data.getString(2);
-            String courierName2 = data.getString(1);
-
-            idPrint.setText("ID paczki : " + idMessage );
-            statusPrint.setText("Status: w magazynie" );
-            courierPrint.setText("Dostarczona do magazynu przez: " + courierName + " " + courierName2 + "  |  ID: " + courierId);
-
-
-            ((AppCompatButton) changeStatus).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    updateStatus();
-                }
-            });
-
+        if(dbH.getData("stanowisko","Pracownicy",userId) != "Koordynator")
+        {
+            buttonRemoveParcel.setVisibility(View.GONE);
         }
-        else{
-            updateStatus();
-        }*/
 
     }
 
