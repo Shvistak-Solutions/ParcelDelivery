@@ -49,10 +49,14 @@ public class LoginActivity extends AppCompatActivity {
         db = new DatabaseHelper(this);
         if(db.getUpdate()){
             db.dbSeed();
-            db.setUpdate(false);
+            //db.setUpdate(false);
         }
         db.updateDates();
-        db.scheduleSeed();
+
+        if(db.getUpdate()) {
+            db.scheduleSeed();
+            db.setUpdate(false);
+        }
         db.presenceCheck();
 
         Name = (EditText)findViewById(R.id.etName);
